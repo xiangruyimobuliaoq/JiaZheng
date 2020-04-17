@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/statusbar_blue</color>
+    <color name="colorPrimaryDark">@color/statusbar_blue</color>
+    <color name="colorAccent">@color/statusbar_yellow</color>
+
+
+    <color name="statusbar_blue">#2F318B</color>
+    <color name="statusbar_yellow">#FFF000</color>
+    <color name="yellow">#FFF000</color>
+    <color name="white">#FFF</color>
+    <color name="text_3">#999999</color>
+    <color name="line_1">#CCCCCC</color>
+    <color name="line_2">#E6E6E6</color>
+
+    <color name="text_yellow">#FDAD34</color>
+    <color name="text_yellow_light">#88FDAD34</color>
+    <color name="text_1">#333333</color>
+    <color name="gray">#f5f5f5</color>
+    <color name="red">#F94205</color>
+</resources>

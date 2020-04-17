@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nst.jiazheng">
+
+    <!--允许程序打开网络套接字-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--允许程序设置内置sd卡的读写权限-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--允许程序获取网络状态-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--允许程序访问WiFi网络信息-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--允许程序读写手机状态和身份-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--允许程序访问CellID或WiFi热点来获取粗略的位置-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:name=".base.App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme_yellow"
+        android:usesCleartextTraffic="true">
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="53faf9d7bf36dd10b642b27c7025bfaf" />
+
+        <activity
+            android:name=".login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme_blue">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".login.RegistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme_blue" />
+        <activity
+            android:name=".login.ForgotPwdActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme_blue" />
+        <activity
+            android:name=".user.HomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.qb.MyPointActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.AgreementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.AboutUsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.SendServeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.jzfw.RequestServeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.AddrPickActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.wdgj.WorkerInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".user.wdgj.CompanyInfoActivity"
+            android:screenOrientation="portrait" />
+    </application>
+
+</manifest>

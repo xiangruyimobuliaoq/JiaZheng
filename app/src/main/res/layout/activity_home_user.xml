@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.nst.jiazheng.base.LockableViewPager
+        android:id="@+id/vp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RadioGroup
+        android:id="@+id/rg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/ic_jzfw1"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="3dp">
+
+        <RadioButton
+            android:id="@+id/jzfw"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/sel_home_user_jzfw"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="家政服务"
+            android:textColor="@drawable/sel_home_user_text"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/wdgj"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="25dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:button="@null"
+            android:drawableTop="@drawable/sel_home_user_wdgj"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="我的管家"
+            android:textColor="@drawable/sel_home_user_text"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/wdqb"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:button="@null"
+            android:drawableTop="@drawable/sel_home_user_wdqb"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="我的钱包"
+            android:textColor="@drawable/sel_home_user_text"
+            android:textSize="10sp" />
+
+        <RadioButton
+            android:id="@+id/grzx"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:button="@null"
+            android:drawableTop="@drawable/sel_home_user_grzx"
+            android:drawablePadding="5dp"
+            android:gravity="center_horizontal"
+            android:text="个人中心"
+            android:textColor="@drawable/sel_home_user_text"
+            android:textSize="10sp" />
+    </RadioGroup>
+
+    <ImageView
+        android:id="@+id/fbwf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:src="@mipmap/ic_tj" />
+</RelativeLayout>

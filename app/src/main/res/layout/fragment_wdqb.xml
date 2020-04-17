@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/wallet_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text="钱包"
+        android:textColor="@color/text_1"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="18dp"
+        android:background="@drawable/shape_bg_white_corner"
+        android:elevation="3dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="35dp"
+            android:text="我的余额（元）"
+            android:textColor="@color/text_3"
+            android:textSize="11sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:text="3620.00"
+            android:textColor="@color/text_1"
+            android:textSize="25sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/shape_btn_blue_corner"
+            android:paddingLeft="22dp"
+            android:paddingTop="6.5dp"
+            android:paddingRight="22dp"
+            android:paddingBottom="6.5dp"
+            android:text="充值"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:id="@+id/wdjf"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="18dp"
+        android:background="@drawable/shape_bg_white_corner"
+        android:drawableRight="@mipmap/ic_jinr"
+        android:elevation="1dp"
+        android:padding="18sp"
+        android:text="我的积分"
+        android:textColor="@color/text_1"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="18dp"
+        android:background="@drawable/shape_bg_white_corner"
+        android:drawableRight="@mipmap/ic_jinr"
+        android:elevation="1dp"
+        android:padding="18sp"
+        android:text="我的优惠券"
+        android:textColor="@color/text_1"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="18dp"
+        android:background="@drawable/shape_bg_white_corner"
+        android:drawableRight="@mipmap/ic_jinr"
+        android:elevation="1dp"
+        android:padding="18sp"
+        android:text="余额明细"
+        android:textColor="@color/text_1"
+        android:textSize="15sp" />
+
+
+</LinearLayout>
