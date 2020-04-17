@@ -93,7 +93,7 @@ public class CompanyInfoActivity extends BaseToolBarActivity {
         submit.setText(data.is_collect == 0 ? "收藏Ta" : "取消收藏");
         Glide.with(this).load(data.headimgurl).error(R.mipmap.ic_tx).into(tx);
         nickname.setText(mWorker.name);
-        ratingbar.setRating(Float.parseFloat(data.score));
+        ratingbar.setRating(data.score);
         point.setText(data.score + "分");
         name.setText(data.name);
         address.setText(data.address);

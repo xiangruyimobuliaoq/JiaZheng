@@ -104,7 +104,7 @@ public class WorkerInfoActivity extends BaseToolBarActivity {
         counts.setText("已接 " + data.OrderCount + "单");
         Glide.with(this).load(data.headimgurl).error(R.mipmap.ic_tx).into(tx);
         nickname.setText(mWorker.name);
-        ratingbar.setRating(Float.parseFloat(data.score));
+        ratingbar.setRating(data.score);
         point.setText(data.score + "分");
         name.setText(data.name);
         age.setText(data.age + "岁");

@@ -82,6 +82,10 @@
             android:screenOrientation="portrait" />
         <activity android:name=".user.wdgj.CompanyInfoActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".user.jzfw.NearbyActivity" />
+
+        <service android:name="com.amap.api.location.APSService"/>
+
     </application>
 
 </manifest>

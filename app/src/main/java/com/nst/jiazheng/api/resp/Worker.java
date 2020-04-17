@@ -30,8 +30,8 @@ public class Worker implements Serializable {
     public double lat;
     public double lng;
     public String logo;
-    public String score;
-    public int calc_range;
+    public float score;
+    public float calc_range;
     public int OrderCount;
     public List<ServeType> serve_type;
     public int type;
