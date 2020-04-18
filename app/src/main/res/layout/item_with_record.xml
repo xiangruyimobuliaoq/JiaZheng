@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dp_12"
+    android:layout_marginTop="@dimen/dp_12"
+    android:layout_marginRight="@dimen/dp_12"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/dp_15"
+    android:paddingTop="17dp"
+    android:paddingRight="@dimen/dp_15"
+    android:background="@color/white"
+    android:paddingBottom="17dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="6"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提现中"
+            android:textColor="#ff333333"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_marginTop="11.5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="失败原因：填写的提现信息有误"
+            android:textColor="#ff999999"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_marginTop="11.5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2018-11-11 12:11:45"
+            android:textColor="#ff999999"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:gravity="right"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:text="-￥50.00"
+        android:textColor="#fff94205"
+        android:textSize="15sp" />
+
+
+</LinearLayout>

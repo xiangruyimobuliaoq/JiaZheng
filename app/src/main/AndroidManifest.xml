@@ -82,6 +82,13 @@
             android:screenOrientation="portrait" />
         <activity android:name=".user.wdgj.CompanyInfoActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".worker.CharActivity" />
+        <activity android:name=".worker.WithdrawActivity" />
+        <activity android:name=".worker.WithdrawalsRecordActivity" />
+        <activity android:name=".worker.ServiceTypeActivity" />
+        <activity android:name=".worker.MyCommentActivity" />
+        <activity android:name=".worker.MyProfileActivity" />
+        <activity android:name=".worker.CommentDetailsActivity" />
     </application>
 
 </manifest>

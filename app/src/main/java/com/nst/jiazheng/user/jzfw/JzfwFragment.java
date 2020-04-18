@@ -52,6 +52,7 @@ import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.DpUtil;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.worker.MainActivity;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 
@@ -77,6 +78,9 @@ import razerdp.basepopup.BasePopupWindow;
  */
 @Layout(layoutId = R.layout.fragment_jzfw)
 public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeListener, AMap.OnMarkerClickListener, Inputtips.InputtipsListener {
+    //iv_title_left_icon
+    @BindView(R.id.iv_title_left_icon)
+    ImageView ivTitleLeftIcon;
     @BindView(R.id.map)
     MapView map;
     @BindView(R.id.dingwei)
@@ -173,6 +177,18 @@ public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeLis
                 Log.e("123", addressName);
             }
         });
+
+        initEvent();
+    }
+
+    private void initEvent() {
+        ivTitleLeftIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                overlay(MainActivity.class);
+            }
+        });
+
     }
 
     private void requestPermission() {

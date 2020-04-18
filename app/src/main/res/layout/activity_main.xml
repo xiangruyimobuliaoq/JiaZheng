@@ -1,22 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_toolbar" />
+    <include layout="@layout/layout_toolbar_icon" />
 
-
-    <RelativeLayout
-        android:background="@mipmap/ic_bg4"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_marginTop="18.5dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
 
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="18.5dp"
+                android:layout_marginRight="12dp"
+                android:background="@mipmap/ic_bg4">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_withDraw"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dp_4"
+                        android:text="申请体现" />
+
+                    <TextView
+                        android:id="@+id/tv_withDrawRecord"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/dp_4"
+                        android:text="提现记录" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_yue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="958.20"
+                        android:textSize="36sp" />/
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="余额（元）" />
+
+                    <TextView
+                        android:id="@+id/tv_shouru"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:text="240000.00"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="总收入（元）" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="16"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="今日接单"
+                                android:textSize="13sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1360.00"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="今日收入（元）"
+                                android:textSize="13sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="27dp"
+                android:layout_marginTop="-30dp"
+                android:layout_marginRight="27dp"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10">
+
+                <TextView
+                    android:id="@+id/tv_service"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@mipmap/ic_fwlx"
+                    android:drawablePadding="@dimen/dp_4"
+                    android:gravity="center"
+                    android:text="服务类型"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_comment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@mipmap/ic_wdpj"
+                    android:drawablePadding="@dimen/dp_4"
+                    android:gravity="center"
+                    android:text="我的评价"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_my"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableTop="@mipmap/ic_grxx"
+                    android:drawablePadding="@dimen/dp_4"
+                    android:gravity="center"
+                    android:text="个人信息"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:background="@color/white"
+                android:id="@+id/tab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginRight="@dimen/dp_12"
+                android:paddingBottom="@dimen/dp_4"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/colorPrimary"
+                app:tabIndicatorFullWidth="true"
+                app:tabIndicatorHeight="@dimen/dp_4">
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabItem1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="接待栏" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabItem2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="待进行" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="进行中" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="待确认" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="已完成" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginLeft="@dimen/dp_12"
+                android:layout_marginRight="@dimen/dp_12"
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

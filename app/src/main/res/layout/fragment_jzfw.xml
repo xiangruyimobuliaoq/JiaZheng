@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
+            android:id="@+id/iv_title_left_icon"
             android:src="@mipmap/ic_sqcwgj" />
 
         <RadioGroup
