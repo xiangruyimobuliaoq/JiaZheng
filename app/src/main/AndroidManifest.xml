@@ -89,6 +89,9 @@
         <activity android:name=".worker.MyCommentActivity" />
         <activity android:name=".worker.MyProfileActivity" />
         <activity android:name=".worker.CommentDetailsActivity" />
+        <activity android:name=".worker.InputAgeActivity" />
+        <activity android:name=".worker.OrderDetailsActivity" />
+        <activity android:name=".worker.AddCommentActivity" />
     </application>
 
 </manifest>

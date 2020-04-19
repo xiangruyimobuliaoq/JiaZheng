@@ -98,6 +98,7 @@
         android:background="#E6E6E6" />
 
     <LinearLayout
+        android:id="@+id/ll_sex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -114,11 +115,12 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tv_sex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="女"
             android:drawableRight="@mipmap/ic_xyb"
             android:drawablePadding="@dimen/dp_4"
+            android:text="女"
             android:textColor="#ff999999"
             android:textSize="14sp" />
 
@@ -151,6 +153,110 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="已认证"
+            android:textColor="#ff999999"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#E6E6E6" />
+
+    <LinearLayout
+        android:id="@+id/ll_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_12">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="所在城市"
+            android:textColor="#ff333333"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@mipmap/ic_xyb"
+            android:drawablePadding="@dimen/dp_4"
+            android:text="广东省 东莞市"
+            android:textColor="#ff999999"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#E6E6E6" />
+
+    <LinearLayout
+        android:id="@+id/ll_long"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_12">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="从事家政年限"
+            android:textColor="#ff333333"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_long"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@mipmap/ic_xyb"
+            android:drawablePadding="@dimen/dp_4"
+            android:text="4年"
+            android:textColor="#ff999999"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#E6E6E6" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_age"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_12">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="年龄"
+            android:textColor="#ff333333"
+            android:textSize="14sp" />
+
+        <TextView
+
+            android:id="@+id/tv_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@mipmap/ic_xyb"
+            android:drawablePadding="@dimen/dp_4"
+            android:text="38岁"
             android:textColor="#ff999999"
             android:textSize="14sp" />
 

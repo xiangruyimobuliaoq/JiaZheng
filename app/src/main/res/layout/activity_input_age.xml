@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_toolbar_icon" />
+
+
+    <EditText
+        android:padding="@dimen/dp_12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@drawable/shape_bg_white_corner"
+        android:hint="请输入年龄"
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="37.5dp"
+        android:layout_marginTop="@dimen/dp_40"
+        android:layout_marginRight="37.5dp"
+        android:background="@drawable/shape_btn_darkyellow_corner"
+        android:gravity="center"
+        android:padding="14.5dp"
+        android:text="保存"
+        android:textColor="#ff2f318b"
+        android:textSize="16sp" />
+</LinearLayout>

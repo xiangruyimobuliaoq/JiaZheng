@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_toolbar_icon" />
+
+    <LinearLayout
+        android:background="@drawable/shape_bg_white_corner"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_15"
+        android:paddingLeft="@dimen/dp_10"
+        android:paddingRight="@dimen/dp_10"
+        android:paddingTop="@dimen/dp_15"
+        android:paddingBottom="@dimen/dp_15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_marginLeft="@dimen/dp_4"
+                android:src="@mipmap/ic_starb2"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"/>
+
+            <ImageView
+                android:layout_marginLeft="@dimen/dp_4"
+                android:src="@mipmap/ic_starb"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"/>
+            <ImageView
+                android:layout_marginLeft="@dimen/dp_4"
+                android:src="@mipmap/ic_starb"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"/>
+            <ImageView
+                android:layout_marginLeft="@dimen/dp_4"
+                android:src="@mipmap/ic_starb"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"/>
+            <ImageView
+                android:layout_marginLeft="@dimen/dp_4"
+                android:src="@mipmap/ic_starb"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"/>
+            <ImageView
+                android:src="@mipmap/ic_starb"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"/>
+            
+        </LinearLayout>
+
+        <EditText
+            android:layout_marginTop="@dimen/dp_15"
+            android:padding="@dimen/dp_10"
+            android:gravity="start"
+            android:textSize="14sp"
+            android:background="@drawable/shape_bg_gray_corner"
+            android:hint="请输入你的评价"
+            android:layout_width="match_parent"
+            android:minLines="6"
+            android:maxLines="6"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:layout_marginTop="@dimen/dp_40"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/submit"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="37.5dp"
+            android:layout_marginRight="37.5dp"
+            android:background="@drawable/shape_btn_yellow_corner"
+            android:text="提交"
+            android:textColor="@color/text_1"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+</LinearLayout>

@@ -4,11 +4,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.android.material.tabs.TabLayout;
 import com.nst.jiazheng.R;
@@ -103,6 +105,13 @@ public class MainActivity extends BaseToolBarActivity {
             @Override
             public void onClick(View view) {
                 overlay(ServiceTypeActivity.class);
+            }
+        });
+
+        myAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                overlay(OrderDetailsActivity.class);
             }
         });
         mTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
