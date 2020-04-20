@@ -1,11 +1,12 @@
 package com.nst.jiazheng.worker;
 
-import android.view.View;
+import android.view.Gravity;
 import android.widget.TextView;
 
 import com.nst.jiazheng.R;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
+import com.nst.jiazheng.worker.widget.ConfirmWindow;
 
 import butterknife.BindView;
 
@@ -23,17 +24,24 @@ public class OrderDetailsActivity extends BaseToolBarActivity {
 
     @Override
     protected void init() {
-
         initView();
         initEvent();
     }
 
     private void initEvent() {
-        mTvConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                overlay(AddCommentActivity.class);
-            }
+        mTvConfirm.setOnClickListener(view -> {
+            new ConfirmWindow(this)
+//                    .setTitle("联系客服")
+                    .setContent("是否确认取消订单")
+                    .setListener((ConfirmWindow window) -> {
+                        window.dismiss();
+                        overlay(AddCommentActivity.class);
+                    })
+                    .setPopupGravity(Gravity.CENTER)
+                    .setBackPressEnable(true)
+                    .setOutSideDismiss(true).showPopupWindow();
+            ;
+
         });
 
     }
