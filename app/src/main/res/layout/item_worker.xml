@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_marginTop="@dimen/dp_10"
-    android:background="@color/white"
+    android:background="@drawable/shape_bg_white_corner"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/dp_20"
     android:paddingTop="@dimen/dp_15"
     android:paddingRight="@dimen/dp_20"
@@ -16,70 +16,96 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="服务类型"
-            android:textColor="#ff333333"
-            android:textSize="12sp" />
+            android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="服务类型"
+                    android:textColor="#ff333333"
+                    android:textSize="12sp" />
+
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="清洁扫地"
+                    android:textColor="#ff999999"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11.5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="服务内容"
+                    android:textColor="#ff333333"
+                    android:textSize="12sp" />
+
+
+                <TextView
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="主要是清洁一下客厅和房间"
+                    android:textColor="#ff999999"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_title"
-            android:layout_weight="3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="清洁扫地"
-            android:textColor="#ff999999"
-            android:textSize="12sp" />
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:background="@mipmap/ic_ann"
+            android:gravity="center"
+            android:text="接"
+            android:textColor="#ffffffff"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
+
     <LinearLayout
-        android:layout_marginTop="11.5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="11.5dp"
         android:orientation="horizontal">
 
         <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="服务内容"
-            android:textColor="#ff333333"
-            android:textSize="12sp" />
-
-
-        <TextView
-            android:layout_weight="3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="主要是清洁一下客厅和房间"
-            android:textColor="#ff999999"
-            android:textSize="12sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginTop="11.5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:text="时间"
             android:textColor="#ff333333"
             android:textSize="12sp" />
 
 
         <TextView
-            android:layout_weight="3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="3"
             android:text="2019.06.06 12:25"
             android:textColor="#ff999999"
             android:textSize="12sp" />
@@ -87,74 +113,108 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="11.5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="11.5dp"
         android:orientation="horizontal">
 
         <TextView
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="地址"
             android:textColor="#ff333333"
             android:textSize="12sp" />
 
 
         <TextView
-            android:layout_weight="3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="3"
             android:text="广东省东莞市南城去高盛科技大厦"
             android:textColor="#ff999999"
             android:textSize="12sp" />
 
     </LinearLayout>
 
+
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_marginTop="11.5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <TextView
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="单位"
-            android:textColor="#ff333333"
-            android:textSize="12sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="单位"
+                android:textColor="#ff333333"
+                android:textSize="12sp" />
 
 
-        <TextView
-            android:layout_weight="3"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="次"
+                android:textColor="#ff999999"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="广东省东莞市南城去高盛科技大厦"
-            android:textColor="#ff999999"
-            android:textSize="12sp" />
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="数量"
+                android:textColor="#ff333333"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="2"
+                android:textColor="#ff999999"
+                android:textSize="12sp" />
+
+        </LinearLayout>
     </LinearLayout>
 
+
     <LinearLayout
-        android:layout_marginTop="11.5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="11.5dp"
         android:orientation="horizontal">
 
         <TextView
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="服务总价"
             android:textColor="#ff333333"
             android:textSize="12sp" />
 
 
         <TextView
-            android:layout_weight="3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="3"
             android:text="￥168.00"
             android:textColor="#fff94205"
             android:textSize="12sp" />

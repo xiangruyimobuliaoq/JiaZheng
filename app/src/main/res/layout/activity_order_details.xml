@@ -294,13 +294,31 @@
 
 
     <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom">
 
         <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="37.5dp"
+            android:layout_marginTop="@dimen/dp_40"
+            android:layout_marginRight="37.5dp"
+            android:background="@drawable/shape_bg_white_corner_big"
+            android:gravity="center"
+            android:padding="14.5dp"
+            android:text="取消订单"
+            android:textColor="#ff333333"
+            android:textSize="16sp" />
+
+        <TextView
             android:id="@+id/tv_confirm"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginLeft="37.5dp"
             android:layout_marginTop="@dimen/dp_40"
@@ -308,7 +326,7 @@
             android:background="@drawable/shape_btn_darkyellow_corner"
             android:gravity="center"
             android:padding="14.5dp"
-            android:text="确认接单"
+            android:text="开始服务"
             android:textColor="#ff2f318b"
             android:textSize="16sp" />
     </LinearLayout>

@@ -24,27 +24,38 @@
                 android:layout_marginTop="18.5dp"
                 android:layout_marginRight="12dp"
                 android:background="@mipmap/ic_bg4">
+                <ImageView
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_centerHorizontal="true"
+                    android:src="@mipmap/ic_d1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_15"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tv_withDraw"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dp_4"
-                        android:text="申请体现" />
+                        android:background="@drawable/shape_bg_white_corner_half"
+                        android:text="申请体现"
+                        android:textColor="#ff2f318b"
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/tv_withDrawRecord"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/dp_4"
-                        android:text="提现记录" />
+                        android:layout_marginTop="@dimen/dp_10"
+                        android:background="@drawable/shape_bg_white_corner_half"
+                        android:text="提现记录"
+                        android:textColor="#ff2f318b"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -185,13 +196,13 @@
             </LinearLayout>
 
             <com.google.android.material.tabs.TabLayout
-                android:background="@color/white"
                 android:id="@+id/tab"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_12"
                 android:layout_marginTop="@dimen/dp_20"
                 android:layout_marginRight="@dimen/dp_12"
+                android:background="@color/white"
                 android:paddingBottom="@dimen/dp_4"
                 app:tabGravity="fill"
                 app:tabIndicatorColor="@color/colorPrimary"
@@ -202,7 +213,7 @@
                     android:id="@+id/tabItem1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="接待栏" />
+                    android:text="接单栏" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tabItem2"
@@ -229,11 +240,11 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_marginLeft="@dimen/dp_12"
-                android:layout_marginRight="@dimen/dp_12"
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_12"
+                android:layout_marginRight="@dimen/dp_12" />
 
 
         </LinearLayout>

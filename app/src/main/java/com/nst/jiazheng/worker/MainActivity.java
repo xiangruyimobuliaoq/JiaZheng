@@ -1,5 +1,6 @@
 package com.nst.jiazheng.worker;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,6 +58,7 @@ public class MainActivity extends BaseToolBarActivity {
     private List<Register> items;
     private MyAdapter myAdapter;
     private Register mUserInfo;
+    private int mSelectTabIndex;
 
     @Override
     protected void init() {
@@ -111,13 +113,36 @@ public class MainActivity extends BaseToolBarActivity {
         myAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                overlay(OrderDetailsActivity.class);
+                Bundle bundle = new Bundle();
+                String status = OrderDetailsActivity.DJD;
+                switch (mSelectTabIndex) {
+                    case 0:
+                        status = OrderDetailsActivity.DJD;
+                        break;
+                    case 1:
+                        status = OrderDetailsActivity.DJX;
+                        break;
+                    case 2:
+                        status = OrderDetailsActivity.JXZ;
+                        break;
+                    case 3:
+                        status = OrderDetailsActivity.DQR;
+                        break;
+                    case 4:
+                        status = OrderDetailsActivity.YWC;
+                        break;
+                    default:
+                        break;
+                }
+                bundle.putString(OrderDetailsActivity.STATUS, status);
+                overlay(OrderDetailsActivity.class, bundle);
             }
         });
         mTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
+                mSelectTabIndex = position;
                 ToastHelper.showToast("addOnTabSelectedListener : " + position, mContext);
             }
 
@@ -147,22 +172,6 @@ public class MainActivity extends BaseToolBarActivity {
 
     private void initData() {
         mUserInfo = (Register) SpUtil.readObj("userInfo");
-//        OkGo.<String>post(Api.serverApi)
-//                .params("api_name", "server_type_app")
-//                .params("token", mUserInfo.token)
-////                .params("type", worker.type)
-////                .params("id", worker.id)
-//                .execute(new StringCallback() {
-//            @Override
-//            public void onSuccess(Response<String> response) {
-//                Resp<List<ServeType>> resp = new Gson().fromJson(response.body(), new
-//                TypeToken<Resp<List<ServeType>>>() {
-//                }.getType());
-//                if (resp.code == 1) {
-//                    myAdapter.setNewInstance(resp.data);
-//                }
-//            }
-//        });
         for (int i = 0; i < 10; i++) {
             items.add(new Register());
         }

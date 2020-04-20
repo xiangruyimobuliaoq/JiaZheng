@@ -10,7 +10,7 @@
     android:paddingLeft="@dimen/dp_15"
     android:paddingTop="17dp"
     android:paddingRight="@dimen/dp_15"
-    android:background="@color/white"
+    android:background="@drawable/shape_bg_white_corner"
     android:paddingBottom="17dp">
 
     <LinearLayout
