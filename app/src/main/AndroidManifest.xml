@@ -80,11 +80,15 @@
         <activity
             android:name=".user.wdgj.WorkerInfoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".user.wdgj.CompanyInfoActivity"
+        <activity
+            android:name=".user.wdgj.CompanyInfoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".user.jzfw.NearbyActivity" />
+        <activity
+            android:name=".user.jzfw.NearbyActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".user.qb.RechargeActivity" />
 
-        <service android:name="com.amap.api.location.APSService"/>
+        <service android:name="com.amap.api.location.APSService" />
 
     </application>
 

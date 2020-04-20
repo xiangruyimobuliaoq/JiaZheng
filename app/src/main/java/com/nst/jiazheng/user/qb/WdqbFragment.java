@@ -1,5 +1,6 @@
 package com.nst.jiazheng.user.qb;
 
+import android.view.View;
 import android.widget.TextView;
 
 import com.nst.jiazheng.R;
@@ -21,10 +22,19 @@ import butterknife.BindView;
 public class WdqbFragment extends BaseFragment {
     @BindView(R.id.wdjf)
     TextView wdjf;
+    @BindView(R.id.recharge)
+    TextView recharge;
+
     @Override
     protected void init() {
         wdjf.setOnClickListener(v -> {
             overlay(MyPointActivity.class);
+        });
+        recharge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                overlay(RechargeActivity.class);
+            }
         });
     }
 }
