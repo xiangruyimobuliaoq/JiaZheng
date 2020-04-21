@@ -202,12 +202,16 @@
                 android:layout_marginLeft="@dimen/dp_12"
                 android:layout_marginTop="@dimen/dp_20"
                 android:layout_marginRight="@dimen/dp_12"
-                android:background="@color/white"
+                android:background="@drawable/shape_bg_white_corner"
                 android:paddingBottom="@dimen/dp_4"
                 app:tabGravity="fill"
                 app:tabIndicatorColor="@color/colorPrimary"
-                app:tabIndicatorFullWidth="true"
-                app:tabIndicatorHeight="@dimen/dp_4">
+                app:tabIndicatorHeight="@dimen/dp_4"
+                app:tabIndicatorFullWidth="false"
+                app:tabMode="fixed"
+                app:tabBackground="@null"
+                app:tabRippleColor="@null"
+                >
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tabItem1"

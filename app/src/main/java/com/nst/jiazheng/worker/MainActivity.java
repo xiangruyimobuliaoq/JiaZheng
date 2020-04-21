@@ -1,8 +1,11 @@
 package com.nst.jiazheng.worker;
 
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +25,7 @@ import com.nst.jiazheng.base.LogUtil;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.base.ToastHelper;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -160,6 +164,7 @@ public class MainActivity extends BaseToolBarActivity {
 
     private void initView() {
         setTitle("管家首页");
+
         mIvChat.setImageResource(R.mipmap.ic_xiaox);
         items = new ArrayList<>();
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
@@ -170,6 +175,8 @@ public class MainActivity extends BaseToolBarActivity {
     }
 
 
+
+    
     private void initData() {
         mUserInfo = (Register) SpUtil.readObj("userInfo");
         for (int i = 0; i < 10; i++) {
