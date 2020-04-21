@@ -117,4 +117,14 @@
         android:layout_marginBottom="150dp"
         android:src="@mipmap/ic_dw" />
 
+    <ImageView
+        android:id="@+id/fujin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="85dp"
+        android:layout_marginRight="15dp"
+        android:src="@mipmap/ic_dw2" />
+
 </RelativeLayout>

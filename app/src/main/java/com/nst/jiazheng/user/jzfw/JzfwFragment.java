@@ -85,6 +85,8 @@ public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeLis
     MapView map;
     @BindView(R.id.dingwei)
     ImageView dingwei;
+    @BindView(R.id.fujin)
+    ImageView fujin;
     @BindView(R.id.rg)
     RadioGroup rg;
     @BindView(R.id.clear)
@@ -120,6 +122,12 @@ public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeLis
             public void onClick(View view) {
 //                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                 aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(23.02067, 113.75179), 16));
+            }
+        });
+        fujin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                overlay(NearbyActivity.class);
             }
         });
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

@@ -1,4 +1,4 @@
-package com.nst.jiazheng.user.wdgj;
+package com.nst.jiazheng.user.jzfw;
 
 import android.Manifest;
 import android.os.Bundle;
@@ -20,14 +20,14 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.nst.jiazheng.R;
 import com.nst.jiazheng.api.Api;
-import com.nst.jiazheng.api.resp.MyCollect;
+import com.nst.jiazheng.api.resp.IndexMap;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.api.resp.ServeType;
-import com.nst.jiazheng.base.BaseFragment;
+import com.nst.jiazheng.api.resp.Worker;
+import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
-import com.nst.jiazheng.user.jzfw.RequestServeActivity;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.List;
@@ -40,16 +40,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 创建者     彭龙
- * 创建时间   2020/4/2 6:01 PM
+ * 创建时间   2020/4/17 3:22 PM
  * 描述
  * <p>
  * 更新者     $
  * 更新时间   $
  * 更新描述
  */
-@Layout(layoutId = R.layout.fragment_wdgj)
-public class WdgjFragment extends BaseFragment implements AMapLocationListener {
-
+@Layout(layoutId = R.layout.activity_nearby)
+public class NearbyActivity extends BaseToolBarActivity implements AMapLocationListener {
     @BindView(R.id.nearbylist)
     RecyclerView nearbylist;
     @BindView(R.id.rg)
@@ -81,7 +80,7 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
             }
         });
         requestPermission();
-        LinearLayoutManager manager = new LinearLayoutManager(mContext);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(RecyclerView.VERTICAL);
         nearbylist.setLayoutManager(manager);
         mAdapter = new NearbyAdapter(R.layout.item_worker_home, null);
@@ -104,7 +103,7 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
     }
 
     private void initLocation() {
-        mlocationClient = new AMapLocationClient(mContext);
+        mlocationClient = new AMapLocationClient(this);
 //初始化定位参数
         mLocationOption = new AMapLocationClientOption();
 //设置定位监听
@@ -124,24 +123,23 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
         mlocationClient.onDestroy();
     }
 
     private void getData() {
         mAdapter.setList(null);
-        OkGo.<String>post(Api.serverApi).params("api_name", "my_collect").params("token", mUserInfo.token).params("type", currentType)
+        OkGo.<String>post(Api.serverApi).params("api_name", "index_map").params("token", mUserInfo.token).params("type", currentType)
                 .params("lng", 113.75179).params("lat", 23.02067)
 //                .params("lng", cameraPosition.target.longitude).params("lat", cameraPosition.target.latitude)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        Resp<List<MyCollect>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<MyCollect>>>() {
+                        Resp<IndexMap> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<IndexMap>>() {
                         }.getType());
-                        toast(resp.msg);
                         if (resp.code == 1) {
-                            mAdapter.setList(resp.data);
+                            mAdapter.setList(resp.data.list);
                         }
                     }
                 });
@@ -165,29 +163,29 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
         }
     }
 
-    class NearbyAdapter extends BaseQuickAdapter<MyCollect, BaseViewHolder> {
-        public NearbyAdapter(int layoutResId, List<MyCollect> data) {
+    class NearbyAdapter extends BaseQuickAdapter<Worker, BaseViewHolder> {
+        public NearbyAdapter(int layoutResId, List<Worker> data) {
             super(layoutResId, data);
         }
 
         @Override
-        protected void convert(BaseViewHolder baseViewHolder, MyCollect worker) {
+        protected void convert(BaseViewHolder baseViewHolder, Worker worker) {
             RecyclerView mTypelist = baseViewHolder.getView(R.id.typelist);
-            Glide.with(getContext()).load(worker.info.logo).error(R.mipmap.ic_tx).into((CircleImageView) baseViewHolder.getView(R.id.tx));
-            baseViewHolder.setText(R.id.counts, worker.info.OrderCount + "单")
-                    .setText(R.id.point, worker.info.score + "分")
-                    .setText(R.id.length, "[" + worker.info.calc_range + "km]")
-                    .setText(R.id.nickname, worker.info.name);
+            Glide.with(getContext()).load(worker.logo).error(R.mipmap.ic_tx).into((CircleImageView) baseViewHolder.getView(R.id.tx));
+            baseViewHolder.setText(R.id.counts, worker.OrderCount + "单")
+                    .setText(R.id.point, worker.score + "分")
+                    .setText(R.id.length, "[" + worker.calc_range + "km]")
+                    .setText(R.id.nickname, worker.name);
             GridLayoutManager manager = new GridLayoutManager(getContext(), 4);
             mTypelist.setLayoutManager(manager);
-            TypeAdapter adapter = new TypeAdapter(R.layout.item_servetype, worker.info.serve_type);
+            TypeAdapter adapter = new TypeAdapter(R.layout.item_servetype, worker.serve_type);
             mTypelist.setAdapter(adapter);
             baseViewHolder.getView(R.id.btn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    worker.info.type = currentType;
+                    worker.type = currentType;
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("worker", worker.info);
+                    bundle.putSerializable("worker", worker);
                     overlay(RequestServeActivity.class, bundle);
                 }
             });

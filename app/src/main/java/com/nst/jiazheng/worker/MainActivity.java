@@ -1,11 +1,8 @@
 package com.nst.jiazheng.worker;
 
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,7 +22,6 @@ import com.nst.jiazheng.base.LogUtil;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.base.ToastHelper;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -170,7 +166,7 @@ public class MainActivity extends BaseToolBarActivity {
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(manager);
-        myAdapter = new MyAdapter(R.layout.item_worker, items);
+        myAdapter = new MyAdapter(R.layout.item_worker_home, items);
         mRecyclerView.setAdapter(myAdapter);
     }
 
