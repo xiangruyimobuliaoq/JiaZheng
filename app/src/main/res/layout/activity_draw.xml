@@ -37,8 +37,10 @@
                 android:textColor="#ff333333"
                 android:textSize="18sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <EditText
+                android:background="@null"
+                android:id="@+id/et_money"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="100.00"
                 android:textColor="#ff333333"
@@ -146,6 +148,7 @@
 
 
     <TextView
+        android:id="@+id/tv_request"
         android:background="@drawable/shape_btn_darkyellow_corner"
         android:padding="14.5dp"
         android:gravity="center"

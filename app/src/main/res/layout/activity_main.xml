@@ -43,7 +43,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_bg_white_corner_half"
-                        android:text="申请体现"
+                        android:text="申请提现"
                         android:textColor="#ff2f318b"
                         android:textSize="12sp" />
 

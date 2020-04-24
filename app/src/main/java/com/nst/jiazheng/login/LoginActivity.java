@@ -19,6 +19,7 @@ import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.user.AddrPickActivity;
 import com.nst.jiazheng.user.HomeActivity;
+import com.nst.jiazheng.worker.MainActivity;
 
 import butterknife.BindView;
 

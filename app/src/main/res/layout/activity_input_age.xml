@@ -8,6 +8,7 @@
 
 
     <EditText
+        android:id="@+id/et_age"
         android:padding="@dimen/dp_12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,9 +17,14 @@
         android:layout_marginTop="@dimen/dp_20"
         android:background="@drawable/shape_bg_white_corner"
         android:hint="请输入年龄"
-        android:inputType="numberDecimal" />
+        android:singleLine="true"
+        android:maxLines="1"
+        android:minLines="1"
+        android:numeric="integer"
+        android:inputType="numberSigned" />
 
     <TextView
+        android:id="@+id/tv_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="37.5dp"

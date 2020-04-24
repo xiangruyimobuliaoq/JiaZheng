@@ -14,8 +14,17 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 import com.nst.jiazheng.R;
+import com.nst.jiazheng.api.Api;
+import com.nst.jiazheng.api.resp.Order;
 import com.nst.jiazheng.api.resp.Register;
+import com.nst.jiazheng.api.resp.Resp;
+import com.nst.jiazheng.api.resp.Worker;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.LogUtil;
@@ -55,7 +64,7 @@ public class MainActivity extends BaseToolBarActivity {
     @BindView(R.id.tv_my)
     TextView mTvMy;
 
-    private List<Register> items;
+    private List<Order> items;
     private MyAdapter myAdapter;
     private Register mUserInfo;
     private int mSelectTabIndex;
@@ -143,7 +152,7 @@ public class MainActivity extends BaseToolBarActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
                 mSelectTabIndex = position;
-                ToastHelper.showToast("addOnTabSelectedListener : " + position, mContext);
+                getOrderList(position);
             }
 
             @Override
@@ -160,7 +169,6 @@ public class MainActivity extends BaseToolBarActivity {
 
     private void initView() {
         setTitle("管家首页");
-
         mIvChat.setImageResource(R.mipmap.ic_xiaox);
         items = new ArrayList<>();
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
@@ -171,29 +179,59 @@ public class MainActivity extends BaseToolBarActivity {
     }
 
 
-
-    
     private void initData() {
         mUserInfo = (Register) SpUtil.readObj("userInfo");
-        for (int i = 0; i < 10; i++) {
-            items.add(new Register());
-        }
-        myAdapter.setNewInstance(items);
+        int status = 2;
+        getOrderList(status);
+    }
 
+    private void getOrderList(int status) {
+        OkGo.<String>post(Api.orderList)
+                .params("api_name", "order_list_app")
+                .params("token", mUserInfo.token)
+                .params("status", status)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        LogUtil.getInstance().d("order_list_app : " + response.body());
+                        Resp<List<Order>> resp = new Gson().fromJson(response.body(),
+                                new TypeToken<Resp<List<Order>>>() {
+                                }.getType());
+                        if (resp.code == 1) {
+                            List<Order> data = resp.data;
+                            myAdapter.setNewInstance(data);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                    }
+                });
     }
 
 
-    class MyAdapter extends BaseQuickAdapter<Register, BaseViewHolder> {
+    class MyAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
 
-        public MyAdapter(int layoutResId, @Nullable List<Register> data) {
+        public MyAdapter(int layoutResId, @Nullable List<Order> data) {
             super(layoutResId, data);
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, Register item) {
+        protected void convert(BaseViewHolder helper, Order item) {
             int position = helper.getLayoutPosition();
-            LogUtil.getInstance().d("position  :: " + position);
-            helper.setText(R.id.tv_title, "MyAdapter");
+            String typeName = item.serve_type_name;
+            String address = item.address;
+            int num = item.num;
+            String time = item.time;
+            String countPrice = item.pay_price;
+            String units = item.serve_type_units;
+            helper.setText(R.id.tv_title, typeName)
+                    .setText(R.id.tv_ads, address)
+                    .setText(R.id.tv_num, num + "")
+                    .setText(R.id.tv_count_price, countPrice)
+                    .setText(R.id.tv_time, time)
+                    .setText(R.id.tv_units, units);
 
         }
     }

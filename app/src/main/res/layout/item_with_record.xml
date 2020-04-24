@@ -20,6 +20,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="提现中"
@@ -27,6 +28,7 @@
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/tv_msg"
             android:layout_marginTop="11.5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,6 +37,7 @@
             android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/tv_ctime"
             android:layout_marginTop="11.5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,6 +48,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_money"
         android:gravity="right"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

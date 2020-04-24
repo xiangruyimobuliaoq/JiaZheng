@@ -10,11 +10,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 import com.nst.jiazheng.R;
+import com.nst.jiazheng.api.Api;
+import com.nst.jiazheng.api.resp.Order;
 import com.nst.jiazheng.api.resp.Register;
+import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.LogUtil;
+import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.base.ToastHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +41,8 @@ public class MyCommentActivity extends BaseToolBarActivity {
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
     private MyAdapter myAdapter;
-    private List<Register> items;
+    private List<Order> items;
+    private Register mUserInfo;
 
     @Override
     protected void init() {
@@ -50,7 +61,6 @@ public class MyCommentActivity extends BaseToolBarActivity {
     }
 
     private void initView() {
-
         setTitle("我的评价");
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -60,25 +70,49 @@ public class MyCommentActivity extends BaseToolBarActivity {
     }
 
     private void initData() {
+        mUserInfo = (Register) SpUtil.readObj("userInfo");
         items = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            items.add(new Register());
-        }
-        myAdapter.setNewInstance(items);
+//        for (int i = 0; i < 5; i++) {
+//            items.add(new Register());
+//        }
+        OkGo.<String>post(Api.userApi)
+                .params("api_name", "comment_list")
+                .params("token", mUserInfo.token)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        LogUtil.getInstance().d("comment_list : " + response.body());
+                        Resp<List<Order>> resp = new Gson().fromJson(response.body(),
+                                new TypeToken<Resp<List<Order>>>() {
+                                }.getType());
+                        if (resp.code == 1) {
+                            List<Order> data = resp.data;
+                            myAdapter.setNewInstance(data);
+                        }
+                        ToastHelper.showToast(resp.msg, mContext);
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                    }
+                });
 
     }
 
-    class MyAdapter extends BaseQuickAdapter<Register, BaseViewHolder> {
+    class MyAdapter extends BaseQuickAdapter<Order, BaseViewHolder> {
 
-        public MyAdapter(int layoutResId, @Nullable List<Register> data) {
+        public MyAdapter(int layoutResId, @Nullable List<Order> data) {
             super(layoutResId, data);
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, Register item) {
-            int position = helper.getLayoutPosition();
-            LogUtil.getInstance().d("position  :: " + position);
-
+        protected void convert(BaseViewHolder helper, Order item) {
+            helper
+                    .setText(R.id.tv_name, item.name)
+                    .setText(R.id.tv_content, item.content)
+                    .setText(R.id.tv_time, item.ctime)
+            ;
         }
     }
 
