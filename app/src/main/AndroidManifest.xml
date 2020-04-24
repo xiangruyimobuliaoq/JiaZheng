@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nst.jiazheng">
-
     <!--允许程序打开网络套接字-->
     <uses-permission android:name="android.permission.INTERNET" />
     <!--允许程序设置内置sd卡的读写权限-->
@@ -15,7 +14,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!--允许程序访问CellID或WiFi热点来获取粗略的位置-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -27,7 +25,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme_yellow"
         android:usesCleartextTraffic="true">
-
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="53faf9d7bf36dd10b642b27c7025bfaf" />
@@ -38,7 +35,6 @@
             android:theme="@style/AppTheme_blue">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -54,7 +50,7 @@
             android:name=".user.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".user.qb.MyPointActivity"
+            android:name=".user.qb.MyIntegralActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".worker.MainActivity"
@@ -86,21 +82,55 @@
         <activity
             android:name=".user.jzfw.NearbyActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".worker.CharActivity" />
-        <activity android:name=".worker.WithdrawActivity" />
-        <activity android:name=".worker.WithdrawalsRecordActivity" />
-        <activity android:name=".worker.ServiceTypeActivity" />
-        <activity android:name=".worker.MyCommentActivity" />
-        <activity android:name=".worker.MyProfileActivity" />
-        <activity android:name=".worker.CommentDetailsActivity" />
-        <activity android:name=".worker.InputAgeActivity" />
-        <activity android:name=".worker.OrderDetailsActivity" />
-        <activity android:name=".worker.AddCommentActivity" />
-        <activity android:name=".user.qb.RechargeActivity" />
+        <activity
+            android:name=".worker.CharActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.WithdrawActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.WithdrawalsRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.ServiceTypeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.MyCommentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.MyProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.CommentDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.InputAgeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.OrderDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.AddCommentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.qb.RechargeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.qb.IntegralLogActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.qb.CouponListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.qb.CashLogActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.MsgCenterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.CommentActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name="com.amap.api.location.APSService" />
-
     </application>
-
 </manifest>

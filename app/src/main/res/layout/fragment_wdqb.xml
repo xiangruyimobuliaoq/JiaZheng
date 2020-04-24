@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
-            android:text="3620.00"
+            android:id="@+id/money"
             android:textColor="@color/text_1"
             android:textSize="25sp" />
 
@@ -80,6 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
         android:layout_marginTop="20dp"
+        android:id="@+id/couponlist"
         android:layout_marginRight="18dp"
         android:background="@drawable/shape_bg_white_corner"
         android:drawableRight="@mipmap/ic_jinr"
@@ -98,6 +99,7 @@
         android:background="@drawable/shape_bg_white_corner"
         android:drawableRight="@mipmap/ic_jinr"
         android:elevation="1dp"
+        android:id="@+id/cashlog"
         android:padding="18sp"
         android:text="余额明细"
         android:textColor="@color/text_1"

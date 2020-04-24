@@ -27,15 +27,16 @@
             android:textSize="11sp" />
 
         <TextView
+            android:id="@+id/integral"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
-            android:text="3620.00"
             android:textColor="@color/text_1"
             android:textSize="25sp" />
 
         <TextView
+            android:id="@+id/integrallog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -51,22 +52,25 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/jftitle"
         android:layout_marginLeft="18dp"
         android:layout_marginTop="40dp"
-        android:layout_marginBottom="15dp"
         android:layout_marginRight="18dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/shape_bg_white_corner"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/integrallist"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="30dp" />
+            android:layout_marginLeft="7.5dp"
+            android:layout_marginTop="36.5dp"
+            android:layout_marginRight="7.5dp"
+            android:layout_marginBottom="7.5dp" />
     </LinearLayout>
 
     <TextView
