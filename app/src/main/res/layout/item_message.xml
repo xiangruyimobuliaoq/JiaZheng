@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="12dp"
+    android:layout_marginTop="7.5dp"
+    android:layout_marginRight="12dp"
+    android:layout_marginBottom="7.5dp"
+    android:background="@drawable/shape_bg_white_corner"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16.5dp"
+        android:gravity="center_vertical">
+
+        <View
+            android:layout_width="3dp"
+            android:layout_height="15dp"
+            android:background="@drawable/shape_bg_blue_corner_right" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="订单通知"
+            android:textColor="@color/text_1"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/line_2" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginRight="15dp"
+        android:text="您订单号为131312312的服务订单已被周阿姨接单！"
+        android:textColor="@color/text_1"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/ctime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="12.5dp"
+        android:layout_marginBottom="16.5dp"
+        android:text="2019-06-06 16:18"
+        android:textColor="@color/text_3"
+        android:textSize="10sp" />
+
+</LinearLayout>

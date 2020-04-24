@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="12dp"
+    android:layout_marginTop="7.5dp"
+    android:layout_marginRight="12dp"
+    android:layout_marginBottom="7.5dp"
+    android:background="@drawable/shape_bg_white_corner">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15.5dp"
+            android:layout_marginTop="17dp"
+            android:text="家政订单"
+            android:textColor="@color/text_1"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/ctime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15.5dp"
+            android:layout_marginTop="12.5dp"
+            android:layout_marginBottom="17dp"
+            android:text="2018-11-11 12:11:45"
+            android:textColor="@color/text_3"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/integral"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="15.5dp"
+        android:gravity="right"
+        android:text="+500"
+        android:textColor="@color/red"
+        android:textSize="15sp" />
+</LinearLayout>

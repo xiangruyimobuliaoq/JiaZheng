@@ -84,7 +84,7 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         manager.setOrientation(RecyclerView.VERTICAL);
         nearbylist.setLayoutManager(manager);
-        mAdapter = new NearbyAdapter(R.layout.item_worker_home, null);
+        mAdapter = new NearbyAdapter(R.layout.item_worker, null);
         nearbylist.setAdapter(mAdapter);
         getData();
     }

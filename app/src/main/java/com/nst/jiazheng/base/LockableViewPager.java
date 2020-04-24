@@ -40,4 +40,5 @@ public class LockableViewPager extends ViewPager {
     public boolean canScrollHorizontally(int direction) {
         return !swipeLocked && super.canScrollHorizontally(direction);
     }
+
 }

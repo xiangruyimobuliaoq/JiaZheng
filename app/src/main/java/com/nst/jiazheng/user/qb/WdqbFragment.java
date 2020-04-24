@@ -3,9 +3,19 @@ package com.nst.jiazheng.user.qb;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 import com.nst.jiazheng.R;
+import com.nst.jiazheng.api.Api;
+import com.nst.jiazheng.api.resp.Money;
+import com.nst.jiazheng.api.resp.Register;
+import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.Layout;
+import com.nst.jiazheng.base.SpUtil;
 
 import butterknife.BindView;
 
@@ -24,17 +34,41 @@ public class WdqbFragment extends BaseFragment {
     TextView wdjf;
     @BindView(R.id.recharge)
     TextView recharge;
+    @BindView(R.id.money)
+    TextView money;
+    @BindView(R.id.couponlist)
+    TextView couponlist;
+    @BindView(R.id.cashlog)
+    TextView cashlog;
+    private Register mUserInfo;
 
     @Override
     protected void init() {
+        mUserInfo = (Register) SpUtil.readObj("userInfo");
         wdjf.setOnClickListener(v -> {
-            overlay(MyPointActivity.class);
+            overlay(MyIntegralActivity.class);
         });
-        recharge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                overlay(RechargeActivity.class);
-            }
+        recharge.setOnClickListener(view -> overlay(RechargeActivity.class));
+        couponlist.setOnClickListener(view -> {
+            overlay(CouponListActivity.class);
         });
+        cashlog.setOnClickListener(view -> {
+            overlay(CashLogActivity.class);
+        });
+        getUserInfo();
+    }
+
+    private void getUserInfo() {
+        OkGo.<String>post(Api.userApi).params("api_name", "my_money").params("token", mUserInfo.token)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Resp<Money> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Money>>() {
+                        }.getType());
+                        if (resp.code == 1) {
+                            money.setText(String.valueOf(resp.data.money));
+                        }
+                    }
+                });
     }
 }

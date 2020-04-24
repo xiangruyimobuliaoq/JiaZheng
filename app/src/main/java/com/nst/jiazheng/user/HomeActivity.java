@@ -52,20 +52,16 @@ public class HomeActivity extends BaseActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i) {
                     case R.id.jzfw:
-                        Log.e("123", "0");
-                        vp.setCurrentItem(0);
+                        vp.setCurrentItem(0, false);
                         break;
                     case R.id.wdgj:
-                        Log.e("123", "1");
-                        vp.setCurrentItem(1);
+                        vp.setCurrentItem(1, false);
                         break;
                     case R.id.wdqb:
-                        Log.e("123", "2");
-                        vp.setCurrentItem(2);
+                        vp.setCurrentItem(2, false);
                         break;
                     case R.id.grzx:
-                        Log.e("123", "3");
-                        vp.setCurrentItem(3);
+                        vp.setCurrentItem(3, false);
                         break;
                 }
             }
