@@ -56,7 +56,6 @@
             android:id="@+id/tv_mobile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1234567891"
             android:textColor="#ff999999"
             android:textSize="14sp" />
 
@@ -87,7 +86,6 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="周XX"
             android:drawableRight="@mipmap/ic_xyb"
             android:drawablePadding="@dimen/dp_4"
             android:textColor="#ff999999"
@@ -123,7 +121,7 @@
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/ic_xyb"
             android:drawablePadding="@dimen/dp_4"
-            android:text="女"
+            android:text="未知"
             android:textColor="#ff999999"
             android:textSize="14sp" />
 
@@ -152,11 +150,10 @@
 
         <TextView
             android:id="@+id/tv_is_certification"
-            android:drawableRight="@mipmap/ic_xyb"
-            android:drawablePadding="@dimen/dp_4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="已认证"
+            android:drawableRight="@mipmap/ic_xyb"
+            android:drawablePadding="@dimen/dp_4"
             android:textColor="#ff999999"
             android:textSize="14sp" />
 
@@ -190,7 +187,6 @@
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/ic_xyb"
             android:drawablePadding="@dimen/dp_4"
-            android:text="广东省 东莞市"
             android:textColor="#ff999999"
             android:textSize="14sp" />
 
@@ -224,7 +220,6 @@
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/ic_xyb"
             android:drawablePadding="@dimen/dp_4"
-            android:text="4年"
             android:textColor="#ff999999"
             android:textSize="14sp" />
 
@@ -260,7 +255,6 @@
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/ic_xyb"
             android:drawablePadding="@dimen/dp_4"
-            android:text="38岁"
             android:textColor="#ff999999"
             android:textSize="14sp" />
 
@@ -270,9 +264,6 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#E6E6E6" />
-
-
-
 
 
 </LinearLayout>

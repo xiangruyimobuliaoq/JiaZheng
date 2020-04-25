@@ -36,6 +36,7 @@ import com.nst.jiazheng.worker.utils.GetJsonDataUtil;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -83,9 +84,8 @@ public class MyProfileActivity extends BaseToolBarActivity {
 
     @Override
     protected void init() {
-        mUserInfo = (Register) SpUtil.readObj("userInfo");
+
         initView();
-        initData();
         initEvent();
     }
 
@@ -96,6 +96,13 @@ public class MyProfileActivity extends BaseToolBarActivity {
     private void initData() {
         initJsonData();
         getUserInfo();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mUserInfo = (Register) SpUtil.readObj("userInfo");
+        initData();
     }
 
     private void getUserInfo() {
@@ -123,22 +130,25 @@ public class MyProfileActivity extends BaseToolBarActivity {
     }
 
     private void setData(Order data) {
-        mTvAge.setText(data.age + "");
+        mTvAge.setText(data.age + "岁");
         mTvMobile.setText(data.mobile);
         mTvName.setText(data.nickname);
         mTvIsCertification.setText(data.is_certification == 1 ? "已认证" : "未认证");
         mTvSex.setText(data.sex == 0 ? "未知" : data.sex == 1 ? "男" : "女");
         mTvCity.setText(data.address);
-        mTvLong.setText(data.job_age+"");
+        mTvLong.setText(data.job_age + "年");
         Glide.with(this)
                 .load(data.headimgurl)
                 .into(mIvAvatar);
     }
 
-    private void updateUserInfo() {
+    private void updateUserInfo(HashMap<String, String> info) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("api_name", "edit_user");
+        map.put("token", mUserInfo.token);
+        map.putAll(info);
         OkGo.<String>post(Api.userApi)
-                .params("api_name", "edit_user")
-                .params("token", mUserInfo.token)
+                .params(map)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -149,6 +159,7 @@ public class MyProfileActivity extends BaseToolBarActivity {
                         if (resp.code == 1) {
 
                         }
+                        getUserInfo();
                         ToastHelper.showToast(resp.msg, mContext);
                     }
 
@@ -199,7 +210,9 @@ public class MyProfileActivity extends BaseToolBarActivity {
             if (resultCode == InputAgeActivity.RESULT_CODE) {
                 int age = data.getIntExtra(InputAgeActivity.INPUT_AGE, 18);
                 mTvAge.setText(age + "");
-                updateUserInfo();
+                HashMap<String, String> map = new HashMap<>();
+                map.put("age", String.valueOf(age));
+                updateUserInfo(map);
             }
         }
     }
@@ -260,6 +273,7 @@ public class MyProfileActivity extends BaseToolBarActivity {
 
     private void showLongTimePicker() {
         List<String> options1Items = new ArrayList<>();
+        options1Items.add("半年");
         for (int i = 0; i < 6; i++) {
             options1Items.add((i + 1) + "年");
         }
@@ -269,6 +283,9 @@ public class MyProfileActivity extends BaseToolBarActivity {
             public void onOptionsSelect(int options1, int option2, int options3, View v) {
                 String tx = options1Items.get(options1);
                 mTvLong.setText(tx);
+                HashMap<String, String> map = new HashMap<>();
+                map.put("job_age", 0.5 + "");
+                updateUserInfo(map);
             }
         })
                 .setCancelColor(Color.GRAY)
@@ -298,6 +315,9 @@ public class MyProfileActivity extends BaseToolBarActivity {
 
                 String tx = opt1tx + opt2tx + opt3tx;
                 mTvCity.setText(tx);
+                HashMap<String, String> map = new HashMap<>();
+                map.put("address", tx);
+                updateUserInfo(map);
             }
         })
 
