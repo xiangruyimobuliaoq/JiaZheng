@@ -1,6 +1,5 @@
 package com.nst.jiazheng.user.grzx;
 
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nst.jiazheng.R;
