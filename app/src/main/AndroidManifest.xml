@@ -130,6 +130,21 @@
         <activity
             android:name=".user.grzx.CommentActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.CommentDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.OrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.PayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.WorkerApplyActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".user.grzx.WorkerAgreementActivity" />
+        <activity android:name=".user.grzx.FeedBackActivity" />
+        <activity android:name=".user.grzx.UserInfoActivity" />
 
         <service android:name="com.amap.api.location.APSService" />
     </application>

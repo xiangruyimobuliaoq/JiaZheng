@@ -9,9 +9,10 @@ package com.nst.jiazheng.api.resp;
  * 更新时间   $
  * 更新描述
  */
-public class PrivateAgreement {
+public class Agreement {
     /**
      * private_agreement : <p>额鹅鹅鹅</p>
      */
     public String private_agreement;
+    public String agreement;
 }

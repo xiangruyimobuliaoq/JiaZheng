@@ -1,6 +1,5 @@
 package com.nst.jiazheng.login;
 
-import android.text.Html;
 import android.text.TextUtils;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,9 +16,7 @@ import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
-import com.nst.jiazheng.user.AddrPickActivity;
 import com.nst.jiazheng.user.HomeActivity;
-import com.nst.jiazheng.worker.MainActivity;
 
 import butterknife.BindView;
 
@@ -74,7 +71,7 @@ public class LoginActivity extends BaseActivity {
             return;
         }
         regist.setEnabled(false);
-        OkGo.<String>post(Api.register).params("api_name", "login")
+        OkGo.<String>post(Api.registerApi).params("api_name", "login")
                 .params("mobile", userName)
                 .params("password", passWord).execute(new StringCallback() {
             @Override

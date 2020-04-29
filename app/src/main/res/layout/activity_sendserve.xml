@@ -173,7 +173,6 @@
                 android:layout_marginRight="12dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_bg_white_corner"
-                android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <EditText

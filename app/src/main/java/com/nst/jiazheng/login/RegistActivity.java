@@ -17,7 +17,6 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.nst.jiazheng.R;
 import com.nst.jiazheng.api.Api;
-import com.nst.jiazheng.api.resp.PrivateAgreement;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseActivity;
@@ -94,7 +93,7 @@ public class RegistActivity extends BaseActivity {
             return;
         }
         regist.setEnabled(false);
-        OkGo.<String>post(Api.register).params("api_name", "register")
+        OkGo.<String>post(Api.registerApi).params("api_name", "register")
                 .params("mobile", userName)
                 .params("password", passWord)
                 .params("code", smsCode).execute(new StringCallback() {

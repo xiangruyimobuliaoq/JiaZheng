@@ -2,6 +2,9 @@ package com.nst.jiazheng.base;
 
 import android.app.Application;
 
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.cache.CacheMode;
+
 
 /**
  * 创建者     彭龙
@@ -19,5 +22,6 @@ public class App extends Application {
         super.onCreate();
         SpUtil.init(this);
         DpUtil.init(this);
+        OkGo.getInstance().setCacheMode(CacheMode.FIRST_CACHE_THEN_REQUEST).init(this);
     }
 }

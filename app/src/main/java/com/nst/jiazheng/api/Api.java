@@ -13,12 +13,12 @@ import com.nst.jiazheng.BuildConfig;
  */
 public class Api {
 
-    public static String register = BuildConfig.API_SERVER + "/outside/register/api";
+    public static String registerApi = BuildConfig.API_SERVER + "/outside/register/api";
     public static String baseApi = BuildConfig.API_SERVER + "/outside/base/api";
     public static String publicApi = BuildConfig.API_SERVER + "/outside/public/api";
     public static String serverApi = BuildConfig.API_SERVER + "/outside/server/api";
     public static String userApi = BuildConfig.API_SERVER + "/outside/user/api";
-    public static String orderList = BuildConfig.API_SERVER + "/outside/order/api";
+    public static String orderApi = BuildConfig.API_SERVER + "/outside/order/api";
 
 
 }

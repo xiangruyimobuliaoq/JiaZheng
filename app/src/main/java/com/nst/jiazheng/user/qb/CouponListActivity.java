@@ -48,15 +48,11 @@ public class CouponListActivity extends BaseToolBarActivity {
     @Override
     protected void init() {
         setTitle("我的优惠券");
-        ArrayList<Coupon> objects = new ArrayList<>();
-        objects.add(new Coupon());
-        objects.add(new Coupon());
-        objects.add(new Coupon());
         mUserInfo = (Register) SpUtil.readObj("userInfo");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(RecyclerView.VERTICAL);
         couponlist.setLayoutManager(manager);
-        mAdapter = new CouponAdapter(R.layout.item_coupon, objects);
+        mAdapter = new CouponAdapter(R.layout.item_coupon, null);
         couponlist.setAdapter(mAdapter);
         getCouponList();
     }
@@ -102,7 +98,7 @@ public class CouponListActivity extends BaseToolBarActivity {
             baseViewHolder.setText(R.id.name, coupon.name)
                     .setText(R.id.money_limit, "满 " + coupon.money_limit + " 使用")
                     .setText(R.id.time, "有效日期: " + new SimpleDateFormat("yyyy/MM/dd").format(new Date(coupon.ctime * 1000)) + " - " + new SimpleDateFormat("yyyy/MM/dd").format(new Date(coupon.etime * 1000)))
-                    .setText(R.id.money, coupon.money);
+                    .setText(R.id.money, String.valueOf(coupon.money));
             baseViewHolder.findView(R.id.del).setOnClickListener(view -> {
 
                 new ConfirmWindow(CouponListActivity.this)

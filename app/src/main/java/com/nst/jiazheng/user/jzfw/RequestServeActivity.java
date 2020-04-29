@@ -29,6 +29,7 @@ import com.nst.jiazheng.R;
 import com.nst.jiazheng.api.Api;
 import com.nst.jiazheng.api.resp.Addr;
 import com.nst.jiazheng.api.resp.CalculatePrice;
+import com.nst.jiazheng.api.resp.Order;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.api.resp.ServeType;
@@ -37,6 +38,7 @@ import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.user.AddrPickActivity;
+import com.nst.jiazheng.user.PayActivity;
 import com.nst.jiazheng.user.wdgj.CompanyInfoActivity;
 import com.nst.jiazheng.user.wdgj.WorkerInfoActivity;
 
@@ -183,10 +185,13 @@ public class RequestServeActivity extends BaseToolBarActivity {
                 .params("insurance", cb.isChecked() ? 1 : 2).execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
-                Resp resp = new Gson().fromJson(response.body(), new TypeToken<Resp>() {
+                Resp<Order> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Order>>() {
                 }.getType());
                 toast(resp.msg);
                 if (resp.code == 1) {
+                    Bundle params = new Bundle();
+                    params.putString("orderNo", resp.data.order_no);
+                    overlay(PayActivity.class, params);
                     finish();
                 }
             }

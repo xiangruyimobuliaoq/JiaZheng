@@ -1,6 +1,7 @@
 package com.nst.jiazheng.user;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.lzy.okgo.model.Response;
 import com.nst.jiazheng.R;
 import com.nst.jiazheng.api.Api;
 import com.nst.jiazheng.api.resp.Addr;
+import com.nst.jiazheng.api.resp.Order;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.api.resp.ServeType;
@@ -132,10 +134,13 @@ public class SendServeActivity extends BaseToolBarActivity {
                 .params("insurance", cb.isChecked() ? 1 : 2).execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
-                Resp resp = new Gson().fromJson(response.body(), new TypeToken<Resp>() {
+                Resp<Order> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Order>>() {
                 }.getType());
                 toast(resp.msg);
                 if (resp.code == 1) {
+                    Bundle params = new Bundle();
+                    params.putString("orderNo", resp.data.order_no);
+                    overlay(PayActivity.class, params);
                     finish();
                 }
             }

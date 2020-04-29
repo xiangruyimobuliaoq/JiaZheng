@@ -24,7 +24,7 @@ public class Coupon {
     public int id;
     public String name;
     public String money_limit;
-    public String money;
+    public int money;
     public int ctime;
     public int etime;
     public int guoqi;

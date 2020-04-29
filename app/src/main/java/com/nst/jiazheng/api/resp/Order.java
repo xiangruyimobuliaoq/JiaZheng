@@ -1,5 +1,7 @@
 package com.nst.jiazheng.api.resp;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
+
 /**
  * 创建者     彭龙
  * 创建时间   2020/4/11 2:42 PM
@@ -9,19 +11,7 @@ package com.nst.jiazheng.api.resp;
  * 更新时间   $
  * 更新描述
  */
-public class Order {
-    /**
-     * daijie : 0
-     * yijie : 0
-     * jinxing : 0
-     * daique : 0
-     */
-
-    public int daijie;
-    public int yijie;
-    public int jinxing;
-    public int daique;
-
+public class Order implements MultiItemEntity {
     /**
      * id : 211
      * order_no : U202002231806233666
@@ -41,7 +31,6 @@ public class Order {
      * staff_name :
      * StatusText : 已完成
      */
-
     public int id;
     public String order_no;
     public int num;
@@ -71,4 +60,10 @@ public class Order {
     public String nickname;
     public int is_certification;  //是否实名认证 1.是 2.否
     public int job_age; //从业年限
+    public String start_time;
+
+    @Override
+    public int getItemType() {
+        return status;
+    }
 }

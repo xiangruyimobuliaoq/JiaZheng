@@ -35,8 +35,8 @@ import butterknife.BindView;
  */
 @Layout(layoutId = R.layout.activity_cashlog)
 public class CashLogActivity extends BaseToolBarActivity {
-    @BindView(R.id.integralloglist)
-    RecyclerView integralloglist;
+    @BindView(R.id.cashloglist)
+    RecyclerView cashloglist;
     private CashLogAdapter mAdapter;
     private Register mUserInfo;
     @Override
@@ -45,9 +45,9 @@ public class CashLogActivity extends BaseToolBarActivity {
         mUserInfo = (Register) SpUtil.readObj("userInfo");
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(RecyclerView.VERTICAL);
-        integralloglist.setLayoutManager(manager);
+        cashloglist.setLayoutManager(manager);
         mAdapter = new CashLogAdapter(R.layout.item_integrallog, null);
-        integralloglist.setAdapter(mAdapter);
+        cashloglist.setAdapter(mAdapter);
         getCashLog();
     }
 

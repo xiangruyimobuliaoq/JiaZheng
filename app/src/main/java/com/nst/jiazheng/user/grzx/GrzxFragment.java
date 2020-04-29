@@ -80,6 +80,23 @@ public class GrzxFragment extends BaseFragment {
         desc.setOnClickListener(v -> {
             overlay(CommentActivity.class);
         });
+        wddd.setOnClickListener(v -> {
+            overlay(OrderActivity.class);
+        });
+        sqcwgj.setOnClickListener(v -> {
+            overlay(WorkerApplyActivity.class);
+        });
+        yjfk.setOnClickListener(v -> {
+            overlay(FeedBackActivity.class);
+        });
+        grzl.setOnClickListener(v -> {
+            overlay(UserInfoActivity.class);
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getCenterData();
     }
 

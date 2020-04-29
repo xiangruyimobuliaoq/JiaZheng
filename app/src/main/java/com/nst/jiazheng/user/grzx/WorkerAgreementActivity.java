@@ -1,4 +1,4 @@
-package com.nst.jiazheng.login;
+package com.nst.jiazheng.user.grzx;
 
 import android.text.Html;
 import android.widget.TextView;
@@ -28,20 +28,20 @@ import butterknife.BindView;
  */
 
 @Layout(layoutId = R.layout.activity_agreement)
-public class AgreementActivity extends BaseToolBarActivity {
+public class WorkerAgreementActivity extends BaseToolBarActivity {
     @BindView(R.id.content)
     TextView content;
 
     @Override
     protected void init() {
-        setTitle("用户协议");
-        OkGo.<String>post(Api.registerApi).params("api_name", "agreement").execute(new StringCallback() {
+        setTitle("私人管家协议");
+        OkGo.<String>post(Api.registerApi).params("api_name", "private_agreement").execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 Resp<Agreement> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Agreement>>() {
                 }.getType());
                 if (resp.code == 1) {
-                    content.setText(Html.fromHtml(resp.data.agreement));
+                    content.setText(Html.fromHtml(resp.data.private_agreement));
                 }
             }
 

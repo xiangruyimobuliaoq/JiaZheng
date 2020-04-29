@@ -1,5 +1,6 @@
 package com.nst.jiazheng.user.grzx;
 
+import android.os.Bundle;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -61,7 +62,9 @@ public class CommentActivity extends BaseToolBarActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-
+                Bundle params = new Bundle();
+                params.putSerializable("data",mAdapter.getData().get(position));
+                overlay(CommentDetailActivity.class,params);
             }
         });
         getCommentList();

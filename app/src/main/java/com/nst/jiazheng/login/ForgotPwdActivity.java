@@ -1,12 +1,8 @@
 package com.nst.jiazheng.login;
 
 import android.os.CountDownTimer;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.style.UnderlineSpan;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -78,7 +74,7 @@ public class ForgotPwdActivity extends BaseActivity {
             return;
         }
         submit.setEnabled(false);
-        OkGo.<String>post(Api.register).params("api_name", "forgetPassword")
+        OkGo.<String>post(Api.registerApi).params("api_name", "forgetPassword")
                 .params("mobile", userName)
                 .params("password", passWord)
                 .params("code", smsCode).execute(new StringCallback() {

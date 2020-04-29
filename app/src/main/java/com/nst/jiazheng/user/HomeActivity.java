@@ -17,6 +17,7 @@ import com.nst.jiazheng.user.wdgj.WdgjFragment;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -45,7 +46,7 @@ public class HomeActivity extends BaseActivity {
     protected void init() {
         mList = new HashMap();
         vp.setSwipeLocked(true);
-        vp.setAdapter(new HomePageAdapter(getSupportFragmentManager()));
+        vp.setAdapter(new HomePageAdapter(getSupportFragmentManager(), 1));
         vp.setOffscreenPageLimit(3);
         rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -73,8 +74,9 @@ public class HomeActivity extends BaseActivity {
 
     private class HomePageAdapter extends FragmentPagerAdapter {
 
-        public HomePageAdapter(FragmentManager fm) {
-            super(fm);
+
+        public HomePageAdapter(@NonNull FragmentManager fm, int behavior) {
+            super(fm, behavior);
         }
 
         @Override

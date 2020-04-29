@@ -45,7 +45,7 @@
         android:background="@drawable/shape_bg_white_corner"
         android:drawableRight="@mipmap/ic_jinr"
         android:padding="18.5dp"
-        android:text="清楚缓存"
+        android:text="清除缓存"
         android:textColor="@color/text_1"
         android:textSize="14sp" />
 

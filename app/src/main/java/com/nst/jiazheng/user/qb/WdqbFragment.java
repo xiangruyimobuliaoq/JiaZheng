@@ -13,6 +13,7 @@ import com.nst.jiazheng.api.Api;
 import com.nst.jiazheng.api.resp.Money;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
+import com.nst.jiazheng.api.resp.UserCenter;
 import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
@@ -55,15 +56,20 @@ public class WdqbFragment extends BaseFragment {
         cashlog.setOnClickListener(view -> {
             overlay(CashLogActivity.class);
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getUserInfo();
     }
 
     private void getUserInfo() {
-        OkGo.<String>post(Api.userApi).params("api_name", "my_money").params("token", mUserInfo.token)
+        OkGo.<String>post(Api.userApi).params("api_name", "center").params("token", mUserInfo.token)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        Resp<Money> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Money>>() {
+                        Resp<UserCenter> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<UserCenter>>() {
                         }.getType());
                         if (resp.code == 1) {
                             money.setText(String.valueOf(resp.data.money));
