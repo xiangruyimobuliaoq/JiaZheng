@@ -26,7 +26,9 @@ import com.nst.jiazheng.base.LogUtil;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.base.ToastHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -108,10 +110,11 @@ public class MyCommentActivity extends BaseToolBarActivity {
 
         @Override
         protected void convert(BaseViewHolder helper, Order item) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             helper
                     .setText(R.id.tv_name, item.name)
                     .setText(R.id.tv_content, item.content)
-                    .setText(R.id.tv_time, item.ctime)
+                    .setText(R.id.tv_time, format.format(new Date(item.ctime)))
             ;
         }
     }

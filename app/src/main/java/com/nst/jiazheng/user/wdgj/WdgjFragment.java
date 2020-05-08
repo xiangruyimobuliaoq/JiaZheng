@@ -86,6 +86,11 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
         nearbylist.setLayoutManager(manager);
         mAdapter = new NearbyAdapter(R.layout.item_worker, null);
         nearbylist.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getData();
     }
 
@@ -131,18 +136,26 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
 
     private void getData() {
         mAdapter.setList(null);
+        showDialog("加载中", false);
         OkGo.<String>post(Api.serverApi).params("api_name", "my_collect").params("token", mUserInfo.token).params("type", currentType)
                 .params("lng", 113.75179).params("lat", 23.02067)
 //                .params("lng", cameraPosition.target.longitude).params("lat", cameraPosition.target.latitude)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        dismissDialog();
                         Resp<List<MyCollect>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<MyCollect>>>() {
                         }.getType());
                         toast(resp.msg);
                         if (resp.code == 1) {
                             mAdapter.setList(resp.data);
                         }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        dismissDialog();
                     }
                 });
     }
@@ -173,7 +186,6 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
         @Override
         protected void convert(BaseViewHolder baseViewHolder, MyCollect worker) {
             RecyclerView mTypelist = baseViewHolder.getView(R.id.typelist);
-            Glide.with(getContext()).load(worker.info.logo).error(R.mipmap.ic_tx).into((CircleImageView) baseViewHolder.getView(R.id.tx));
             baseViewHolder.setText(R.id.counts, worker.info.OrderCount + "单")
                     .setText(R.id.point, worker.info.score + "分")
                     .setText(R.id.length, "[" + worker.info.calc_range + "km]")
@@ -191,6 +203,11 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
                     overlay(RequestServeActivity.class, bundle);
                 }
             });
+            try {
+                Glide.with(getContext()).load(worker.info.logo).error(R.mipmap.ic_tx).into((CircleImageView) baseViewHolder.getView(R.id.tx));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

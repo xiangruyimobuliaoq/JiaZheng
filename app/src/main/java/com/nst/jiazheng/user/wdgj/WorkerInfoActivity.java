@@ -102,7 +102,6 @@ public class WorkerInfoActivity extends BaseToolBarActivity {
         submit.setEnabled(true);
         submit.setText(data.is_collect == 0 ? "收藏Ta" : "取消收藏");
         counts.setText("已接 " + data.OrderCount + "单");
-        Glide.with(this).load(data.headimgurl).error(R.mipmap.ic_tx).into(tx);
         nickname.setText(mWorker.name);
         ratingbar.setRating(data.score);
         point.setText(data.score + "分");
@@ -124,6 +123,11 @@ public class WorkerInfoActivity extends BaseToolBarActivity {
         describe.setLayoutManager(manager1);
         CommentAdapter adapter1 = new CommentAdapter(R.layout.item_comment, data.comment_list);
         describe.setAdapter(adapter1);
+        try {
+            Glide.with(this).load(data.headimgurl).error(R.mipmap.ic_tx).into(tx);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void collect() {
@@ -180,8 +184,12 @@ public class WorkerInfoActivity extends BaseToolBarActivity {
                     .setText(R.id.ctime, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(comment.ctime * 1000)));
             CircleImageView tx = baseViewHolder.getView(R.id.tx);
             AndRatingBar score = baseViewHolder.getView(R.id.score);
-            Glide.with(WorkerInfoActivity.this).load(comment.headimgurl).error(R.mipmap.ic_tx).into(tx);
             score.setRating(Float.parseFloat(comment.score));
+            try {
+                Glide.with(WorkerInfoActivity.this).load(comment.headimgurl).error(R.mipmap.ic_tx).into(tx);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

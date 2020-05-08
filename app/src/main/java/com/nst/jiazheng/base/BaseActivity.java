@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.xiasuhuei321.loadingdialog.view.LoadingDialog;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -31,6 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     //    private LoadingDialog mDialog;
     public Context mContext;
+    private LoadingDialog mDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +63,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void toast(int msg_id) {
         ToastHelper.showToast(getString(msg_id), this);
+    }
+
+    public void showDialog(String title, boolean canCancel) {
+        dismissDialog();
+        mDialog = new LoadingDialog(this);
+        mDialog.setInterceptBack(canCancel);
+        mDialog.setLoadingText(title).show();
+    }
+
+    public void dismissDialog() {
+        if (null != mDialog)
+            mDialog.close();
     }
 
     protected void initToolbar(Toolbar toolbar) {

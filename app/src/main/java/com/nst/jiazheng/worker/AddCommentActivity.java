@@ -9,7 +9,6 @@ import com.nst.jiazheng.base.Layout;
  * 创建时间   2020/4/19 6:05 PM
  * 描述	      评价
  */
-
 @Layout(layoutId = R.layout.activity_add_comment)
 public class AddCommentActivity extends BaseToolBarActivity {
     @Override

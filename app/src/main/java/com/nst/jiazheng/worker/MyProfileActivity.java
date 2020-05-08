@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 创建者     ZhangAnran
@@ -73,7 +74,7 @@ public class MyProfileActivity extends BaseToolBarActivity {
     @BindView(R.id.tv_is_certification)
     TextView mTvIsCertification;
     @BindView(R.id.iv_avatar)
-    ImageView mIvAvatar;
+    CircleImageView mIvAvatar;
 
 
     private int REQUEST_CODE = 888;
@@ -137,9 +138,13 @@ public class MyProfileActivity extends BaseToolBarActivity {
         mTvSex.setText(data.sex == 0 ? "未知" : data.sex == 1 ? "男" : "女");
         mTvCity.setText(data.address);
         mTvLong.setText(data.job_age + "年");
-        Glide.with(this)
-                .load(data.headimgurl)
-                .into(mIvAvatar);
+        try {
+            Glide.with(this)
+                    .load(data.headimgurl)
+                    .into(mIvAvatar);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateUserInfo(HashMap<String, String> info) {

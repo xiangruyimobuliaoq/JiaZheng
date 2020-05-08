@@ -130,7 +130,6 @@
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/ic_xyb"
             android:drawablePadding="@dimen/dp_4"
-            android:text="未知"
             android:textColor="#ff999999"
             android:textSize="15sp" />
 
@@ -145,6 +144,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:id="@+id/certificate"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="12dp"

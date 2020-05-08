@@ -1,4 +1,4 @@
-package com.nst.jiazheng.user.grzx;
+package com.nst.jiazheng.worker;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
@@ -50,21 +50,18 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
         super();
         switch (type) {
             case 0:
-                this.type = "";
-                break;
-            case 1:
                 this.type = "2";
                 break;
-            case 2:
+            case 1:
                 this.type = "3";
                 break;
-            case 3:
+            case 2:
                 this.type = "4";
                 break;
-            case 4:
+            case 3:
                 this.type = "7";
                 break;
-            case 5:
+            case 4:
                 this.type = "6";
                 break;
         }
@@ -91,7 +88,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
 
     private void getOrderList(boolean loadMore) {
         if (loadMore) {
-            OkGo.<String>post(Api.orderApi).params("api_name", "order_list")
+            OkGo.<String>post(Api.orderApi).params("api_name", "order_list_app")
                     .params("token", mUserInfo.token)
                     .params("status", type)
                     .params("page", mAdapter.getData().size() / 10 + 1)
@@ -117,7 +114,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                         }
                     });
         } else {
-            OkGo.<String>post(Api.orderApi).params("api_name", "order_list")
+            OkGo.<String>post(Api.orderApi).params("api_name", "order_list_app")
                     .params("token", mUserInfo.token)
                     .params("status", type)
                     .params("page", 1)
@@ -150,41 +147,41 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
 
         public OrderAdapter(List<MultiItemEntity> data) {
             super(data);
-            addItemType(1, R.layout.item_order_daizhifu);
-            addItemType(2, R.layout.item_order_daijiedan);
-            addItemType(3, R.layout.item_order_yijiedan);
-            addItemType(4, R.layout.item_order_jinxingzhong);
-            addItemType(5, R.layout.item_order_jinxingzhong);
-            addItemType(6, R.layout.item_order_jinxingzhong);
-            addItemType(7, R.layout.item_order_jinxingzhong);
-            addItemType(-1, R.layout.item_order_jinxingzhong);
-            addItemType(-2, R.layout.item_order_jinxingzhong);
+            addItemType(2, R.layout.item_order_worker_jiedan);
+            addItemType(3, R.layout.item_order_worker_daijinxing);
+            addItemType(4, R.layout.item_order_worker_jinxingzhong);
+            addItemType(5, R.layout.item_order_worker_daiqueren);
+            addItemType(6, R.layout.item_order_worker_daiqueren);
+            addItemType(7, R.layout.item_order_worker_daiqueren);
+            addItemType(-1, R.layout.item_order_worker_daiqueren);
+            addItemType(-2, R.layout.item_order_worker_daiqueren);
         }
 
         @Override
         protected void convert(BaseViewHolder baseViewHolder, MultiItemEntity multiItemEntity) {
             Order order = (Order) multiItemEntity;
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            baseViewHolder.setText(R.id.order_no, "订单编号: " + order.order_no)
-                    .setText(R.id.status, order.StatusText)
-                    .setText(R.id.serve_type_name, "服务类型: " + order.serve_type_name)
-                    .setText(R.id.num, "数量: " + order.num)
-                    .setText(R.id.address, "服务地址: " + order.address)
-                    .setText(R.id.time, "预约时间: " + order.time)
-                    .setText(R.id.pay_price, "¥ " + order.pay_price)
-                    .setText(R.id.serve_type_price, "服务单价: ¥ " + order.serve_type_price + " /" + order.serve_type_units);
+            baseViewHolder.setText(R.id.serve_type_name, order.serve_type_name)
+                    .setText(R.id.content, order.content)
+                    .setText(R.id.num, order.num + "")
+                    .setText(R.id.address, order.address)
+                    .setText(R.id.time, order.time)
+                    .setText(R.id.serve_type_units, order.serve_type_units)
+                    .setText(R.id.pay_price, "¥ " + order.pay_price);
             switch (baseViewHolder.getItemViewType()) {
-                case 1:
                 case 2:
+                    baseViewHolder.getView(R.id.jie).setOnClickListener(view -> {
+                        toast("接单");
+                    });
                     break;
                 case 3:
-                    baseViewHolder.setText(R.id.staff_name, "接单管家: " + order.staff_name)
-                            .setText(R.id.jie_time, "接单时间: " + format.format(new Date(order.jie_time)));
                     break;
                 case 4:
-                    baseViewHolder.setText(R.id.staff_name, "接单管家: " + order.staff_name)
-                            .setText(R.id.jie_time, "接单时间: " + format.format(new Date(order.jie_time)))
-                            .setText(R.id.start_time, "开始服务时间: " + format.format(new Date(order.start_time)));
+                    baseViewHolder.setText(R.id.start_time, format.format(new Date(order.start_time)));
+                    break;
+                case 5:
+                    baseViewHolder.setText(R.id.start_time, format.format(new Date(order.start_time)))
+                            .setText(R.id.petime, format.format(new Date(order.petime)));
                     break;
             }
         }

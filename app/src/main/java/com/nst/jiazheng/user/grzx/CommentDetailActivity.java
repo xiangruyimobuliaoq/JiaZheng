@@ -45,7 +45,11 @@ public class CommentDetailActivity extends BaseToolBarActivity {
         name.setText(data.name);
         content.setText(data.content);
         ctime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(data.ctime * 1000)));
-        Glide.with(this).load(data.headimgurl).error(R.mipmap.ic_tx).into(tx);
         score.setRating(Float.parseFloat(data.score));
+        try {
+            Glide.with(this).load(data.headimgurl).error(R.mipmap.ic_tx).into(tx);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -12,9 +12,11 @@
         android:layout_marginLeft="@dimen/dp_12"
         android:layout_marginTop="@dimen/dp_12"
         android:layout_marginRight="@dimen/dp_12"
-        android:background="@color/white"
+        android:background="@drawable/shape_bg_white_corner"
         android:orientation="vertical"
-        android:padding="@dimen/dp_30"
+        android:paddingLeft="30dp"
+        android:paddingTop="@dimen/dp_30"
+        android:paddingRight="30dp"
         android:paddingBottom="@dimen/dp_10">
 
         <TextView
@@ -38,10 +40,10 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:background="@null"
                 android:id="@+id/et_money"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@null"
                 android:text="100.00"
                 android:textColor="#ff333333"
                 android:textSize="35sp" />
@@ -73,20 +75,20 @@
     </LinearLayout>
 
     <LinearLayout
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_12"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_marginRight="@dimen/dp_12"
+        android:background="@drawable/shape_bg_white_corner"
         android:orientation="vertical"
         android:paddingLeft="@dimen/dp_15"
         android:paddingRight="@dimen/dp_15">
 
         <LinearLayout
-            android:gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="horizontal"
             android:paddingTop="18dp"
             android:paddingBottom="18dp">
@@ -101,11 +103,11 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:gravity="center_vertical"
-                android:drawableLeft="@mipmap/icon_weixinzhifu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/icon_weixinzhifu"
                 android:drawablePadding="@dimen/dp_4"
+                android:gravity="center_vertical"
                 android:text="微信零钱"
                 android:textColor="#ff333333"
                 android:textSize="15sp" />
@@ -117,9 +119,9 @@
             android:background="#E5E5E5" />
 
         <LinearLayout
-            android:gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingTop="18dp"
             android:paddingBottom="18dp">
@@ -134,11 +136,11 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:drawableRight="@mipmap/ic_xyb"
-                android:drawablePadding="@dimen/dp_4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:drawableRight="@mipmap/ic_xyb"
+                android:drawablePadding="@dimen/dp_4"
                 android:gravity="right"
                 android:text="未绑定"
                 android:textColor="#ff999999"
@@ -149,16 +151,15 @@
 
     <TextView
         android:id="@+id/tv_request"
-        android:background="@drawable/shape_btn_darkyellow_corner"
-        android:padding="14.5dp"
-        android:gravity="center"
-        android:layout_marginTop="@dimen/dp_40"
-        android:layout_marginLeft="37.5dp"
-        android:layout_marginRight="37.5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="37.5dp"
+        android:layout_marginTop="@dimen/dp_40"
+        android:layout_marginRight="37.5dp"
+        android:background="@drawable/shape_btn_darkyellow_corner"
+        android:gravity="center"
+        android:padding="14.5dp"
         android:text="申请提现"
         android:textColor="#ff2f318b"
-        android:textSize="16sp"
-        />
+        android:textSize="16sp" />
 </LinearLayout>

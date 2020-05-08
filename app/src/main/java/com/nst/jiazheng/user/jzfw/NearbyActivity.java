@@ -83,7 +83,7 @@ public class NearbyActivity extends BaseToolBarActivity implements AMapLocationL
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(RecyclerView.VERTICAL);
         nearbylist.setLayoutManager(manager);
-        mAdapter = new NearbyAdapter(R.layout.item_worker_home, null);
+        mAdapter = new NearbyAdapter(R.layout.item_worker, null);
         nearbylist.setAdapter(mAdapter);
         getData();
     }
@@ -130,17 +130,25 @@ public class NearbyActivity extends BaseToolBarActivity implements AMapLocationL
 
     private void getData() {
         mAdapter.setList(null);
+        showDialog("加载中", false);
         OkGo.<String>post(Api.serverApi).params("api_name", "index_map").params("token", mUserInfo.token).params("type", currentType)
                 .params("lng", 113.75179).params("lat", 23.02067)
 //                .params("lng", cameraPosition.target.longitude).params("lat", cameraPosition.target.latitude)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        dismissDialog();
                         Resp<IndexMap> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<IndexMap>>() {
                         }.getType());
                         if (resp.code == 1) {
                             mAdapter.setList(resp.data.list);
                         }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        dismissDialog();
                     }
                 });
     }
@@ -171,7 +179,6 @@ public class NearbyActivity extends BaseToolBarActivity implements AMapLocationL
         @Override
         protected void convert(BaseViewHolder baseViewHolder, Worker worker) {
             RecyclerView mTypelist = baseViewHolder.getView(R.id.typelist);
-            Glide.with(getContext()).load(worker.logo).error(R.mipmap.ic_tx).into((CircleImageView) baseViewHolder.getView(R.id.tx));
             baseViewHolder.setText(R.id.counts, worker.OrderCount + "单")
                     .setText(R.id.point, worker.score + "分")
                     .setText(R.id.length, "[" + worker.calc_range + "km]")
@@ -189,6 +196,11 @@ public class NearbyActivity extends BaseToolBarActivity implements AMapLocationL
                     overlay(RequestServeActivity.class, bundle);
                 }
             });
+            try {
+                Glide.with(getContext()).load(worker.logo).error(R.mipmap.ic_tx).into((CircleImageView) baseViewHolder.getView(R.id.tx));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

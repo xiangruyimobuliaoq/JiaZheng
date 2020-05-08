@@ -104,7 +104,7 @@ public class RequestServeActivity extends BaseToolBarActivity {
         nickname.setText(mWorker.name);
         counts.setText(mWorker.OrderCount + "单");
         point.setText(mWorker.score + "分");
-        Glide.with(this).load(mWorker.logo).error(R.mipmap.ic_tx).into(tx);
+
         submit.setEnabled(false);
         workerinfo.setOnClickListener(v -> {
             Bundle params = new Bundle();
@@ -161,6 +161,11 @@ public class RequestServeActivity extends BaseToolBarActivity {
                 }
             }
         });
+        try {
+            Glide.with(this).load(mWorker.logo).error(R.mipmap.ic_tx).into(tx);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void sendOrder() {

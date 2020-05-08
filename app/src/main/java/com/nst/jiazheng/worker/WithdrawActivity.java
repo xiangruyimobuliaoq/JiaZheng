@@ -1,6 +1,5 @@
 package com.nst.jiazheng.worker;
 
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,17 +13,13 @@ import com.nst.jiazheng.api.Api;
 import com.nst.jiazheng.api.resp.Order;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
-import com.nst.jiazheng.base.BaseActivity;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.LogUtil;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.base.ToastHelper;
 
-import java.util.List;
-
 import butterknife.BindView;
-
 /**
  * 创建者     ZhangAnran
  * 创建时间   2020/4/18 2:33 PM
@@ -50,13 +45,7 @@ public class WithdrawActivity extends BaseToolBarActivity {
     }
 
     private void initEvent() {
-        mTvRequest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doWithDraw();
-            }
-        });
-
+        mTvRequest.setOnClickListener(view -> doWithDraw());
     }
 
     private void doWithDraw() {

@@ -32,7 +32,7 @@ public class WorkerApplyActivity extends BaseToolBarActivity {
             overlay(WorkerAgreementActivity.class);
         });
         submit.setOnClickListener(view -> {
-
+            overlay(ApplySubmitActivity.class);
         });
     }
 }

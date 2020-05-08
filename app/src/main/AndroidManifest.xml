@@ -83,7 +83,7 @@
             android:name=".user.jzfw.NearbyActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".worker.CharActivity"
+            android:name=".worker.ChatActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".worker.WithdrawActivity"
@@ -142,9 +142,18 @@
         <activity
             android:name=".user.grzx.WorkerApplyActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".user.grzx.WorkerAgreementActivity" />
-        <activity android:name=".user.grzx.FeedBackActivity" />
-        <activity android:name=".user.grzx.UserInfoActivity" />
+        <activity
+            android:name=".user.grzx.WorkerAgreementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.FeedBackActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.UserInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".user.grzx.ShareActivity" />
+        <activity android:name=".user.grzx.CertificationActivity" />
+        <activity android:name=".user.grzx.ApplySubmitActivity" />
 
         <service android:name="com.amap.api.location.APSService" />
     </application>

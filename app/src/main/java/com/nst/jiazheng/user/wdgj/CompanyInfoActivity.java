@@ -91,7 +91,7 @@ public class CompanyInfoActivity extends BaseToolBarActivity {
     private void setData(Worker data) {
         submit.setEnabled(true);
         submit.setText(data.is_collect == 0 ? "收藏Ta" : "取消收藏");
-        Glide.with(this).load(data.headimgurl).error(R.mipmap.ic_tx).into(tx);
+
         nickname.setText(mWorker.name);
         ratingbar.setRating(data.score);
         point.setText(data.score + "分");
@@ -108,6 +108,11 @@ public class CompanyInfoActivity extends BaseToolBarActivity {
         typelist.setLayoutManager(manager);
         TypeAdapter adapter = new TypeAdapter(R.layout.item_servetype, data.servetype);
         typelist.setAdapter(adapter);
+        try {
+            Glide.with(this).load(data.headimgurl).error(R.mipmap.ic_tx).into(tx);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void collect() {

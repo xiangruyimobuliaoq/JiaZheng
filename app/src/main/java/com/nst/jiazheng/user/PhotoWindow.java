@@ -1,4 +1,4 @@
-package com.nst.jiazheng.worker.widget;
+package com.nst.jiazheng.user;
 
 import android.content.Context;
 import android.view.View;
@@ -9,28 +9,32 @@ import com.nst.jiazheng.R;
 import razerdp.basepopup.BasePopupWindow;
 
 /**
- * 创建者     ZhangAnran
- * 创建时间   2020/4/20 10:23 AM
- * 描述	      确认弹窗
+ * 创建者     彭龙
+ * 创建时间   2020/5/6 4:14 PM
+ * 描述
+ * <p>
+ * 更新者     $
+ * 更新时间   $
+ * 更新描述
  */
-public class ConfirmWindow extends BasePopupWindow {
+public class PhotoWindow extends BasePopupWindow {
     private View mView;
     private TextView mContentView;
     private TextView mConfirmView;
     private TextView mTitleView;
 
-    public ConfirmWindow setListener(OnConfirmClickListener listener) {
+    public PhotoWindow setListener(OnConfirmClickListener listener) {
         mConfirmView.setOnClickListener(view -> listener.onConfirmClick(this));
         return this;
     }
 
-    public ConfirmWindow setTitle(String title) {
+    public PhotoWindow setTitle(String title) {
         mTitleView.setVisibility(View.VISIBLE);
         mTitleView.setText(title);
         return this;
     }
 
-    public ConfirmWindow(Context context) {
+    public PhotoWindow(Context context) {
         super(context);
     }
 
@@ -49,22 +53,22 @@ public class ConfirmWindow extends BasePopupWindow {
 
     @Override
     public View onCreateContentView() {
-        mView = createPopupById(R.layout.layout_dialog_confirm);
+        mView = createPopupById(R.layout.window_photo);
         return mView;
     }
 
-    public ConfirmWindow setContent(String content) {
+    public PhotoWindow setContent(String content) {
         mContentView.setText(content);
         return this;
     }
 
-    public ConfirmWindow setContent(String content, String confirmText) {
+    public PhotoWindow setContent(String content, String confirmText) {
         mContentView.setText(content);
         mConfirmView.setText(confirmText);
         return this;
     }
 
     public interface OnConfirmClickListener {
-        void onConfirmClick(ConfirmWindow confirmWindow);
+        void onConfirmClick(PhotoWindow confirmWindow);
     }
 }

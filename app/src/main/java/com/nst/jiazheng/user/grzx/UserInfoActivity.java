@@ -48,6 +48,8 @@ public class UserInfoActivity extends BaseToolBarActivity {
     TextView mTvName;
     @BindView(R.id.tv_is_certification)
     TextView mTvIsCertification;
+    @BindView(R.id.certificate)
+    LinearLayout certificate;
     @BindView(R.id.iv_avatar)
     CircleImageView mIvAvatar;
 
@@ -61,6 +63,9 @@ public class UserInfoActivity extends BaseToolBarActivity {
 
     private void initView() {
         setTitle("个人资料");
+        certificate.setOnClickListener(view -> {
+            overlay(CertificationActivity.class);
+        });
     }
 
     private void initData() {
@@ -102,10 +107,14 @@ public class UserInfoActivity extends BaseToolBarActivity {
         mTvName.setText(data.nickname);
         mTvIsCertification.setText(data.is_certification == 1 ? "已认证" : "未认证");
         mTvSex.setText(data.sex == 0 ? "未知" : data.sex == 1 ? "男" : "女");
-        Glide.with(this)
-                .load(data.headimgurl)
-                .error(R.mipmap.ic_tx)
-                .into(mIvAvatar);
+        try {
+            Glide.with(this)
+                    .load(data.headimgurl)
+                    .error(R.mipmap.ic_tx)
+                    .into(mIvAvatar);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateUserInfo(HashMap<String, String> info) {

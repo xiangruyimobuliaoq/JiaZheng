@@ -37,4 +37,23 @@ public class UserCenter {
     public String join_msg;
     public int join_company_id;
     public int comment_count;
+
+
+    /**
+     * withdraw_money : 0.00
+     * total_money : 0.00
+     * today_order : 0
+     * today_income : 0
+     * withdraw_price : 10.00
+     * bind_weixin : 0
+     * manage_status : 1
+     */
+
+    public String withdraw_money;
+    public String total_money;
+    public int today_order;
+    public int today_income;
+    public String withdraw_price;
+    public int bind_weixin;
+    public int manage_status;
 }

@@ -53,7 +53,6 @@ public class MarkerInfoWindow extends BasePopupWindow implements View.OnClickLis
         mBtn = findViewById(R.id.btn);
         mTypelist = findViewById(R.id.typelist);
         nickname = findViewById(R.id.nickname);
-        Glide.with(getContext()).load(worker.logo).error(R.mipmap.ic_tx).into(mTx);
         mCounts.setText(worker.OrderCount+"单");
         mPoint.setText(worker.score+"分");
         nickname.setText(worker.name);
@@ -62,6 +61,11 @@ public class MarkerInfoWindow extends BasePopupWindow implements View.OnClickLis
         TypeAdapter adapter = new TypeAdapter(R.layout.item_servetype, worker.serve_type);
         mTypelist.setAdapter(adapter);
         mBtn.setOnClickListener(this);
+        try {
+            Glide.with(getContext()).load(worker.logo).error(R.mipmap.ic_tx).into(mTx);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return this;
     }
 

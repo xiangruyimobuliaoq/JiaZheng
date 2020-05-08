@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.xiasuhuei321.loadingdialog.view.LoadingDialog;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -19,6 +20,7 @@ import butterknife.ButterKnife;
 public abstract class BaseFragment extends Fragment {
 
     protected Context mContext;
+    private LoadingDialog loadingDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,16 @@ public abstract class BaseFragment extends Fragment {
 
     protected void toast(int msg_id) {
         ToastHelper.showToast(getString(msg_id), getActivity());
+    }
+
+    protected void showDialog(String title, boolean canCancel) {
+        loadingDialog = new LoadingDialog(mContext);
+        loadingDialog.setInterceptBack(canCancel);
+        loadingDialog.setLoadingText(title).show();
+    }
+
+    protected void dismissDialog() {
+        loadingDialog.close();
     }
 
     protected void requestPermissions(String permission) {

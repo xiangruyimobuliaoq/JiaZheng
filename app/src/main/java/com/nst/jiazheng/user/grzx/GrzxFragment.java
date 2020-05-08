@@ -1,5 +1,8 @@
 package com.nst.jiazheng.user.grzx;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +22,8 @@ import com.nst.jiazheng.api.resp.UserCenter;
 import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.user.qb.CouponListActivity;
+import com.nst.jiazheng.worker.widget.ConfirmWindow;
 
 import java.util.List;
 
@@ -92,6 +97,28 @@ public class GrzxFragment extends BaseFragment {
         grzl.setOnClickListener(v -> {
             overlay(UserInfoActivity.class);
         });
+        tjfx.setOnClickListener(v -> {
+            overlay(ShareActivity.class);
+        });
+        lxkf.setOnClickListener(v -> {
+            new ConfirmWindow(mContext)
+                    .setContent("0769-22656565", "拨打")
+                    .setListener((ConfirmWindow window) -> {
+                        callServer();
+                        window.dismiss();
+                    })
+                    .setPopupGravity(Gravity.CENTER)
+                    .setBackPressEnable(true)
+                    .setOutSideDismiss(true)
+                    .showPopupWindow();
+        });
+    }
+
+    private void callServer() {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        Uri data = Uri.parse("tel:" + "0769-22656565");
+        intent.setData(data);
+        startActivity(intent);
     }
 
     @Override
@@ -115,11 +142,15 @@ public class GrzxFragment extends BaseFragment {
     }
 
     private void setData(UserCenter data) {
-        Glide.with(this).load(data.headimgurl).error(R.mipmap.ic_tx).into(touxiang);
         nickname.setText(data.nickname);
         msgnum.setText(String.valueOf(data.msg_count));
         descnum.setText(String.valueOf(data.comment_count));
         user.setImageResource(data.is_certification == 1 ? R.mipmap.ic_hy : R.mipmap.ic_hy2);
         worker.setImageResource(mUserInfo.type == 1 ? R.mipmap.ic_jz1 : R.mipmap.ic_jz);
+        try {
+            Glide.with(this).load(data.headimgurl).error(R.mipmap.ic_tx).into(touxiang);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

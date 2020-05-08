@@ -37,12 +37,12 @@ public class Order implements MultiItemEntity {
     public String address;
     public int status;
     public String pay_price;
-    public int jie_time;
-    public int stime;
-    public int etime;
-    public int cancel_time;
+    public long jie_time;
+    public long stime;
+    public long etime;
+    public long cancel_time;
     public String time;
-    public int ctime;
+    public long ctime;
     public String serve_type_name;
     public String serve_type_price;
     public String serve_type_units;
@@ -60,7 +60,8 @@ public class Order implements MultiItemEntity {
     public String nickname;
     public int is_certification;  //是否实名认证 1.是 2.否
     public int job_age; //从业年限
-    public String start_time;
+    public long start_time;
+    public long petime;
 
     @Override
     public int getItemType() {

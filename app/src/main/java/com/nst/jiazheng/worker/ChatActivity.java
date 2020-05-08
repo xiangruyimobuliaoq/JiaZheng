@@ -6,20 +6,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.StringCallback;
-import com.lzy.okgo.model.Response;
 import com.nst.jiazheng.R;
-import com.nst.jiazheng.api.Api;
 import com.nst.jiazheng.api.resp.Order;
 import com.nst.jiazheng.api.resp.Register;
-import com.nst.jiazheng.api.resp.Resp;
-import com.nst.jiazheng.base.BaseActivity;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
-import com.nst.jiazheng.base.LogUtil;
 import com.nst.jiazheng.base.SpUtil;
 
 import java.util.ArrayList;
@@ -33,7 +24,7 @@ import butterknife.BindView;
  * 描述	      对话
  */
 @Layout(layoutId = R.layout.activity_chat)
-public class CharActivity extends BaseToolBarActivity {
+public class ChatActivity extends BaseToolBarActivity {
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
     private MyAdapter myAdapter;
@@ -51,7 +42,6 @@ public class CharActivity extends BaseToolBarActivity {
         for (int i = 0; i < 5; i++) {
             items.add(new Order());
         }
-
     }
 
     private void initView() {
@@ -76,7 +66,6 @@ public class CharActivity extends BaseToolBarActivity {
                     .setText(R.id.tv_name,item.name)
                     .setText(R.id.tv_content,item.content)
                     ;
-
         }
     }
 }

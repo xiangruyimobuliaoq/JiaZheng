@@ -99,8 +99,12 @@ public class CommentActivity extends BaseToolBarActivity {
                     .setText(R.id.ctime, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(comment.ctime * 1000)));
             CircleImageView tx = baseViewHolder.getView(R.id.tx);
             AndRatingBar score = baseViewHolder.getView(R.id.score);
-            Glide.with(CommentActivity.this).load(comment.headimgurl).error(R.mipmap.ic_tx).into(tx);
             score.setRating(Float.parseFloat(comment.score));
+            try {
+                Glide.with(CommentActivity.this).load(comment.headimgurl).error(R.mipmap.ic_tx).into(tx);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

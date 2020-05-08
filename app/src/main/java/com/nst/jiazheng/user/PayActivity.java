@@ -1,5 +1,6 @@
 package com.nst.jiazheng.user;
 
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -38,6 +39,8 @@ public class PayActivity extends BaseToolBarActivity {
     TextView pay_price;
     @BindView(R.id.coupon)
     TextView coupon;
+    @BindView(R.id.submit)
+    Button submit;
     @BindView(R.id.weixin)
     CheckBox weixin;
     @BindView(R.id.zhifubao)
@@ -47,6 +50,7 @@ public class PayActivity extends BaseToolBarActivity {
 
     private Register mUserInfo;
     private String mOrderNo;
+    private int currentPayType = 1;
 
     @Override
     protected void init() {
@@ -57,18 +61,27 @@ public class PayActivity extends BaseToolBarActivity {
             if (b) {
                 zhifubao.setChecked(false);
                 yue.setChecked(false);
+                currentPayType = 1;
+            } else {
+                weixin.setChecked(true);
             }
         });
         zhifubao.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 weixin.setChecked(false);
                 yue.setChecked(false);
+                currentPayType = 2;
+            } else {
+                zhifubao.setChecked(true);
             }
         });
         yue.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 weixin.setChecked(false);
                 zhifubao.setChecked(false);
+                currentPayType = 3;
+            } else {
+                yue.setChecked(true);
             }
         });
         getPayInfo();
@@ -94,5 +107,26 @@ public class PayActivity extends BaseToolBarActivity {
         total_price.setText("¥ " + data.total_price);
         pay_price.setText("¥ " + data.pay_price);
         coupon.setText("有" + data.coupon_count + "张可用");
+        submit.setOnClickListener(view -> {
+            pay();
+        });
+    }
+
+    private void pay() {
+        OkGo.<String>post(Api.serverApi).params("api_name", "server_pay_sublimit").params("token", mUserInfo.token)
+                .params("order_no", mOrderNo)
+                .params("pay_type", currentPayType)
+                .params("flag", "app")
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Resp<PayInfo> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<PayInfo>>() {
+                        }.getType());
+                        toast(resp.msg);
+                        if (resp.code == 1) {
+                            finish();
+                        }
+                    }
+                });
     }
 }

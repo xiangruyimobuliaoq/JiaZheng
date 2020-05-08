@@ -22,7 +22,9 @@ import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.LogUtil;
 import com.nst.jiazheng.base.SpUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -91,11 +93,12 @@ public class WithdrawalsRecordActivity extends BaseToolBarActivity {
 
         @Override
         protected void convert(BaseViewHolder helper, Order item) {
-            helper.setText(R.id.tv_status,item.title)
-                    .setText(R.id.tv_money,item.money)
-                    .setText(R.id.tv_msg,item.msg)
-                    .setText(R.id.tv_ctime,item.ctime)
-                    ;
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            helper.setText(R.id.tv_status, item.title)
+                    .setText(R.id.tv_money, item.money)
+                    .setText(R.id.tv_msg, item.msg)
+                    .setText(R.id.tv_time, format.format(new Date(item.ctime)))
+            ;
 
         }
     }
