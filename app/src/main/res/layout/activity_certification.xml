@@ -10,7 +10,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="@color/yellow" />
+        android:background="@color/yellow"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:src="@mipmap/ic_smrz" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

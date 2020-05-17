@@ -1,10 +1,8 @@
 package com.nst.jiazheng.worker;
 
 
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -21,6 +19,7 @@ import com.nst.jiazheng.api.resp.ServeType;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 
 import java.util.List;
 
@@ -59,9 +58,7 @@ public class ServiceTypeActivity extends BaseToolBarActivity {
         typelist.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
         });
-        submit.setOnClickListener(view -> {
-            submit();
-        });
+        submit.setOnClickListener(view -> submit());
     }
 
     private void submit() {
@@ -72,18 +69,29 @@ public class ServiceTypeActivity extends BaseToolBarActivity {
                 params += serveType.id + ",";
             }
         }
+        showDialog("正在提交", true);
         OkGo.<String>post(Api.serverApi).params("api_name", "server_edit")
                 .params("token", mUserInfo.token)
                 .params("serve_type_id", params)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        dismissDialog();
                         Resp resp = new Gson().fromJson(response.body(), new TypeToken<Resp>() {
                         }.getType());
                         toast(resp.msg);
                         if (resp.code == 1) {
                             finish();
+                        } else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        dismissDialog();
                     }
                 });
     }
@@ -101,6 +109,9 @@ public class ServiceTypeActivity extends BaseToolBarActivity {
                         }.getType());
                         if (resp.code == 1) {
                             mAdapter.setList(resp.data);
+                        } else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
                     }
                 });

@@ -18,6 +18,7 @@ import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.worker.widget.ConfirmWindow;
 
 import java.text.SimpleDateFormat;
@@ -66,6 +67,9 @@ public class CouponListActivity extends BaseToolBarActivity {
                         }.getType());
                         if (resp.code == 1) {
                             mAdapter.setList(resp.data);
+                        }else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
                     }
                 });
@@ -82,6 +86,9 @@ public class CouponListActivity extends BaseToolBarActivity {
                         toast(resp.msg);
                         if (resp.code == 1) {
                             mAdapter.remove(coupon);
+                        }else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
                     }
                 });

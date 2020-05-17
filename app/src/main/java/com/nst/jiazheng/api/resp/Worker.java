@@ -25,7 +25,7 @@ public class Worker implements Serializable {
      * serve_type : [{"id":31,"title":"呃呃呃呃呃呃"},{"id":32,"title":"哦哦哦哦哦"},{"id":35,"title":"啊啊啊啊啊啊"},{"id":40,"title":"ABC"}]
      * OrderCount : 0
      */
-    public int id;
+    public String id;
     public String name;
     public double lat;
     public double lng;

@@ -19,33 +19,26 @@ import razerdp.basepopup.BasePopupWindow;
  */
 public class PhotoWindow extends BasePopupWindow {
     private View mView;
-    private TextView mContentView;
-    private TextView mConfirmView;
-    private TextView mTitleView;
-
-    public PhotoWindow setListener(OnConfirmClickListener listener) {
-        mConfirmView.setOnClickListener(view -> listener.onConfirmClick(this));
-        return this;
-    }
-
-    public PhotoWindow setTitle(String title) {
-        mTitleView.setVisibility(View.VISIBLE);
-        mTitleView.setText(title);
-        return this;
-    }
+    private TextView gallery;
+    private TextView cancel;
+    private TextView mCam;
 
     public PhotoWindow(Context context) {
         super(context);
     }
 
+    public PhotoWindow setListener(OnConfirmClickListener listener) {
+        mCam.setOnClickListener(view -> listener.onCam(this));
+        gallery.setOnClickListener(view -> listener.onGallery(this));
+        return this;
+    }
 
     @Override
     public void onViewCreated(View contentView) {
         super.onViewCreated(contentView);
-        mConfirmView = contentView.findViewById(R.id.tv_confirm);
-        TextView cancel = contentView.findViewById(R.id.tv_cancel);
-        mContentView = contentView.findViewById(R.id.tv_content);
-        mTitleView = contentView.findViewById(R.id.tv_title);
+        cancel = contentView.findViewById(R.id.cancel);
+        mCam = contentView.findViewById(R.id.cam);
+        gallery = contentView.findViewById(R.id.gallery);
         cancel.setOnClickListener(view -> {
             this.dismiss();
         });
@@ -57,18 +50,9 @@ public class PhotoWindow extends BasePopupWindow {
         return mView;
     }
 
-    public PhotoWindow setContent(String content) {
-        mContentView.setText(content);
-        return this;
-    }
-
-    public PhotoWindow setContent(String content, String confirmText) {
-        mContentView.setText(content);
-        mConfirmView.setText(confirmText);
-        return this;
-    }
-
     public interface OnConfirmClickListener {
-        void onConfirmClick(PhotoWindow confirmWindow);
+        void onCam(PhotoWindow confirmWindow);
+
+        void onGallery(PhotoWindow confirmWindow);
     }
 }

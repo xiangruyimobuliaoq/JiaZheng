@@ -22,6 +22,7 @@ import com.nst.jiazheng.api.resp.Worker;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -70,7 +71,7 @@ public class WorkerInfoActivity extends BaseToolBarActivity {
     @BindView(R.id.submit)
     Button submit;
 
-    private Worker mWorker;
+    private String id;
     private Register mUserInfo;
     private Worker mData;
 
@@ -78,14 +79,14 @@ public class WorkerInfoActivity extends BaseToolBarActivity {
     protected void init() {
         setTitle("管家详情");
         mUserInfo = (Register) SpUtil.readObj("userInfo");
-        mWorker = (Worker) getIntent().getSerializableExtra("worker");
+        id = getIntent().getStringExtra("worker");
         submit.setEnabled(false);
         getInfo();
     }
 
     private void getInfo() {
         OkGo.<String>post(Api.serverApi).params("api_name", "private_info").params("token", mUserInfo.token)
-                .params("id", mWorker.id).execute(new StringCallback() {
+                .params("id", id).execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 Resp<Worker> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Worker>>() {
@@ -93,6 +94,9 @@ public class WorkerInfoActivity extends BaseToolBarActivity {
                 if (resp.code == 1) {
                     mData = resp.data;
                     setData(mData);
+                } else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
                 }
             }
         });
@@ -102,7 +106,7 @@ public class WorkerInfoActivity extends BaseToolBarActivity {
         submit.setEnabled(true);
         submit.setText(data.is_collect == 0 ? "收藏Ta" : "取消收藏");
         counts.setText("已接 " + data.OrderCount + "单");
-        nickname.setText(mWorker.name);
+        nickname.setText(data.name);
         ratingbar.setRating(data.score);
         point.setText(data.score + "分");
         name.setText(data.name);
@@ -147,6 +151,9 @@ public class WorkerInfoActivity extends BaseToolBarActivity {
                         mData.is_collect = 0;
                         submit.setText("收藏Ta");
                     }
+                } else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
                 }
             }
 

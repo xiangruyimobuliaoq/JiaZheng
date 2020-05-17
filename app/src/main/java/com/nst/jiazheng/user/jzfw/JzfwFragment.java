@@ -52,6 +52,7 @@ import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.DpUtil;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.worker.MainActivity;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -78,7 +79,6 @@ import razerdp.basepopup.BasePopupWindow;
  */
 @Layout(layoutId = R.layout.fragment_jzfw)
 public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeListener, AMap.OnMarkerClickListener, Inputtips.InputtipsListener {
-    //iv_title_left_icon
     @BindView(R.id.iv_title_left_icon)
     ImageView ivTitleLeftIcon;
     @BindView(R.id.map)
@@ -294,6 +294,9 @@ public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeLis
                                 mWorkers.put(String.valueOf(worker.id), worker);
                                 aMap.addMarker(new MarkerOptions().title(String.valueOf(worker.id)).position(new LatLng(worker.lat, worker.lng)).icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_srgj))));
                             }
+                        }else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
                     }
                 });

@@ -27,6 +27,7 @@ import com.nst.jiazheng.api.resp.ServeType;
 import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.user.jzfw.RequestServeActivity;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -130,8 +131,8 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mlocationClient.onDestroy();
+        super.onDestroy();
     }
 
     private void getData() {
@@ -149,6 +150,9 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
                         toast(resp.msg);
                         if (resp.code == 1) {
                             mAdapter.setList(resp.data);
+                        } else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
                     }
 

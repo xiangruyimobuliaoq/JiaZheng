@@ -31,9 +31,9 @@ public class Order implements MultiItemEntity {
      * staff_name :
      * StatusText : 已完成
      */
-    public int id;
+    public String id;
     public String order_no;
-    public int num;
+    public String num;
     public String address;
     public int status;
     public String pay_price;
@@ -62,6 +62,10 @@ public class Order implements MultiItemEntity {
     public int job_age; //从业年限
     public long start_time;
     public long petime;
+    public String staff_score;
+    public String staff_logo;
+    public String staff_mobile;
+    public String staff_id;
 
     @Override
     public int getItemType() {

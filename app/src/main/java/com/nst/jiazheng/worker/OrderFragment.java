@@ -1,7 +1,13 @@
 package com.nst.jiazheng.worker;
 
+import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnLoadMoreListener;
 import com.chad.library.adapter.base.module.BaseLoadMoreModule;
 import com.chad.library.adapter.base.module.LoadMoreModule;
@@ -19,11 +25,15 @@ import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
+import com.nst.jiazheng.user.grzx.OrderDetailsDaizhifuActivity;
+import com.nst.jiazheng.worker.widget.ConfirmWindow;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -41,35 +51,54 @@ import butterknife.BindView;
 public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
-    String type;
+    int type;
     private OrderAdapter mAdapter;
     private Register mUserInfo;
     private BaseLoadMoreModule mLoadMoreModule;
+    private int status;
 
     public OrderFragment(int type) {
         super();
-        switch (type) {
-            case 0:
-                this.type = "2";
-                break;
-            case 1:
-                this.type = "3";
-                break;
-            case 2:
-                this.type = "4";
-                break;
-            case 3:
-                this.type = "7";
-                break;
-            case 4:
-                this.type = "6";
-                break;
-        }
+        this.type = type;
     }
 
     @Override
     protected void init() {
         mUserInfo = (Register) SpUtil.readObj("userInfo");
+        if (mUserInfo.type == 2) {
+            switch (type) {
+                case 0:
+                    status = 2;
+                    break;
+                case 1:
+                    status = 3;
+                    break;
+                case 2:
+                    status = 4;
+                    break;
+                case 3:
+                    status = 7;
+                    break;
+                case 4:
+                    status = 6;
+                    break;
+            }
+        } else {
+            switch (type) {
+                case 0:
+                    status = 3;
+                    break;
+                case 1:
+                    status = 4;
+                    break;
+                case 2:
+                    status = 7;
+                    break;
+                case 3:
+                    status = 6;
+                    break;
+            }
+        }
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         manager.setOrientation(RecyclerView.VERTICAL);
         mRecyclerView.setLayoutManager(manager);
@@ -78,6 +107,23 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
         mLoadMoreModule = mAdapter.getLoadMoreModule();
         mLoadMoreModule.setEnableLoadMoreIfNotFullPage(false);
         mLoadMoreModule.setOnLoadMoreListener(this);
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+            Order order = (Order) adapter.getData().get(position);
+            Bundle bundle = new Bundle();
+            bundle.putString("id", order.id);
+            switch (order.status) {
+                case 2:
+                case 5:
+                    overlay(JiedanlanActivity.class, bundle);
+                    break;
+                case 3:
+                    overlay(DaijinxingActivity.class, bundle);
+                    break;
+                case 4:
+                    overlay(JinxingzhongActivity.class, bundle);
+                    break;
+            }
+        });
     }
 
     @Override
@@ -90,7 +136,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
         if (loadMore) {
             OkGo.<String>post(Api.orderApi).params("api_name", "order_list_app")
                     .params("token", mUserInfo.token)
-                    .params("status", type)
+                    .params("status", status)
                     .params("page", mAdapter.getData().size() / 10 + 1)
                     .execute(new StringCallback() {
                         @Override
@@ -104,6 +150,9 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                                     mLoadMoreModule.loadMoreEnd();
                                 }
                                 mAdapter.addData(resp.data);
+                            } else if (resp.code == 101) {
+                                SpUtil.putBoolean("isLogin", false);
+                                startAndClearAll(LoginActivity.class);
                             }
                         }
 
@@ -116,7 +165,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
         } else {
             OkGo.<String>post(Api.orderApi).params("api_name", "order_list_app")
                     .params("token", mUserInfo.token)
-                    .params("status", type)
+                    .params("status", status)
                     .params("page", 1)
                     .execute(new StringCallback() {
                         @Override
@@ -128,6 +177,9 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                                     mLoadMoreModule.loadMoreEnd();
                                 }
                                 mAdapter.setList(resp.data);
+                            } else if (resp.code == 101) {
+                                SpUtil.putBoolean("isLogin", false);
+                                startAndClearAll(LoginActivity.class);
                             }
                         }
                     });
@@ -143,6 +195,34 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
         getOrderList(true);
     }
 
+    private void acceptOrder(Order order) {
+        showDialog("正在提交", true);
+        OkGo.<String>post(Api.orderApi).params("api_name", order.status == 2 ? "order_qiang" : "order_confirm")
+                .params("token", mUserInfo.token)
+                .params("order_id", order.id)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        dismissDialog();
+                        Resp resp = new Gson().fromJson(response.body(), new TypeToken<Resp>() {
+                        }.getType());
+                        toast(resp.msg);
+                        if (resp.code == 1) {
+                            mAdapter.remove(order);
+                        } else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        dismissDialog();
+                    }
+                });
+    }
+
     class OrderAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> implements LoadMoreModule {
 
         public OrderAdapter(List<MultiItemEntity> data) {
@@ -150,11 +230,11 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
             addItemType(2, R.layout.item_order_worker_jiedan);
             addItemType(3, R.layout.item_order_worker_daijinxing);
             addItemType(4, R.layout.item_order_worker_jinxingzhong);
-            addItemType(5, R.layout.item_order_worker_daiqueren);
-            addItemType(6, R.layout.item_order_worker_daiqueren);
+            addItemType(5, R.layout.item_order_worker_jiedan);
+            addItemType(6, R.layout.item_order_worker_yiwancheng);
             addItemType(7, R.layout.item_order_worker_daiqueren);
-            addItemType(-1, R.layout.item_order_worker_daiqueren);
-            addItemType(-2, R.layout.item_order_worker_daiqueren);
+            addItemType(-1, R.layout.item_order_worker_yiwancheng);
+            addItemType(-2, R.layout.item_order_worker_yiwancheng);
         }
 
         @Override
@@ -170,21 +250,35 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                     .setText(R.id.pay_price, "¥ " + order.pay_price);
             switch (baseViewHolder.getItemViewType()) {
                 case 2:
+                case 5:
                     baseViewHolder.getView(R.id.jie).setOnClickListener(view -> {
-                        toast("接单");
+                        new ConfirmWindow(mContext)
+                                .setContent("是否确认接单?", "确认")
+                                .setListener((ConfirmWindow window) -> {
+                                    acceptOrder(order);
+                                    window.dismiss();
+                                })
+                                .setPopupGravity(Gravity.CENTER)
+                                .setBackPressEnable(true)
+                                .setOutSideDismiss(true)
+                                .showPopupWindow();
                     });
                     break;
-                case 3:
-                    break;
                 case 4:
-                    baseViewHolder.setText(R.id.start_time, format.format(new Date(order.start_time)));
+                    baseViewHolder.setText(R.id.start_time, format.format(new Date(order.start_time * 1000)));
                     break;
-                case 5:
-                    baseViewHolder.setText(R.id.start_time, format.format(new Date(order.start_time)))
-                            .setText(R.id.petime, format.format(new Date(order.petime)));
+                case 7:
+                    baseViewHolder.setText(R.id.start_time, format.format(new Date(order.start_time * 1000)))
+                            .setText(R.id.petime, format.format(new Date(order.petime * 1000)));
+                    break;
+                case 6:
+                case -1:
+                case -2:
+                    baseViewHolder.setText(R.id.start_time, format.format(new Date(order.start_time * 1000)))
+                            .setText(R.id.etime, format.format(new Date(order.etime * 1000)))
+                            .setText(R.id.petime, format.format(new Date(order.petime * 1000)));
                     break;
             }
         }
     }
-
 }

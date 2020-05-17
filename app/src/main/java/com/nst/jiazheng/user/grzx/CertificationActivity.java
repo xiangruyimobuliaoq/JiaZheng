@@ -1,13 +1,21 @@
 package com.nst.jiazheng.user.grzx;
 
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 import com.nst.jiazheng.R;
+import com.nst.jiazheng.api.Api;
+import com.nst.jiazheng.api.resp.Register;
+import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
+import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 
 import butterknife.BindView;
 
@@ -28,9 +36,11 @@ public class CertificationActivity extends BaseToolBarActivity {
     EditText cerNum;
     @BindView(R.id.submit)
     Button submit;
+    private Register mUserInfo;
 
     @Override
     protected void init() {
+        mUserInfo = (Register) SpUtil.readObj("userInfo");
         setTitle("实名认证");
         submit.setOnClickListener(view -> {
             submitCertificate();
@@ -48,5 +58,30 @@ public class CertificationActivity extends BaseToolBarActivity {
             toast("请输入身份证号码");
             return;
         }
+        showDialog("认证中", true);
+        OkGo.<String>post(Api.certificationApi).params("api_name", "idmatch")
+                .params("token", mUserInfo.token)
+                .params("id_card", cerNum)
+                .params("name", name)
+                .params("flag", "app").execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                dismissDialog();
+                Resp resp = new Gson().fromJson(response.body(), Resp.class);
+                toast(resp.msg);
+                if (resp.code == 1) {
+                    finish();
+                }else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
+                }
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                super.onError(response);
+                dismissDialog();
+            }
+        });
     }
 }

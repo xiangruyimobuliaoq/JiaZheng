@@ -1,5 +1,6 @@
 package com.nst.jiazheng.worker;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.LockableViewPager;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 
 import butterknife.BindView;
 
@@ -55,8 +57,16 @@ public class MainActivity extends BaseToolBarActivity {
     TextView mTvMy;
     @BindView(R.id.tv_shouru)
     TextView tv_shouru;
+    @BindView(R.id.tv_shouru_title)
+    TextView tv_shouru_title;
+    @BindView(R.id.tv_yue_title)
+    TextView tv_yue_title;
     @BindView(R.id.tv_yue)
     TextView tv_yue;
+    @BindView(R.id.today_order_title)
+    TextView today_order_title;
+    @BindView(R.id.today_income_title)
+    TextView today_income_title;
     @BindView(R.id.today_order)
     TextView today_order;
     @BindView(R.id.today_income)
@@ -65,15 +75,40 @@ public class MainActivity extends BaseToolBarActivity {
 
     @Override
     protected void init() {
-        initView();
-        initData();
-        initEvent();
-    }
-
-    private void initEvent() {
+        mUserInfo = (Register) SpUtil.readObj("userInfo");
+        if (mUserInfo.type == 2) {
+            setTitle("管家首页");
+            tv_shouru_title.setText("总收入（元）");
+            tv_yue_title.setText("余额（元）");
+            today_order_title.setText("今日接单");
+            today_income_title.setText("今日收入（元）");
+            mTvWithDraw.setVisibility(View.VISIBLE);
+            mTvWithDrawRecord.setVisibility(View.VISIBLE);
+            mTvWithDraw.setOnClickListener(view -> overlay(WithdrawActivity.class));
+            mTvWithDrawRecord.setOnClickListener(view -> overlay(WithdrawalsRecordActivity.class));
+            mTab.addTab(mTab.newTab().setText("接单栏"));
+            mTab.addTab(mTab.newTab().setText("待进行"));
+            mTab.addTab(mTab.newTab().setText("进行中"));
+            mTab.addTab(mTab.newTab().setText("待确认"));
+            mTab.addTab(mTab.newTab().setText("已完成"));
+        } else {
+            setTitle("家政首页");
+            tv_shouru_title.setText("今日已完成");
+            tv_yue_title.setText("总完成任务");
+            today_order_title.setText("本周已完成");
+            today_income_title.setText("本月已完成");
+            mTvWithDraw.setVisibility(View.GONE);
+            mTvWithDrawRecord.setVisibility(View.GONE);
+            mTab.addTab(mTab.newTab().setText("任务栏"));
+            mTab.addTab(mTab.newTab().setText("进行中"));
+            mTab.addTab(mTab.newTab().setText("待确认"));
+            mTab.addTab(mTab.newTab().setText("已完成"));
+        }
+        mIvChat.setImageResource(R.mipmap.ic_xiaox);
+        vp.setSwipeLocked(true);
+        vp.setAdapter(new OrderPageAdapter(getSupportFragmentManager(), 1));
+        vp.setOffscreenPageLimit(mTab.getTabCount() - 1);
         mIvChat.setOnClickListener(view -> overlay(ChatActivity.class));
-        mTvWithDraw.setOnClickListener(view -> overlay(WithdrawActivity.class));
-        mTvWithDrawRecord.setOnClickListener(view -> overlay(WithdrawalsRecordActivity.class));
         mTvMy.setOnClickListener(view -> overlay(MyProfileActivity.class));
         mTvComment.setOnClickListener(view -> overlay(MyCommentActivity.class));
         mTvServiceType.setOnClickListener(view -> overlay(ServiceTypeActivity.class));
@@ -96,17 +131,6 @@ public class MainActivity extends BaseToolBarActivity {
         });
     }
 
-    private void initView() {
-        setTitle("管家首页");
-        mIvChat.setImageResource(R.mipmap.ic_xiaox);
-        vp.setSwipeLocked(true);
-        vp.setAdapter(new OrderPageAdapter(getSupportFragmentManager(), 1));
-        vp.setOffscreenPageLimit(5);
-    }
-
-    private void initData() {
-        mUserInfo = (Register) SpUtil.readObj("userInfo");
-    }
 
     @Override
     protected void onResume() {
@@ -115,7 +139,7 @@ public class MainActivity extends BaseToolBarActivity {
     }
 
     private void getCenterInfo() {
-        OkGo.<String>post(Api.userApi).params("api_name", "private_center").params("token", mUserInfo.token)
+        OkGo.<String>post(Api.userApi).params("api_name", mUserInfo.type == 2 ? "private_center" : "staff_center").params("token", mUserInfo.token)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -123,16 +147,26 @@ public class MainActivity extends BaseToolBarActivity {
                         }.getType());
                         if (resp.code == 1) {
                             setData(resp.data);
+                        } else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
                     }
                 });
     }
 
     private void setData(UserCenter data) {
-        tv_yue.setText(data.withdraw_money);
-        tv_shouru.setText(data.total_money);
-        today_order.setText(String.valueOf(data.today_order));
-        today_income.setText(String.valueOf(data.today_income));
+        if (mUserInfo.type == 2) {
+            tv_yue.setText(data.withdraw_money);
+            tv_shouru.setText(data.total_money);
+            today_order.setText(String.valueOf(data.today_order));
+            today_income.setText(String.valueOf(data.today_income));
+        } else {
+            tv_yue.setText(data.total_order);
+            tv_shouru.setText(data.today_order);
+            today_order.setText(String.valueOf(data.week_order));
+            today_income.setText(String.valueOf(data.month_order));
+        }
     }
 
     class OrderPageAdapter extends FragmentPagerAdapter {
@@ -149,7 +183,7 @@ public class MainActivity extends BaseToolBarActivity {
 
         @Override
         public int getCount() {
-            return 5;
+            return mTab.getTabCount();
         }
     }
 }

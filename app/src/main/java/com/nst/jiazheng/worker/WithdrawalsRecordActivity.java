@@ -21,6 +21,7 @@ import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.LogUtil;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,6 +66,9 @@ public class WithdrawalsRecordActivity extends BaseToolBarActivity {
                         if (resp.code == 1) {
                             List<Order> data = resp.data;
                             myAdapter.setNewInstance(data);
+                        }else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
                     }
 
@@ -97,7 +101,7 @@ public class WithdrawalsRecordActivity extends BaseToolBarActivity {
             helper.setText(R.id.tv_status, item.title)
                     .setText(R.id.tv_money, item.money)
                     .setText(R.id.tv_msg, item.msg)
-                    .setText(R.id.tv_time, format.format(new Date(item.ctime)))
+                    .setText(R.id.tv_time, format.format(new Date(item.ctime*1000)))
             ;
 
         }

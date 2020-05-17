@@ -18,6 +18,7 @@ import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.LogUtil;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.base.ToastHelper;
+import com.nst.jiazheng.login.LoginActivity;
 
 import butterknife.BindView;
 /**
@@ -63,6 +64,9 @@ public class WithdrawActivity extends BaseToolBarActivity {
                                 }.getType());
                         if (resp.code == 1) {
 
+                        }else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
                         ToastHelper.showToast(resp.msg, mContext);
                     }

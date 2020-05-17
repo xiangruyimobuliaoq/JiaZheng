@@ -21,6 +21,7 @@ import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseActivity;
 import com.nst.jiazheng.base.Layout;
+import com.nst.jiazheng.base.SpUtil;
 
 import butterknife.BindView;
 
@@ -105,6 +106,9 @@ public class RegistActivity extends BaseActivity {
                 toast(resp.msg);
                 if (resp.code == 1) {
                     finish();
+                }else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
                 }
             }
 

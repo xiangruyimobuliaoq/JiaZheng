@@ -22,6 +22,7 @@ import com.nst.jiazheng.api.resp.UserCenter;
 import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.user.qb.CouponListActivity;
 import com.nst.jiazheng.worker.widget.ConfirmWindow;
 
@@ -136,6 +137,9 @@ public class GrzxFragment extends BaseFragment {
                         }.getType());
                         if (resp.code == 1) {
                             setData(resp.data);
+                        }else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
                     }
                 });

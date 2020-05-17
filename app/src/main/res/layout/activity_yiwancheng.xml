@@ -17,7 +17,8 @@
         android:orientation="horizontal"
         android:padding="@dimen/dp_15">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/tx"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@mipmap/ic_tx" />
@@ -32,6 +33,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="周小姐"
@@ -50,6 +52,7 @@
                     android:src="@mipmap/ic_starb2" />
 
                 <TextView
+                    android:id="@+id/score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_4"
@@ -67,26 +70,26 @@
             android:gravity="center_vertical|right">
 
             <ImageView
+                android:id="@+id/ddh"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@mipmap/ic_ddh" />
 
             <ImageView
+                android:id="@+id/xx"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@mipmap/ic_xiaox2" />
 
             <ImageView
+                android:id="@+id/dh"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@mipmap/ic_daohang" />
-
         </LinearLayout>
-
-
     </LinearLayout>
 
     <LinearLayout
@@ -118,7 +121,7 @@
 
 
             <TextView
-                android:id="@+id/tv_title"
+                android:id="@+id/serve_type_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -144,6 +147,7 @@
 
 
             <TextView
+                android:id="@+id/content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -159,16 +163,99 @@
             android:layout_marginTop="11.5dp"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="单位"
+                    android:textColor="#ff333333"
+                    android:textSize="12sp" />
+
+
+                <TextView
+                    android:id="@+id/serve_type_units"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="次"
+                    android:textColor="#ff999999"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="数量"
+                    android:textColor="#ff333333"
+                    android:textSize="12sp" />
+
+
+                <TextView
+                    android:id="@+id/num"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="2"
+                    android:textColor="#ff999999"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11.5dp"
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="时间"
+                android:text="服务地址"
                 android:textColor="#ff333333"
                 android:textSize="12sp" />
 
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="广东省东莞市南城去高盛科技大厦"
+                android:textColor="#ff999999"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11.5dp"
+            android:orientation="horizontal">
 
             <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="预约时间"
+                android:textColor="#ff333333"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -188,16 +275,16 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="地址"
+                android:text="接单时间"
                 android:textColor="#ff333333"
                 android:textSize="12sp" />
 
-
             <TextView
+                android:id="@+id/jie_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:text="广东省东莞市南城去高盛科技大厦"
+                android:text="2019.06.06 12:25"
                 android:textColor="#ff999999"
                 android:textSize="12sp" />
 
@@ -213,20 +300,46 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="单位"
+                android:text="开始时间"
                 android:textColor="#ff333333"
                 android:textSize="12sp" />
 
-
             <TextView
+                android:id="@+id/stime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:text="广东省东莞市南城去高盛科技大厦"
+                android:text="2019.06.06 12:25"
                 android:textColor="#ff999999"
                 android:textSize="12sp" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11.5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="结束时间"
+                android:textColor="#ff333333"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/etime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="2019.06.06 12:25"
+                android:textColor="#ff999999"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -242,8 +355,8 @@
                 android:textColor="#ff333333"
                 android:textSize="12sp" />
 
-
             <TextView
+                android:id="@+id/pay_price"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
@@ -252,8 +365,6 @@
                 android:textSize="12sp" />
 
         </LinearLayout>
-
-
     </LinearLayout>
 
     <LinearLayout
@@ -292,41 +403,24 @@
         </LinearLayout>
     </LinearLayout>
 
-
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="bottom">
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/tv_cancel"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="37.5dp"
-            android:layout_marginTop="@dimen/dp_40"
-            android:layout_marginRight="37.5dp"
-            android:background="@drawable/shape_bg_white_corner_big"
-            android:gravity="center"
-            android:padding="14.5dp"
-            android:text="取消订单"
-            android:textColor="#ff333333"
-            android:textSize="16sp" />
+        android:gravity="bottom"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_confirm"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_marginLeft="37.5dp"
-            android:layout_marginTop="@dimen/dp_40"
+            android:layout_marginTop="15dp"
             android:layout_marginRight="37.5dp"
-            android:background="@drawable/shape_btn_darkyellow_corner"
+            android:layout_weight="1"
+            android:background="@drawable/shape_btn_yellow_corner"
             android:gravity="center"
             android:padding="14.5dp"
-            android:text="开始服务"
+            android:text="评价用户"
             android:textColor="#ff2f318b"
             android:textSize="16sp" />
     </LinearLayout>

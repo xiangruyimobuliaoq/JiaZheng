@@ -14,7 +14,7 @@ public class UserCenter {
     /**
      * nickname : ღ€ε@ηྂ ҉ ҉ ҉ ҉ ҉
      * headimgurl : https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJkz85rdGfEsiaYh6p2RYNGbnsdmfcFWibR19ZXukay1STdJqvt7F1xYC
-     yHcOEo2RCQa9egSnYTZSyQ/132
+     * yHcOEo2RCQa9egSnYTZSyQ/132
      * mobile : 13333322233
      * sex : 1
      * is_certification : 1
@@ -51,9 +51,12 @@ public class UserCenter {
 
     public String withdraw_money;
     public String total_money;
-    public int today_order;
-    public int today_income;
+    public String today_order;
+    public String today_income;
     public String withdraw_price;
-    public int bind_weixin;
-    public int manage_status;
+    public String bind_weixin;
+    public String manage_status;
+    public String total_order;
+    public String week_order;
+    public String month_order;
 }

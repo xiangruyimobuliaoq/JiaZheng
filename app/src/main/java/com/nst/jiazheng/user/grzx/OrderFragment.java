@@ -1,7 +1,12 @@
 package com.nst.jiazheng.user.grzx;
 
+import android.os.Bundle;
+import android.view.View;
+
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnLoadMoreListener;
 import com.chad.library.adapter.base.module.BaseLoadMoreModule;
 import com.chad.library.adapter.base.module.LoadMoreModule;
@@ -19,11 +24,13 @@ import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -81,6 +88,33 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
         mLoadMoreModule = mAdapter.getLoadMoreModule();
         mLoadMoreModule.setEnableLoadMoreIfNotFullPage(false);
         mLoadMoreModule.setOnLoadMoreListener(this);
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+            Order order = (Order) adapter.getData().get(position);
+            Bundle bundle = new Bundle();
+            bundle.putString("id", order.id);
+            switch (order.status) {
+                case 1:
+                    overlay(OrderDetailsDaizhifuActivity.class, bundle);
+                    break;
+                case 2:
+                case 5:
+                    overlay(OrderDetailsDaijiedanActivity.class, bundle);
+                    break;
+                case 3:
+                    overlay(OrderDetailsYijiedanActivity.class, bundle);
+                    break;
+                case 4:
+                    overlay(OrderDetailsJinxingzhongActivity.class, bundle);
+                    break;
+                case 6:
+                    overlay(OrderDetailsYiwanchengActivity.class, bundle);
+                    break;
+                case -1:
+                case -2:
+                    overlay(OrderDetailsYiquxiaoActivity.class, bundle);
+                    break;
+            }
+        });
     }
 
     @Override
@@ -107,6 +141,9 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                                     mLoadMoreModule.loadMoreEnd();
                                 }
                                 mAdapter.addData(resp.data);
+                            } else if (resp.code == 101) {
+                                SpUtil.putBoolean("isLogin", false);
+                                startAndClearAll(LoginActivity.class);
                             }
                         }
 
@@ -131,6 +168,9 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                                     mLoadMoreModule.loadMoreEnd();
                                 }
                                 mAdapter.setList(resp.data);
+                            } else if (resp.code == 101) {
+                                SpUtil.putBoolean("isLogin", false);
+                                startAndClearAll(LoginActivity.class);
                             }
                         }
                     });
@@ -154,11 +194,11 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
             addItemType(2, R.layout.item_order_daijiedan);
             addItemType(3, R.layout.item_order_yijiedan);
             addItemType(4, R.layout.item_order_jinxingzhong);
-            addItemType(5, R.layout.item_order_jinxingzhong);
-            addItemType(6, R.layout.item_order_jinxingzhong);
-            addItemType(7, R.layout.item_order_jinxingzhong);
-            addItemType(-1, R.layout.item_order_jinxingzhong);
-            addItemType(-2, R.layout.item_order_jinxingzhong);
+            addItemType(5, R.layout.item_order_daijiedan);
+            addItemType(6, R.layout.item_order_wancheng);
+            addItemType(7, R.layout.item_order_daiqueren);
+            addItemType(-1, R.layout.item_order_tuikuan);
+            addItemType(-2, R.layout.item_order_quxiao);
         }
 
         @Override
@@ -174,17 +214,33 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                     .setText(R.id.pay_price, "¥ " + order.pay_price)
                     .setText(R.id.serve_type_price, "服务单价: ¥ " + order.serve_type_price + " /" + order.serve_type_units);
             switch (baseViewHolder.getItemViewType()) {
-                case 1:
-                case 2:
-                    break;
                 case 3:
                     baseViewHolder.setText(R.id.staff_name, "接单管家: " + order.staff_name)
-                            .setText(R.id.jie_time, "接单时间: " + format.format(new Date(order.jie_time)));
+                            .setText(R.id.jie_time, "接单时间: " + format.format(new Date(order.jie_time * 1000)));
                     break;
                 case 4:
                     baseViewHolder.setText(R.id.staff_name, "接单管家: " + order.staff_name)
-                            .setText(R.id.jie_time, "接单时间: " + format.format(new Date(order.jie_time)))
-                            .setText(R.id.start_time, "开始服务时间: " + format.format(new Date(order.start_time)));
+                            .setText(R.id.jie_time, "接单时间: " + format.format(new Date(order.jie_time * 1000)))
+                            .setText(R.id.start_time, "开始服务时间: " + format.format(new Date(order.start_time * 1000)));
+                    break;
+                case 6:
+                    baseViewHolder.setText(R.id.staff_name, "接单管家: " + order.staff_name)
+                            .setText(R.id.jie_time, "接单时间: " + format.format(new Date(order.jie_time * 1000)))
+                            .setText(R.id.etime, "完成时间: " + format.format(new Date(order.etime * 1000)))
+                            .setText(R.id.petime, "确认时间: " + format.format(new Date(order.petime * 1000)))
+                            .setText(R.id.start_time, "开始服务时间: " + format.format(new Date(order.start_time * 1000)));
+                    break;
+                case 7:
+                    baseViewHolder.setText(R.id.staff_name, "接单管家: " + order.staff_name)
+                            .setText(R.id.jie_time, "接单时间: " + format.format(new Date(order.jie_time * 1000)))
+                            .setText(R.id.etime, "完成时间: " + format.format(new Date(order.etime * 1000)))
+                            .setText(R.id.start_time, "开始服务时间: " + format.format(new Date(order.start_time * 1000)));
+                    break;
+                case -1:
+                    baseViewHolder.setText(R.id.cancel_time, "退款时间: " + format.format(new Date(order.cancel_time * 1000)));
+                    break;
+                case -2:
+                    baseViewHolder.setText(R.id.cancel_time, "取消时间: " + format.format(new Date(order.cancel_time * 1000)));
                     break;
             }
         }

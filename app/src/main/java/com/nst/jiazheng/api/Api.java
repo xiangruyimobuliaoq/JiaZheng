@@ -19,6 +19,7 @@ public class Api {
     public static String serverApi = BuildConfig.API_SERVER + "/outside/server/api";
     public static String userApi = BuildConfig.API_SERVER + "/outside/user/api";
     public static String orderApi = BuildConfig.API_SERVER + "/outside/order/api";
+    public static String certificationApi = BuildConfig.API_SERVER + "/outside/certification/api";
 
 
 }

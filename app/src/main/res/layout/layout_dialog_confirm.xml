@@ -1,73 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_50"
     android:background="@drawable/shape_bg_white_corner"
-   android:layout_margin="@dimen/dp_50"
     android:orientation="vertical">
 
     <TextView
-        android:visibility="gone"
-        android:textColor="#ff333333"
-        android:textSize="18sp"
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
         android:gravity="center"
-        android:id="@+id/tv_title"
         android:text="联系客服"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:textColor="#ff333333"
+        android:textSize="18sp"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
+        android:paddingTop="58dp"
+        android:paddingBottom="58dp"
         android:text="是否确认取消该订单？"
         android:textColor="#ff333333"
-        android:textSize="16sp"
-        android:paddingBottom="58dp"
-        android:paddingTop="58dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    
+        android:textSize="16sp" />
+
     <View
-        android:background="#E5E5E5"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"/>
+        android:layout_height="0.5dp"
+        android:background="#E5E5E5" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
             android:paddingTop="13.5dp"
             android:paddingBottom="13.5dp"
-            android:gravity="center"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
             android:text="取消"
             android:textColor="#ffbfbfbf"
-            android:textSize="18sp"
-            />
+            android:textSize="18sp" />
 
         <View
-            android:background="#E5E5E5"
             android:layout_width="0.5dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="#E5E5E5" />
 
         <TextView
             android:id="@+id/tv_confirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
             android:paddingTop="13.5dp"
             android:paddingBottom="13.5dp"
-            android:gravity="center"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
             android:text="确定"
             android:textColor="#ff2f318b"
-            android:textSize="18sp"
-            />
+            android:textSize="18sp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -15,6 +15,8 @@ import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
+import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 
 import butterknife.BindView;
 
@@ -43,6 +45,9 @@ public class AboutUsActivity extends BaseToolBarActivity {
                 }.getType());
                 if (resp.code == 1) {
                     content.setText(Html.fromHtml(resp.data.copyright) + "\r\n" + "        联系电话:" + resp.data.mobile);
+                }else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
                 }
             }
         });

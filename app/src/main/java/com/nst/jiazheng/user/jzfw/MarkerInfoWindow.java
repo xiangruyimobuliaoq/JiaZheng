@@ -53,8 +53,8 @@ public class MarkerInfoWindow extends BasePopupWindow implements View.OnClickLis
         mBtn = findViewById(R.id.btn);
         mTypelist = findViewById(R.id.typelist);
         nickname = findViewById(R.id.nickname);
-        mCounts.setText(worker.OrderCount+"单");
-        mPoint.setText(worker.score+"分");
+        mCounts.setText(worker.OrderCount + "单");
+        mPoint.setText(worker.score + "分");
         nickname.setText(worker.name);
         GridLayoutManager manager = new GridLayoutManager(getContext(), 4);
         mTypelist.setLayoutManager(manager);

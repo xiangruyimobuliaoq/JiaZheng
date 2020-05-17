@@ -81,7 +81,6 @@ public class LoginActivity extends BaseActivity {
                 }.getType());
                 toast(resp.msg);
                 if (resp.code == 1) {
-                    // TODO: 2020/4/10
                     SpUtil.putBoolean("isLogin", true);
                     SpUtil.saveObj("userInfo", resp.data);
                     overlay(HomeActivity.class);

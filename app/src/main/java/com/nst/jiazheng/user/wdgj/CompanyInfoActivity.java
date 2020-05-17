@@ -21,6 +21,7 @@ import com.nst.jiazheng.api.resp.Worker;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 
 import java.util.List;
 
@@ -83,6 +84,9 @@ public class CompanyInfoActivity extends BaseToolBarActivity {
                 if (resp.code == 1) {
                     mData = resp.data;
                     setData(mData);
+                }else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
                 }
             }
         });
@@ -132,6 +136,9 @@ public class CompanyInfoActivity extends BaseToolBarActivity {
                         mData.is_collect = 0;
                         submit.setText("收藏Ta");
                     }
+                }else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
                 }
             }
 

@@ -28,6 +28,7 @@ import com.nst.jiazheng.api.resp.Worker;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.List;
@@ -142,6 +143,9 @@ public class NearbyActivity extends BaseToolBarActivity implements AMapLocationL
                         }.getType());
                         if (resp.code == 1) {
                             mAdapter.setList(resp.data.list);
+                        }else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
                     }
 

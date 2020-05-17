@@ -37,6 +37,7 @@ import com.nst.jiazheng.api.resp.Worker;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.user.AddrPickActivity;
 import com.nst.jiazheng.user.PayActivity;
 import com.nst.jiazheng.user.wdgj.CompanyInfoActivity;
@@ -108,7 +109,7 @@ public class RequestServeActivity extends BaseToolBarActivity {
         submit.setEnabled(false);
         workerinfo.setOnClickListener(v -> {
             Bundle params = new Bundle();
-            params.putSerializable("worker", mWorker);
+            params.putString("worker", mWorker.id);
             if (mWorker.type == 1) {
                 overlay(WorkerInfoActivity.class, params);
             } else {
@@ -198,6 +199,9 @@ public class RequestServeActivity extends BaseToolBarActivity {
                     params.putString("orderNo", resp.data.order_no);
                     overlay(PayActivity.class, params);
                     finish();
+                }else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
                 }
             }
         });
@@ -253,6 +257,9 @@ public class RequestServeActivity extends BaseToolBarActivity {
                 if (resp.code == 1) {
                     submit.setEnabled(true);
                     submit.setText("预约服务(总价: ¥ " + resp.data.total_price + ")");
+                }else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
                 }
             }
         });
@@ -356,6 +363,9 @@ public class RequestServeActivity extends BaseToolBarActivity {
                 }.getType());
                 if (resp.code == 1) {
                     mAdapter.setList(resp.data);
+                }else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
                 }
             }
         });

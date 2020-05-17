@@ -14,6 +14,7 @@ import com.nst.jiazheng.api.resp.Agreement;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
+import com.nst.jiazheng.base.SpUtil;
 
 import butterknife.BindView;
 
@@ -42,6 +43,9 @@ public class AgreementActivity extends BaseToolBarActivity {
                 }.getType());
                 if (resp.code == 1) {
                     content.setText(Html.fromHtml(resp.data.agreement));
+                }else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
                 }
             }
 

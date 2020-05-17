@@ -64,6 +64,7 @@
                 android:textSize="36sp" />/
 
             <TextView
+                android:id="@+id/tv_yue_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="余额（元）" />
@@ -76,6 +77,7 @@
                 android:textSize="18dp" />
 
             <TextView
+                android:id="@+id/tv_shouru_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="总收入（元）" />
@@ -101,6 +103,7 @@
                         android:textSize="20sp" />
 
                     <TextView
+                        android:id="@+id/today_order_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="今日接单"
@@ -122,6 +125,7 @@
                         android:textSize="20sp" />
 
                     <TextView
+                        android:id="@+id/today_income_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="今日收入（元）"
@@ -194,37 +198,7 @@
         app:tabIndicatorFullWidth="false"
         app:tabIndicatorHeight="@dimen/dp_4"
         app:tabMode="fixed"
-        app:tabRippleColor="@null">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabItem1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="接单栏" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabItem2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="待进行" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="进行中" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="待确认" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="已完成" />
-
-    </com.google.android.material.tabs.TabLayout>
-
+        app:tabRippleColor="@null"/>
     <com.nst.jiazheng.base.LockableViewPager
         android:id="@+id/vp"
         android:layout_width="match_parent"

@@ -16,6 +16,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".base.App"
         android:allowBackup="true"
@@ -31,6 +33,7 @@
 
         <activity
             android:name=".login.LoginActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme_blue">
             <intent-filter>
@@ -107,7 +110,7 @@
             android:name=".worker.InputAgeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".worker.OrderDetailsActivity"
+            android:name=".worker.JiedanlanActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".worker.AddCommentActivity"
@@ -151,10 +154,63 @@
         <activity
             android:name=".user.grzx.UserInfoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".user.grzx.ShareActivity" />
-        <activity android:name=".user.grzx.CertificationActivity" />
-        <activity android:name=".user.grzx.ApplySubmitActivity" />
+        <activity
+            android:name=".user.grzx.ShareActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.CertificationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.ApplySubmitActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.OrderDetailsDaizhifuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.ComplainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.OrderDetailsDaijiedanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.OrderDetailsYijiedanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.OrderDetailsJinxingzhongActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.OrderDetailsDaiquerenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.OrderDetailsYiwanchengActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.OrderDetailsYiquxiaoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.JinxingzhongActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.YiwanchengActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".worker.DaiquerenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NickNameActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name="com.amap.api.location.APSService" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 </manifest>

@@ -15,6 +15,7 @@ import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -60,6 +61,9 @@ public class CashLogActivity extends BaseToolBarActivity {
                         }.getType());
                         if (resp.code == 1) {
                             mAdapter.setList(resp.data);
+                        }else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
                     }
                 });

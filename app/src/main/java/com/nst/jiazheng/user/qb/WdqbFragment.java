@@ -17,6 +17,7 @@ import com.nst.jiazheng.api.resp.UserCenter;
 import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
 
 import butterknife.BindView;
 
@@ -73,6 +74,9 @@ public class WdqbFragment extends BaseFragment {
                         }.getType());
                         if (resp.code == 1) {
                             money.setText(String.valueOf(resp.data.money));
+                        }else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
                         }
                     }
                 });
