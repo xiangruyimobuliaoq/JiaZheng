@@ -30,7 +30,7 @@
         android:layout_marginLeft="37.5dp"
         android:layout_marginTop="@dimen/dp_40"
         android:layout_marginRight="37.5dp"
-        android:background="@drawable/shape_btn_darkyellow_corner"
+        android:background="@drawable/shape_btn_yellow_corner"
         android:gravity="center"
         android:padding="14.5dp"
         android:text="保存"

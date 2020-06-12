@@ -15,10 +15,10 @@
         android:background="@color/statusbar_yellow">
 
         <ImageView
+            android:id="@+id/iv_title_left_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
-            android:id="@+id/iv_title_left_icon"
             android:src="@mipmap/ic_sqcwgj" />
 
         <RadioGroup
@@ -121,10 +121,161 @@
         android:id="@+id/fujin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="85dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginRight="15dp"
+        android:layout_marginBottom="85dp"
         android:src="@mipmap/ic_dw2" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:id="@+id/ordercount"
+        android:src="@mipmap/ic_dd" />
+
+    <LinearLayout
+        android:id="@+id/orderpart"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="140dp"
+        android:background="@drawable/shape_bg_white_corner"
+        android:elevation="2dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/daijie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="11dp"
+                android:paddingTop="8.5dp"
+                android:paddingRight="11dp"
+                android:paddingBottom="8.5dp"
+                android:text="待接单"
+                android:textColor="@color/text_1" />
+
+            <TextView
+                android:id="@+id/daijiecount"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginLeft="-10dp"
+                android:layout_marginTop="4.5dp"
+                android:layout_toRightOf="@+id/daijie"
+                android:background="@drawable/shape_bg_red_circle"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="4sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_2" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/yijie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="11dp"
+                android:paddingTop="8.5dp"
+                android:paddingRight="11dp"
+                android:paddingBottom="8.5dp"
+                android:text="已接单"
+                android:textColor="@color/text_1" />
+
+            <TextView
+                android:id="@+id/yijiecount"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginLeft="-10dp"
+                android:layout_marginTop="4.5dp"
+                android:layout_toRightOf="@+id/yijie"
+                android:background="@drawable/shape_bg_red_circle"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="4sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_2" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/jinxing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="11dp"
+                android:paddingTop="8.5dp"
+                android:paddingRight="11dp"
+                android:paddingBottom="8.5dp"
+                android:text="进行中"
+                android:textColor="@color/text_1" />
+
+            <TextView
+                android:id="@+id/jinxingcount"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginLeft="-10dp"
+                android:layout_marginTop="4.5dp"
+                android:layout_toRightOf="@+id/jinxing"
+                android:background="@drawable/shape_bg_red_circle"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="4sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line_2" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/daique"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="11dp"
+                android:paddingTop="8.5dp"
+                android:paddingRight="11dp"
+                android:paddingBottom="8.5dp"
+                android:text="待确认"
+                android:textColor="@color/text_1" />
+
+            <TextView
+                android:id="@+id/daiquecount"
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:layout_marginLeft="-10dp"
+                android:layout_marginTop="4.5dp"
+                android:layout_toRightOf="@+id/daique"
+                android:background="@drawable/shape_bg_red_circle"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="4sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
 
 </RelativeLayout>

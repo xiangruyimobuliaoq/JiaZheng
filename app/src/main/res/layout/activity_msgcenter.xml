@@ -35,10 +35,9 @@
             android:text="对话" />
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <com.nst.jiazheng.base.LockableViewPager
+        android:id="@+id/vp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="7.5dp" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -23,7 +23,26 @@ public class Register implements Serializable {
 
     public String token;
     public String ry_token;
+    public int manage_status;
     public int user_id;
     public int type;
     public String udid;
+    public String logo;
+
+
+    /**
+     * nickname : 彭龙
+     * headimgurl : http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLia8YSc6EDiaYFCTmpEyZu02xbMBf72iaPoSSXmpZibIBqrjoicraAVx0fmKvInlf46d2NhfaLZRZhxuQ/132
+     * sex : 1
+     * app_openid : ozvDyvsRoCQnR3EYL80vVsD8wcgM
+     * unionid : or6bKjoAw-d8VZkGEELBKn1sXekI
+     * promoter_id : 0
+     */
+
+    public String nickname;
+    public String headimgurl;
+    public int sex;
+    public String app_openid;
+    public String unionid;
+    public int promoter_id;
 }

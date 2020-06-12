@@ -6,14 +6,12 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
-import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -29,6 +27,7 @@ import com.nst.jiazheng.NickNameActivity;
 import com.nst.jiazheng.R;
 import com.nst.jiazheng.SexWindow;
 import com.nst.jiazheng.api.Api;
+import com.nst.jiazheng.api.resp.Addr;
 import com.nst.jiazheng.api.resp.Order;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
@@ -41,7 +40,6 @@ import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.base.ToastHelper;
 import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.user.PhotoWindow;
-import com.nst.jiazheng.user.grzx.UserInfoActivity;
 import com.nst.jiazheng.worker.bean.JsonBean;
 import com.nst.jiazheng.worker.utils.GetJsonDataUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -61,7 +59,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 创建时间   2020/4/18 4:52 PM
  * 描述	      个人资料
  */
-
 @Layout(layoutId = R.layout.activity_my_profile)
 public class MyProfileActivity extends BaseToolBarActivity {
     @BindView(R.id.ll_age)
@@ -93,16 +90,18 @@ public class MyProfileActivity extends BaseToolBarActivity {
 
     private int REQUEST_AGE = 888;
     private int REQUEST_NICKNAME = 1;
-    private List<JsonBean> options1Items = new ArrayList<>();
-    private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
-    private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
+    private List<Addr> options1Items = new ArrayList<>();
+    private ArrayList<ArrayList<Addr>> options2Items = new ArrayList<>();
+    private ArrayList<ArrayList<ArrayList<Addr>>> options3Items = new ArrayList<>();
     private Register mUserInfo;
+    private Addr mTotal;
 
     @Override
     protected void init() {
         setTitle("个人资料");
         mUserInfo = (Register) SpUtil.readObj("userInfo");
-        initJsonData();
+//        initJsonData();
+        initJsonData1();
         getUserInfo();
     }
 
@@ -139,8 +138,8 @@ public class MyProfileActivity extends BaseToolBarActivity {
         mTvName.setText(data.nickname);
         mTvIsCertification.setText(data.is_certification == 1 ? "已认证" : "未认证");
         mTvSex.setText(data.sex == 0 ? "未知" : data.sex == 1 ? "男" : "女");
-        mTvCity.setText(data.address);
-        mTvLong.setText(data.job_age + "年");
+        mTvCity.setText(data.province + data.city + data.area + data.address);
+        mTvLong.setText(data.job_age == 0.5 ? "半年" : data.job_age + "年");
         mTvName.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
             bundle.putString("nickname", data.nickname);
@@ -148,10 +147,11 @@ public class MyProfileActivity extends BaseToolBarActivity {
 
         });
         mSelectAge.setOnClickListener(view -> overlayForResult(InputAgeActivity.class, REQUEST_AGE));
-        mSelectSex.setOnClickListener(view -> new SexWindow(this).setListener((confirmWindow, sex) -> {
+        mSelectSex.setOnClickListener(view -> new SexWindow(this).setListener((confirmWindow, sex, sexText) -> {
             HashMap<String, String> map = new HashMap<>();
             map.put("sex", String.valueOf(sex));
             updateUserInfo(map);
+
         }).setPopupGravity(Gravity.BOTTOM).showPopupWindow());
         mSelectCity.setOnClickListener(view -> showCityPickerView());
         mSelectLong.setOnClickListener(view -> showLongTimePicker());
@@ -213,11 +213,13 @@ public class MyProfileActivity extends BaseToolBarActivity {
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override
                     public void onResult(List<LocalMedia> result) {
-                        LocalMedia localMedia = result.get(0);
-                        if (Build.VERSION.SDK_INT == 29) {
-                            upLoadFiles(localMedia.getAndroidQToPath());
-                        } else {
-                            upLoadFiles(localMedia.getPath());
+                        for (LocalMedia localMedia : result
+                        ) {
+                            if (Build.VERSION.SDK_INT == 29) {
+                                upLoadFiles(localMedia.getAndroidQToPath());
+                            } else {
+                                upLoadFiles(localMedia.getPath());
+                            }
                         }
                     }
 
@@ -302,7 +304,6 @@ public class MyProfileActivity extends BaseToolBarActivity {
                             SpUtil.putBoolean("isLogin", false);
                             startAndClearAll(LoginActivity.class);
                         }
-                        getUserInfo();
                         ToastHelper.showToast(resp.msg, mContext);
                     }
 
@@ -334,35 +335,33 @@ public class MyProfileActivity extends BaseToolBarActivity {
         }
     }
 
-
-    private void initJsonData() {//解析数据
-
-        /**
-         * 注意：assets 目录下的Json文件仅供参考，实际使用可自行替换文件
-         * 关键逻辑在于循环体
-         *
-         * */
-        String JsonData = new GetJsonDataUtil().getJson(this, "province.json");//获取assets目录下的json文件数据
-
-        ArrayList<JsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
-
-        /**
-         * 添加省份数据
-         *
-         * 注意：如果是添加的JavaBean实体，则实体类需要实现 IPickerViewData 接口，
-         * PickerView会通过getPickerViewText方法获取字符串显示出来。
-         */
-        options1Items = jsonBean;
-
-        for (int i = 0; i < jsonBean.size(); i++) {//遍历省份
-            ArrayList<String> cityList = new ArrayList<>();//该省的城市列表（第二级）
-            ArrayList<ArrayList<String>> province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
-
-            for (int c = 0; c < jsonBean.get(i).getCityList().size(); c++) {//遍历该省份的所有城市
-                String cityName = jsonBean.get(i).getCityList().get(c).getName();
+    private void initJsonData1() {//解析数据
+        String JsonData = new GetJsonDataUtil().getJson(this, "location.json");//获取assets目录下的json文件数据
+        ArrayList<Addr> addrs = new Gson().fromJson(JsonData, new TypeToken<ArrayList<Addr>>() {
+        }.getType());
+        mTotal = new Addr();
+        for (Addr addr : addrs
+        ) {
+            if (addr.pid == 0) {
+                mTotal.mAddrs.add(addr);
+                continue;
+            }
+            for (Addr addr1 : addrs
+            ) {
+                if (addr1.id == addr.pid) {
+                    addr1.mAddrs.add(addr);
+                    break;
+                }
+            }
+        }
+        options1Items = mTotal.mAddrs;
+        for (int i = 0; i < mTotal.mAddrs.size(); i++) {//遍历省份
+            ArrayList<Addr> cityList = new ArrayList<>();//该省的城市列表（第二级）
+            ArrayList<ArrayList<Addr>> province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
+            for (int c = 0; c < mTotal.mAddrs.get(i).mAddrs.size(); c++) {//遍历该省份的所有城市
+                Addr cityName = mTotal.mAddrs.get(i).mAddrs.get(c);
                 cityList.add(cityName);//添加城市
-                ArrayList<String> city_AreaList = new ArrayList<>();//该城市的所有地区列表
-
+                ArrayList<Addr> city_AreaList = new ArrayList<>();//该城市的所有地区列表
                 //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
                 /*if (jsonBean.get(i).getCityList().get(c).getArea() == null
                         || jsonBean.get(i).getCityList().get(c).getArea().size() == 0) {
@@ -370,28 +369,25 @@ public class MyProfileActivity extends BaseToolBarActivity {
                 } else {
                     city_AreaList.addAll(jsonBean.get(i).getCityList().get(c).getArea());
                 }*/
-                city_AreaList.addAll(jsonBean.get(i).getCityList().get(c).getArea());
+                city_AreaList.addAll(mTotal.mAddrs.get(i).mAddrs.get(c).mAddrs);
                 province_AreaList.add(city_AreaList);//添加该省所有地区数据
             }
-
             /**
              * 添加城市数据
              */
             options2Items.add(cityList);
-
             /**
              * 添加地区数据
              */
             options3Items.add(province_AreaList);
         }
-
-
     }
+
 
     private void showLongTimePicker() {
         List<String> options1Items = new ArrayList<>();
         options1Items.add("半年");
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 30; i++) {
             options1Items.add((i + 1) + "年");
         }
         //条件选择器
@@ -399,7 +395,10 @@ public class MyProfileActivity extends BaseToolBarActivity {
             String tx = options1Items.get(options1);
             mTvLong.setText(tx);
             HashMap<String, String> map = new HashMap<>();
-            map.put("job_age", 0.5 + "");
+            if (tx.equals("半年")) {
+                tx = "0.5年";
+            }
+            map.put("job_age", tx.replaceAll("年", ""));
             updateUserInfo(map);
         })
                 .setCancelColor(Color.GRAY)
@@ -418,17 +417,19 @@ public class MyProfileActivity extends BaseToolBarActivity {
 
             String opt2tx = options2Items.size() > 0
                     && options2Items.get(options1).size() > 0 ?
-                    options2Items.get(options1).get(options2) : "";
+                    options2Items.get(options1).get(options2).name : "";
 
             String opt3tx = options2Items.size() > 0
                     && options3Items.get(options1).size() > 0
                     && options3Items.get(options1).get(options2).size() > 0 ?
-                    options3Items.get(options1).get(options2).get(options3) : "";
+                    options3Items.get(options1).get(options2).get(options3).name : "";
 
             String tx = opt1tx + opt2tx + opt3tx;
             mTvCity.setText(tx);
             HashMap<String, String> map = new HashMap<>();
-            map.put("address", tx);
+            map.put("province", opt1tx);
+            map.put("city", opt2tx);
+            map.put("area", opt3tx);
             updateUserInfo(map);
         }).setTitleText("城市选择")
                 .setCancelColor(Color.GRAY)
@@ -454,6 +455,4 @@ public class MyProfileActivity extends BaseToolBarActivity {
         }
         return detail;
     }
-
-
 }

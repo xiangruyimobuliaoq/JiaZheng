@@ -6,251 +6,275 @@
 
     <include layout="@layout/layout_toolbar" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        android:text="信息仅用于服务认证，家政APP保障您的信息安全"
-        android:textColor="@color/text_3"
-        android:textSize="12sp" />
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="12dp"
-        android:background="@drawable/shape_bg_white_corner"
-        android:elevation="2dp"
-        android:orientation="vertical">
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/line_2"
-            android:gravity="center"
-            android:padding="11dp"
-            android:text="请手持身份证拍一张正面照"
-            android:textColor="#ff333333"
-            android:textSize="14sp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:id="@+id/takepicture"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="17dp"
-            android:src="@mipmap/ic_sfzsc" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="12dp"
-        android:background="@drawable/shape_bg_white_corner"
-        android:elevation="2dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/line_2"
-            android:gravity="center"
-            android:padding="11dp"
-            android:text="填写资料"
-            android:textColor="#ff333333"
-            android:textSize="14sp" />
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:text="姓名"
-                android:textColor="@color/text_1"
-                android:textSize="14sp" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:text="信息仅用于服务认证，家政APP保障您的信息安全"
+                android:textColor="@color/text_3"
+                android:textSize="12sp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:gravity="right"
-                android:text="张三"
-                android:textColor="@color/text_1"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/shape_bg_white_corner"
+                android:elevation="2dp"
+                android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@color/line_1" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/line_2"
+                    android:gravity="center"
+                    android:padding="11dp"
+                    android:text="请手持身份证拍一张正面照"
+                    android:textColor="#ff333333"
+                    android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:text="电话"
-                android:textColor="@color/text_1"
-                android:textSize="14sp" />
+                <ImageView
+                    android:id="@+id/takepicture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="17dp"
+                    android:src="@mipmap/ic_sfzsc" />
 
-            <EditText
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:background="@null"
-                android:gravity="right"
-                android:hint="请输入"
-                android:textColor="@color/text_1"
-                android:textSize="14sp" />
-        </LinearLayout>
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/shape_bg_white_corner"
+                android:elevation="2dp"
+                android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@color/line_1" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/line_2"
+                    android:gravity="center"
+                    android:padding="11dp"
+                    android:text="填写资料"
+                    android:textColor="#ff333333"
+                    android:textSize="14sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:text="性别 "
-                android:textColor="@color/text_1"
-                android:textSize="14sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:text="姓名"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
 
-            <EditText
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:gravity="right"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@color/line_1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:text="电话"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/mobile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:background="@null"
+                        android:gravity="right"
+                        android:hint="请输入"
+                        android:singleLine="true"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@color/line_1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:text="性别 "
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/sex"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:background="@null"
+                        android:drawableRight="@mipmap/ic_jinr"
+                        android:drawablePadding="10dp"
+                        android:gravity="right"
+                        android:hint="请选择"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@color/line_1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:text="年龄"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/age"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:background="@null"
+                        android:drawableRight="@mipmap/ic_jinr"
+                        android:drawablePadding="10dp"
+                        android:gravity="right"
+                        android:hint="请选择"
+                        android:singleLine="true"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@color/line_1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:text="住址"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:background="@null"
+                        android:gravity="right"
+                        android:hint="请输入"
+                        android:singleLine="true"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@color/line_1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:text="从业年限"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/job_age"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:background="@null"
+                        android:drawableRight="@mipmap/ic_jinr"
+                        android:drawablePadding="10dp"
+                        android:gravity="right"
+                        android:hint="请选择"
+                        android:textColor="@color/text_1"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:background="@null"
-                android:gravity="right"
-                android:hint="请输入"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="37.5dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="37.5dp"
+                android:background="@drawable/shape_btn_yellow_corner"
+                android:text="提交审核"
                 android:textColor="@color/text_1"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@color/line_1" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:text="年龄"
-                android:textColor="@color/text_1"
-                android:textSize="14sp" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:background="@null"
-                android:gravity="right"
-                android:hint="请输入"
-                android:textColor="@color/text_1"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@color/line_1" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:text="住址"
-                android:textColor="@color/text_1"
-                android:textSize="14sp" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:background="@null"
-                android:gravity="right"
-                android:hint="请输入"
-                android:textColor="@color/text_1"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@color/line_1" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:text="从业年限"
-                android:textColor="@color/text_1"
-                android:textSize="14sp" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:background="@null"
-                android:gravity="right"
-                android:hint="请输入"
-                android:textColor="@color/text_1"
-                android:textSize="14sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/submit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="37.5dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="37.5dp"
-        android:background="@drawable/shape_btn_yellow_corner"
-        android:text="提交审核"
-        android:textColor="@color/text_1"
-        android:textSize="16sp" />
-
+    </ScrollView>
 </LinearLayout>

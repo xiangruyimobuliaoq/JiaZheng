@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,7 +22,6 @@ import com.nst.jiazheng.NickNameActivity;
 import com.nst.jiazheng.R;
 import com.nst.jiazheng.SexWindow;
 import com.nst.jiazheng.api.Api;
-import com.nst.jiazheng.api.resp.Order;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.api.resp.UpFile;
@@ -31,9 +29,7 @@ import com.nst.jiazheng.api.resp.UserCenter;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.GlideEngine;
 import com.nst.jiazheng.base.Layout;
-import com.nst.jiazheng.base.LogUtil;
 import com.nst.jiazheng.base.SpUtil;
-import com.nst.jiazheng.base.ToastHelper;
 import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.user.PhotoWindow;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -120,7 +116,7 @@ public class UserInfoActivity extends BaseToolBarActivity {
             });
         }
         mTvSex.setText(data.sex == 0 ? "未知" : data.sex == 1 ? "男" : "女");
-        mSelectSex.setOnClickListener(view -> new SexWindow(this).setListener((confirmWindow, sex) -> {
+        mSelectSex.setOnClickListener(view -> new SexWindow(this).setListener((confirmWindow, sex, 男) -> {
             HashMap<String, String> map = new HashMap<>();
             map.put("sex", String.valueOf(sex));
             updateUserInfo(map);

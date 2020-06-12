@@ -54,9 +54,25 @@ public class UserCenter {
     public String today_order;
     public String today_income;
     public String withdraw_price;
-    public String bind_weixin;
-    public String manage_status;
+    public int bind_weixin;
+    public int manage_status;
     public String total_order;
     public String week_order;
     public String month_order;
+
+
+    /**
+     * id_card_img :
+     * name : 彭龙
+     * age : 0
+     * job_age : 0
+     * address :
+     */
+
+    public String id_card_img;
+    public String name;
+    public String age;
+    public String job_age;
+    public String address;
+    public int type;
 }

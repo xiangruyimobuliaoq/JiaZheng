@@ -18,6 +18,9 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission android:name="android.hardware.camera.autofocus" />
+
+
     <application
         android:name=".base.App"
         android:allowBackup="true"
@@ -84,9 +87,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".user.jzfw.NearbyActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".worker.ChatActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".worker.WithdrawActivity"
@@ -199,12 +199,64 @@
         <activity
             android:name=".NickNameActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".face.FaceLivenessExpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".face.FaceDetectExpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".im.ConversationListActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="com.nst.jiazheng"
+                    android:pathPrefix="/conversationlist"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".im.ConversationActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="com.nst.jiazheng"
+                    android:pathPrefix="/conversation"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".worker.DaijinxingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.UserPointActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.grzx.PointDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.WxLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
 
         <service android:name="com.amap.api.location.APSService" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="com.nst.jiazheng.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

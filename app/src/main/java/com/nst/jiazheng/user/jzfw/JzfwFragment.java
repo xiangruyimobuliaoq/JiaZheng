@@ -12,7 +12,9 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
@@ -24,12 +26,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.services.core.AMapException;
-import com.amap.api.services.geocoder.GeocodeAddress;
-import com.amap.api.services.geocoder.GeocodeQuery;
-import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
-import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.api.services.help.Inputtips;
 import com.amap.api.services.help.InputtipsQuery;
 import com.amap.api.services.help.Tip;
@@ -43,10 +40,11 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.nst.jiazheng.R;
 import com.nst.jiazheng.api.Api;
-import com.nst.jiazheng.api.resp.Addr;
 import com.nst.jiazheng.api.resp.IndexMap;
+import com.nst.jiazheng.api.resp.Order;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
+import com.nst.jiazheng.api.resp.UserCenter;
 import com.nst.jiazheng.api.resp.Worker;
 import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.DpUtil;
@@ -91,10 +89,22 @@ public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeLis
     RadioGroup rg;
     @BindView(R.id.clear)
     ImageView clear;
+    @BindView(R.id.ordercount)
+    ImageView ordercount;
     @BindView(R.id.content)
     EditText content;
     @BindView(R.id.addrlist)
     RecyclerView addrlist;
+    @BindView(R.id.orderpart)
+    LinearLayout orderpart;
+    @BindView(R.id.daijiecount)
+    TextView daijiecount;
+    @BindView(R.id.yijiecount)
+    TextView yijiecount;
+    @BindView(R.id.jinxingcount)
+    TextView jinxingcount;
+    @BindView(R.id.daiquecount)
+    TextView daiquecount;
     private AMap aMap;
     private UiSettings uiSettings;
     private MyLocationStyle myLocationStyle;
@@ -120,8 +130,8 @@ public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeLis
         dingwei.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(23.02067, 113.75179), 16));
+                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+//                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(23.02067, 113.75179), 16));
             }
         });
         fujin.setOnClickListener(new View.OnClickListener() {
@@ -161,7 +171,17 @@ public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeLis
 
             }
         });
-
+        ordercount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (orderpart.getVisibility() == View.GONE) {
+                    setOverlay(currentPosition);
+                    orderpart.setVisibility(View.VISIBLE);
+                } else {
+                    orderpart.setVisibility(View.GONE);
+                }
+            }
+        });
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         manager.setOrientation(RecyclerView.VERTICAL);
         addrlist.setLayoutManager(manager);
@@ -185,18 +205,45 @@ public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeLis
                 Log.e("123", addressName);
             }
         });
-
-        initEvent();
     }
 
-    private void initEvent() {
-        ivTitleLeftIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                overlay(MainActivity.class);
-            }
-        });
+    @Override
+    public void setCenterData(UserCenter data) throws Exception{
+        if (data.type == 1) {
+            ivTitleLeftIcon.setVisibility(View.GONE);
+        } else {
+            ivTitleLeftIcon.setVisibility(View.VISIBLE);
+            ivTitleLeftIcon.setOnClickListener(view -> getManageStatus());
+        }
+    }
 
+    private void getManageStatus() {
+        showDialog("正在验证", true);
+        OkGo.<String>post(Api.userApi).params("api_name", "center").params("token", mUserInfo.token)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        dismissDialog();
+                        Resp<UserCenter> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<UserCenter>>() {
+                        }.getType());
+                        if (resp.code == 1) {
+                            if (resp.data.manage_status == 2) {
+                                toast("您的账户已被禁用");
+                            } else {
+                                overlay(MainActivity.class);
+                            }
+                        } else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        dismissDialog();
+                    }
+                });
     }
 
     private void requestPermission() {
@@ -280,26 +327,34 @@ public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeLis
         if (null == cameraPosition)
             return;
         OkGo.<String>post(Api.serverApi).params("api_name", "index_map").params("token", mUserInfo.token).params("type", currentType)
-                .params("lng", 113.75179).params("lat", 23.02067)
-//                .params("lng", cameraPosition.target.longitude).params("lat", cameraPosition.target.latitude)
+//                .params("lng", 113.75179).params("lat", 23.02067)
+                .params("lng", cameraPosition.target.longitude).params("lat", cameraPosition.target.latitude)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
                         Resp<IndexMap> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<IndexMap>>() {
                         }.getType());
                         if (resp.code == 1) {
+                            setOrderCount(resp.data.order);
                             aMap.clear(true);
                             mWorkers = new HashMap<>();
                             for (Worker worker : resp.data.list) {
                                 mWorkers.put(String.valueOf(worker.id), worker);
-                                aMap.addMarker(new MarkerOptions().title(String.valueOf(worker.id)).position(new LatLng(worker.lat, worker.lng)).icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_srgj))));
+                                aMap.addMarker(new MarkerOptions().title(String.valueOf(worker.id)).position(new LatLng(worker.lat, worker.lng)).icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(), currentType == 1 ? R.mipmap.ic_srgj : R.mipmap.ic_jzgs))));
                             }
-                        }else if (resp.code == 101) {
+                        } else if (resp.code == 101) {
                             SpUtil.putBoolean("isLogin", false);
                             startAndClearAll(LoginActivity.class);
                         }
                     }
                 });
+    }
+
+    private void setOrderCount(Order order) {
+        daijiecount.setText(String.valueOf(order.daijie));
+        yijiecount.setText(String.valueOf(order.yijie));
+        jinxingcount.setText(String.valueOf(order.jinxing));
+        daiquecount.setText(String.valueOf(order.daique));
     }
 
     @Override

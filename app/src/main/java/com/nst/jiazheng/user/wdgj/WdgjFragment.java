@@ -87,11 +87,6 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
         nearbylist.setLayoutManager(manager);
         mAdapter = new NearbyAdapter(R.layout.item_worker, null);
         nearbylist.setAdapter(mAdapter);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         getData();
     }
 
@@ -147,7 +142,6 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
                         dismissDialog();
                         Resp<List<MyCollect>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<MyCollect>>>() {
                         }.getType());
-                        toast(resp.msg);
                         if (resp.code == 1) {
                             mAdapter.setList(resp.data);
                         } else if (resp.code == 101) {

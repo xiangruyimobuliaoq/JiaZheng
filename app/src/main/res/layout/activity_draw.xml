@@ -44,7 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:text="100.00"
+                android:inputType="numberDecimal"
+                android:singleLine="true"
                 android:textColor="#ff333333"
                 android:textSize="35sp" />
 
@@ -58,18 +59,18 @@
 
 
         <TextView
+            android:id="@+id/money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="9.5dp"
-            android:text="可提现金额：￥800.00"
             android:textColor="#ffbfbfbf"
             android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/shouxufei"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8.5dp"
-            android:text="手续费：2元（2%）   实际到账：98.00元"
             android:textColor="#fff94205"
             android:textSize="10sp" />
     </LinearLayout>
@@ -136,13 +137,13 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/bindwx"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawableRight="@mipmap/ic_xyb"
                 android:drawablePadding="@dimen/dp_4"
                 android:gravity="right"
-                android:text="未绑定"
                 android:textColor="#ff999999"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -156,7 +157,7 @@
         android:layout_marginLeft="37.5dp"
         android:layout_marginTop="@dimen/dp_40"
         android:layout_marginRight="37.5dp"
-        android:background="@drawable/shape_btn_darkyellow_corner"
+        android:background="@drawable/shape_btn_yellow_corner"
         android:gravity="center"
         android:padding="14.5dp"
         android:text="申请提现"

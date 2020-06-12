@@ -131,6 +131,9 @@ public class ComplainActivity extends BaseToolBarActivity {
                 id += upFile.id + ",";
             }
         }
+        if (id.endsWith(",")) {
+            id = id.substring(0, id.length() - 1);
+        }
         showDialog("正在提交", true);
         OkGo.<String>post(Api.userApi).params("api_name", "feedback")
                 .params("token", mUserInfo.token)
@@ -195,11 +198,13 @@ public class ComplainActivity extends BaseToolBarActivity {
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override
                     public void onResult(List<LocalMedia> result) {
-                        LocalMedia localMedia = result.get(0);
-                        if (Build.VERSION.SDK_INT == 29) {
-                            upLoadFiles(localMedia.getAndroidQToPath());
-                        } else {
-                            upLoadFiles(localMedia.getPath());
+                        for (LocalMedia localMedia : result
+                        ) {
+                            if (Build.VERSION.SDK_INT == 29) {
+                                upLoadFiles(localMedia.getAndroidQToPath());
+                            } else {
+                                upLoadFiles(localMedia.getPath());
+                            }
                         }
                     }
 

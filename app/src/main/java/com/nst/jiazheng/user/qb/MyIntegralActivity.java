@@ -74,7 +74,7 @@ public class MyIntegralActivity extends BaseToolBarActivity {
                         if (resp.code == 1) {
                             integral.setText(String.valueOf(resp.data.integral));
                             mAdapter.setList(resp.data.list);
-                        }else if (resp.code == 101) {
+                        } else if (resp.code == 101) {
                             SpUtil.putBoolean("isLogin", false);
                             startAndClearAll(LoginActivity.class);
                         }
@@ -83,20 +83,28 @@ public class MyIntegralActivity extends BaseToolBarActivity {
     }
 
     private void integralSublimit(Integral integral) {
+        showDialog("正在兑换", true);
         OkGo.<String>post(Api.userApi).params("api_name", "integral_sublimit").params("token", mUserInfo.token)
                 .params("coupon_id", integral.id)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        dismissDialog();
                         Resp<IntegralResp> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<IntegralResp>>() {
                         }.getType());
                         toast(resp.msg);
                         if (resp.code == 1) {
-                            mAdapter.remove(integral);
-                        }else if (resp.code == 101) {
+                            getIntegralList();
+                        } else if (resp.code == 101) {
                             SpUtil.putBoolean("isLogin", false);
                             startAndClearAll(LoginActivity.class);
                         }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        dismissDialog();
                     }
                 });
     }

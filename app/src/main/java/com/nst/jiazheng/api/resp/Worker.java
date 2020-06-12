@@ -52,7 +52,7 @@ public class Worker implements Serializable {
 
     public String headimgurl;
     public int age;
-    public int job_age;
+    public double job_age;
     public int sex;
     public String address;
     public int is_collect;

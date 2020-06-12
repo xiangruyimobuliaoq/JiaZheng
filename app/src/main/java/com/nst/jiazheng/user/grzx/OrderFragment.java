@@ -109,6 +109,9 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                 case 6:
                     overlay(OrderDetailsYiwanchengActivity.class, bundle);
                     break;
+                case 7:
+                    overlay(OrderDetailsDaiquerenActivity.class, bundle);
+                    break;
                 case -1:
                 case -2:
                     overlay(OrderDetailsYiquxiaoActivity.class, bundle);

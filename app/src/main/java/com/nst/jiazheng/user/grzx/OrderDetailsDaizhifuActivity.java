@@ -1,5 +1,6 @@
 package com.nst.jiazheng.user.grzx;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.user.PayActivity;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.BindViews;
 
@@ -50,19 +52,22 @@ public class OrderDetailsDaizhifuActivity extends BaseToolBarActivity {
     TextView pay_price;
     @BindView(R.id.serve_type_price)
     TextView serve_type_price;
+    @BindView(R.id.content)
+    TextView content;
     @BindView(R.id.submit)
     Button submit;
     private Register mUserInfo;
+    private String mId;
 
 
     @Override
     protected void init() {
         setTitle("订单详情");
-        String id = getIntent().getStringExtra("id");
+        mId = getIntent().getStringExtra("id");
         mUserInfo = (Register) SpUtil.readObj("userInfo");
         OkGo.<String>post(Api.orderApi).params("api_name", "order_info")
                 .params("token", mUserInfo.token)
-                .params("order_id", id).execute(new StringCallback() {
+                .params("order_id", mId).execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 Resp<Order> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Order>>() {
@@ -80,6 +85,7 @@ public class OrderDetailsDaizhifuActivity extends BaseToolBarActivity {
     private void setData(Order order) {
         order_no.setText("订单编号: " + order.order_no);
         status.setText(order.StatusText);
+        content.setText(order.content);
         serve_type_name.setText("服务类型: " + order.serve_type_name);
         num.setText("数量: " + order.num);
         address.setText("服务地址: " + order.address);
@@ -89,7 +95,18 @@ public class OrderDetailsDaizhifuActivity extends BaseToolBarActivity {
         submit.setOnClickListener(view -> {
             Bundle params = new Bundle();
             params.putString("orderNo", order.order_no);
-            overlay(PayActivity.class, params);
+            overlayForResult(PayActivity.class, 1, params);
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Bundle bundle = new Bundle();
+            bundle.putString("id", mId);
+            overlay(OrderDetailsDaijiedanActivity.class, bundle);
+            finish();
+        }
     }
 }

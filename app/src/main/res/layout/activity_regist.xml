@@ -35,6 +35,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/logo"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="18.5dp"
                 android:src="@mipmap/ic_logo" />

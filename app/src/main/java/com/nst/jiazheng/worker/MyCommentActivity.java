@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.OkGo;
@@ -50,31 +51,54 @@ import per.wsj.library.AndRatingBar;
 public class MyCommentActivity extends BaseToolBarActivity {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.tab)
+    TabLayout mTab;
     private Register mUserInfo;
     private CommentAdapter mAdapter;
+    int currentTpye = 2;
 
     @Override
     protected void init() {
         setTitle("我的评价");
         mUserInfo = (Register) SpUtil.readObj("userInfo");
+        mTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                if (position == 0) {
+                    currentTpye = 2;
+                } else {
+                    currentTpye = 1;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(manager);
         mAdapter = new CommentAdapter(R.layout.item_comment_padding, null);
         recyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                Bundle params = new Bundle();
-                params.putSerializable("data", mAdapter.getData().get(position));
-                overlay(CommentDetailActivity.class, params);
-            }
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+            Bundle params = new Bundle();
+            params.putSerializable("data", mAdapter.getData().get(position));
+            overlay(CommentDetailActivity.class, params);
         });
         getCommentList();
     }
 
     private void getCommentList() {
-        OkGo.<String>post(Api.userApi).params("api_name", "comment_list").params("token", mUserInfo.token)
+        OkGo.<String>post(Api.userApi).params("api_name", "comment_list")
+                .params("token", mUserInfo.token)
+                .params("type", currentTpye)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {

@@ -26,8 +26,14 @@ public class SexWindow extends BasePopupWindow {
     }
 
     public SexWindow setListener(OnConfirmClickListener listener) {
-        mCam.setOnClickListener(view -> listener.onSex(this, 1));
-        gallery.setOnClickListener(view -> listener.onSex(this, 2));
+        mCam.setOnClickListener(view -> {
+            listener.onSex(this, 1, "男");
+            dismiss();
+        });
+        gallery.setOnClickListener(view -> {
+            listener.onSex(this, 2, "女");
+            dismiss();
+        });
         return this;
     }
 
@@ -49,6 +55,6 @@ public class SexWindow extends BasePopupWindow {
     }
 
     public interface OnConfirmClickListener {
-        void onSex(SexWindow confirmWindow, int sex);
+        void onSex(SexWindow confirmWindow, int sex, String sexText);
     }
 }

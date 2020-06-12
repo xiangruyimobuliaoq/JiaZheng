@@ -39,6 +39,8 @@ public class OrderDetailsYiquxiaoActivity extends BaseToolBarActivity {
     TextView serve_type_name;
     @BindView(R.id.num)
     TextView num;
+    @BindView(R.id.content)
+    TextView content;
     @BindView(R.id.address)
     TextView address;
     @BindView(R.id.time)
@@ -78,6 +80,7 @@ public class OrderDetailsYiquxiaoActivity extends BaseToolBarActivity {
         serve_type_name.setText("服务类型: " + order.serve_type_name);
         num.setText("数量: " + order.num);
         address.setText("服务地址: " + order.address);
+        content.setText(order.content);
         time.setText("预约时间: " + order.time);
         pay_price.setText("¥ " + order.pay_price);
         serve_type_price.setText("服务单价: ¥ " + order.serve_type_price + " /" + order.serve_type_units);

@@ -14,7 +14,7 @@ android {
 
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a","x86"
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86"
         }
     }
 
@@ -29,6 +29,25 @@ android {
         }
     }
 
+    signingConfigs {
+
+        def alias = "penglong"
+        def password = "8236448"
+        def filePath = "../keystore.keystore"
+        debug {
+            keyAlias alias
+            keyPassword password
+            storeFile file(filePath)
+            storePassword(password)
+        }
+        release {
+            keyAlias alias
+            keyPassword password
+            storeFile file(filePath)
+            storePassword(password)
+        }
+    }
+
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
@@ -38,6 +57,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(path: ':faceplatform-ui')
+
     implementation 'androidx.appcompat:appcompat:1.0.2'
 
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:+'
@@ -80,4 +101,19 @@ dependencies {
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.5.3'
 
     implementation 'com.github.ForgetAll:LoadingDialog:v1.1.2'
+    api 'cn.rongcloud.sdk:im_kit:2.10.5'
+//im_kit必须依赖im_lib，所以需要加入对应依赖
+    api 'cn.rongcloud.sdk:im_lib:2.10.5'
+
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
+
+    implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
+
+    api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+
+    implementation 'org.greenrobot:eventbus:3.2.0'
+
+    implementation 'androidx.legacy:legacy-support-v4:+'
+
+    implementation 'cn.bingoogolapple:bga-banner:3.0.0@aar'
 }

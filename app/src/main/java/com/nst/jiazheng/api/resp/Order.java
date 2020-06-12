@@ -59,13 +59,28 @@ public class Order implements MultiItemEntity {
     public String mobile;
     public String nickname;
     public int is_certification;  //是否实名认证 1.是 2.否
-    public int job_age; //从业年限
+    public double job_age; //从业年限
     public long start_time;
     public long petime;
     public String staff_score;
     public String staff_logo;
     public String staff_mobile;
     public String staff_id;
+    public String user_id;
+    public double lat;
+    public double lng;
+
+    public int daijie;
+    public int yijie;
+    public int jinxing;
+    public int daique;
+    public String province;
+    public String city;
+    public String area;
+    public String order_id;
+    public int charge;
+    public String serve_img;
+
 
     @Override
     public int getItemType() {

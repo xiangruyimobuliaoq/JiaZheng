@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -45,6 +46,7 @@ import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.user.grzx.ComplainActivity;
+import com.nst.jiazheng.user.grzx.OrderDetailsDaijiedanActivity;
 import com.nst.jiazheng.worker.widget.ConfirmWindow;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -95,6 +97,8 @@ public class SendServeActivity extends BaseToolBarActivity {
     private List<UpFile> mUpFiles;
     private PicAdapter mAdapter;
     private String mId;
+    private static final int ADDR_PICK = 1;
+    private static final int PAY = 2;
 
     @Override
     protected void init() {
@@ -112,6 +116,7 @@ public class SendServeActivity extends BaseToolBarActivity {
                 toast("请先选择服务");
                 return;
             }
+            Log.e("123", mServeType.serve_type_units_id + "");
             switch (mServeType.serve_type_units_id) {
                 case 1:
                     pickHour();
@@ -128,7 +133,7 @@ public class SendServeActivity extends BaseToolBarActivity {
             }
         });
         addr.setOnClickListener(v -> {
-            overlayForResult(AddrPickActivity.class, 1);
+            overlayForResult(AddrPickActivity.class, ADDR_PICK);
         });
         submit.setOnClickListener(v -> {
             sendOrder();
@@ -193,6 +198,9 @@ public class SendServeActivity extends BaseToolBarActivity {
                 id += upFile.id + ",";
             }
         }
+        if (id.endsWith(",")) {
+            id = id.substring(0, id.length() - 1);
+        }
         showDialog("正在提交", true);
         OkGo.<String>post(Api.serverApi).params("token", mUserInfo.token)
                 .params("api_name", "server_sublimit")
@@ -213,9 +221,9 @@ public class SendServeActivity extends BaseToolBarActivity {
                 toast(resp.msg);
                 if (resp.code == 1) {
                     Bundle params = new Bundle();
+                    mId = resp.data.order_id;
                     params.putString("orderNo", resp.data.order_no);
-                    overlay(PayActivity.class, params);
-                    finish();
+                    overlayForResult(PayActivity.class, PAY, params);
                 } else if (resp.code == 101) {
                     SpUtil.putBoolean("isLogin", false);
                     startAndClearAll(LoginActivity.class);
@@ -280,7 +288,7 @@ public class SendServeActivity extends BaseToolBarActivity {
                 String sday = day.get(options1);
                 String eday = day.get(options2);
                 time.setText(sday + "--" + eday);
-                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 try {
                     mSelectedTime = f.format(format.parse(sday)) + "+-+" + f.format(format.parse(eday));
 //                    calculatePrice();
@@ -297,6 +305,7 @@ public class SendServeActivity extends BaseToolBarActivity {
         List<String> day = new ArrayList<>();
         List<String> startHour = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
         SimpleDateFormat formath = new SimpleDateFormat("HH:mm");
         long l1 = System.currentTimeMillis();
         OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
@@ -306,9 +315,10 @@ public class SendServeActivity extends BaseToolBarActivity {
                 String sh = startHour.get(options2);
                 String eh = startHour.get(options3);
                 time.setText(s + "  " + sh + "--" + eh);
-                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 try {
-                    mSelectedTime = f.format(format.parse(s + " " + sh)) + "+-+" + f.format(format.parse(s + " " + eh));
+                    mSelectedTime = f.format(format1.parse(s + " " + sh)) + "+-+" + f.format(format1.parse(s + " " + eh));
+                    Log.e("123", mSelectedTime);
 //                    calculatePrice();
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -391,14 +401,6 @@ public class SendServeActivity extends BaseToolBarActivity {
         pvOptions.show();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            mAddr = (Addr) data.getSerializableExtra("addr");
-            this.addr.setText(mAddr.addr);
-        }
-    }
 
     private void requestPermissionAndOpenCam() {
         new RxPermissions(this)
@@ -436,11 +438,13 @@ public class SendServeActivity extends BaseToolBarActivity {
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override
                     public void onResult(List<LocalMedia> result) {
-                        LocalMedia localMedia = result.get(0);
-                        if (Build.VERSION.SDK_INT == 29) {
-                            upLoadFiles(localMedia.getAndroidQToPath());
-                        } else {
-                            upLoadFiles(localMedia.getPath());
+                        for (LocalMedia localMedia : result
+                        ) {
+                            if (Build.VERSION.SDK_INT == 29) {
+                                upLoadFiles(localMedia.getAndroidQToPath());
+                            } else {
+                                upLoadFiles(localMedia.getPath());
+                            }
                         }
                     }
 
@@ -458,12 +462,17 @@ public class SendServeActivity extends BaseToolBarActivity {
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override
                     public void onResult(List<LocalMedia> result) {
-                        LocalMedia localMedia = result.get(0);
-                        if (Build.VERSION.SDK_INT == 29) {
-                            upLoadFiles(localMedia.getAndroidQToPath());
-                        } else {
-                            upLoadFiles(localMedia.getPath());
+
+                        for (LocalMedia localMedia : result
+                        ) {
+                            if (Build.VERSION.SDK_INT == 29) {
+                                upLoadFiles(localMedia.getAndroidQToPath());
+                            } else {
+                                upLoadFiles(localMedia.getPath());
+                            }
                         }
+                        LocalMedia localMedia = result.get(0);
+
                     }
 
                     @Override
@@ -496,6 +505,21 @@ public class SendServeActivity extends BaseToolBarActivity {
                 dismissDialog();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADDR_PICK && resultCode == RESULT_OK) {
+            mAddr = (Addr) data.getSerializableExtra("addr");
+            this.addr.setText(mAddr.addr);
+        } else if (requestCode == PAY && resultCode == RESULT_OK) {
+            Bundle bundle = new Bundle();
+            bundle.putString("id", mId);
+            Log.e("123", mId);
+            overlay(OrderDetailsDaijiedanActivity.class, bundle);
+            finish();
+        }
     }
 
 

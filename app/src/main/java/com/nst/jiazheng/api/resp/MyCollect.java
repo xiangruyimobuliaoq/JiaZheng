@@ -26,6 +26,6 @@ public class MyCollect {
     public int private_id;
     public int company_id;
     public int type;
-    public int ctime;
+    public long ctime;
     public Worker info;
 }

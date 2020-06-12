@@ -15,6 +15,8 @@ public class UpFile {
      */
     public String id;
     public String path;
+    public String img;
+    public String title;
 
     public UpFile(String id, String path) {
         this.id = id;

@@ -60,25 +60,7 @@ public class WdqbFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getUserInfo();
-    }
-
-    private void getUserInfo() {
-        OkGo.<String>post(Api.userApi).params("api_name", "center").params("token", mUserInfo.token)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        Resp<UserCenter> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<UserCenter>>() {
-                        }.getType());
-                        if (resp.code == 1) {
-                            money.setText(String.valueOf(resp.data.money));
-                        }else if (resp.code == 101) {
-                            SpUtil.putBoolean("isLogin", false);
-                            startAndClearAll(LoginActivity.class);
-                        }
-                    }
-                });
+    public void setCenterData(UserCenter data) throws Exception{
+        money.setText(String.valueOf(data.money));
     }
 }

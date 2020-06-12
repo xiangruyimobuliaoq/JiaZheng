@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.OkGo;
@@ -18,14 +20,24 @@ import com.nst.jiazheng.api.Api;
 import com.nst.jiazheng.api.resp.Order;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
+import com.nst.jiazheng.api.resp.UpFile;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.login.LoginActivity;
+import com.nst.jiazheng.map.HisLocationBean;
+import com.nst.jiazheng.map.MapWindow;
 import com.nst.jiazheng.worker.widget.ConfirmWindow;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.rong.imkit.RongIM;
+import io.rong.imlib.model.Conversation.ConversationType;
 
 /**
  * 创建者     彭龙
@@ -44,6 +56,8 @@ public class JiedanlanActivity extends BaseToolBarActivity {
     TextView nickname;
     @BindView(R.id.score)
     TextView score;
+    @BindView(R.id.StatusText)
+    TextView StatusText;
     @BindView(R.id.ddh)
     ImageView ddh;
     @BindView(R.id.tv_confirm)
@@ -64,7 +78,11 @@ public class JiedanlanActivity extends BaseToolBarActivity {
     TextView num;
     @BindView(R.id.pay_price)
     TextView pay_price;
+    @BindView(R.id.imglist)
+    RecyclerView imglist;
     private Register mUserInfo;
+    private ArrayList<UpFile> mUpFiles;
+    private PicAdapter mAdapter;
 
     @Override
     protected void init() {
@@ -90,6 +108,7 @@ public class JiedanlanActivity extends BaseToolBarActivity {
 
     private void setData(Order data) {
         nickname.setText(data.nickname);
+        StatusText.setText(data.StatusText);
         score.setText(data.staff_score);
         ddh.setOnClickListener(view -> {
             new ConfirmWindow(mContext)
@@ -116,9 +135,13 @@ public class JiedanlanActivity extends BaseToolBarActivity {
                     .showPopupWindow();
         });
         xx.setOnClickListener(view -> {
-
+            ConversationType conversationType = ConversationType.PRIVATE;
+            String targetId = data.staff_id;
+            String title = "聊天";
+            RongIM.getInstance().startConversation(this, conversationType, targetId, title, null);
         });
         dh.setOnClickListener(view -> {
+            new MapWindow(this, new HisLocationBean(data.lat, data.lng)).setPopupGravity(Gravity.BOTTOM).showPopupWindow();
 
         });
         serve_type_name.setText(data.serve_type_name);
@@ -127,7 +150,16 @@ public class JiedanlanActivity extends BaseToolBarActivity {
         serve_type_units.setText(data.serve_type_units);
         num.setText(data.num);
         pay_price.setText("¥ " + data.pay_price);
-
+        GridLayoutManager manager = new GridLayoutManager(this, 4);
+        imglist.setLayoutManager(manager);
+        String[] split = data.serve_img.split(",");
+        mUpFiles = new ArrayList<>();
+        for (String s : split
+        ) {
+            mUpFiles.add(new UpFile("", s));
+        }
+        mAdapter = new PicAdapter(R.layout.item_pic, mUpFiles);
+        imglist.setAdapter(mAdapter);
         try {
             Glide.with(this).load(data.staff_logo).error(R.mipmap.ic_tx).into(tx);
         } catch (Exception e) {
@@ -162,5 +194,21 @@ public class JiedanlanActivity extends BaseToolBarActivity {
                         }
                     }
                 });
+    }
+    class PicAdapter extends BaseQuickAdapter<UpFile, BaseViewHolder> {
+
+        public PicAdapter(int layoutResId, List<UpFile> data) {
+            super(layoutResId, data);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder baseViewHolder, UpFile upfile) {
+            ImageView pic = baseViewHolder.getView(R.id.pic);
+            try {
+                Glide.with(JiedanlanActivity.this).load(upfile.path).centerCrop().into(pic);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

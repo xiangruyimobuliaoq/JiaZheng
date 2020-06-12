@@ -4,8 +4,10 @@ import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.OkGo;
@@ -34,8 +36,8 @@ import butterknife.BindView;
 public class ForgotPwdActivity extends BaseActivity {
     @BindView(R.id.sendcode)
     TextView sendcode;
-    @BindView(R.id.yhxy)
-    TextView agreement;
+    //    @BindView(R.id.yhxy)
+//    TextView agreement;
     @BindView(R.id.username)
     EditText username;
     @BindView(R.id.password)
@@ -44,17 +46,37 @@ public class ForgotPwdActivity extends BaseActivity {
     EditText smscode;
     @BindView(R.id.submit)
     Button submit;
+    @BindView(R.id.logo)
+    ImageView logo;
+
     @Override
     protected void init() {
-
         sendcode.setOnClickListener(v -> {
             sendCode();
         });
-        agreement.setOnClickListener(v -> {
-            overlay(AgreementActivity.class);
-        });
+//        agreement.setOnClickListener(v -> {
+//            overlay(AgreementActivity.class);
+//        });
         submit.setOnClickListener(v -> {
             regist();
+        });
+        setLogo();
+    }
+
+    private void setLogo() {
+        OkGo.<String>post(Api.publicApi).params("api_name", "logo").execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                Resp<Register> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Register>>() {
+                }.getType());
+                if (resp.code == 1) {
+                    try {
+                        Glide.with(ForgotPwdActivity.this).load(resp.data.logo).centerCrop().error(R.mipmap.ic_logo).into(logo);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         });
     }
 
@@ -87,7 +109,7 @@ public class ForgotPwdActivity extends BaseActivity {
                 toast(resp.msg);
                 if (resp.code == 1) {
                     finish();
-                }else if (resp.code == 101) {
+                } else if (resp.code == 101) {
                     SpUtil.putBoolean("isLogin", false);
                     startAndClearAll(LoginActivity.class);
                 }
@@ -109,7 +131,7 @@ public class ForgotPwdActivity extends BaseActivity {
             return;
         }
         sendcode.setEnabled(false);
-        new CountDownTimer(30000, 1000) {
+        new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long l) {
                 sendcode.setText(l / 1000 + "秒");

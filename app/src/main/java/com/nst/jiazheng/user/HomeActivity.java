@@ -1,20 +1,34 @@
 package com.nst.jiazheng.user;
 
-import android.util.Log;
+import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 import com.nst.jiazheng.R;
+import com.nst.jiazheng.api.Api;
+import com.nst.jiazheng.api.resp.Register;
+import com.nst.jiazheng.api.resp.Resp;
+import com.nst.jiazheng.api.resp.UpFile;
+import com.nst.jiazheng.api.resp.UserCenter;
 import com.nst.jiazheng.base.BaseActivity;
 import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.LockableViewPager;
+import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.im.ImManager;
+import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.user.grzx.GrzxFragment;
 import com.nst.jiazheng.user.jzfw.JzfwFragment;
 import com.nst.jiazheng.user.qb.WdqbFragment;
 import com.nst.jiazheng.user.wdgj.WdgjFragment;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
@@ -22,6 +36,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import butterknife.BindView;
+import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
 
 /**
  * 创建者     彭龙
@@ -41,9 +57,11 @@ public class HomeActivity extends BaseActivity {
     @BindView(R.id.fbwf)
     ImageView fbwf;
     private Map<Integer, BaseFragment> mList;
+    private Register mUserInfo;
 
     @Override
     protected void init() {
+        mUserInfo = (Register) SpUtil.readObj("userInfo");
         mList = new HashMap();
         vp.setSwipeLocked(true);
         vp.setAdapter(new HomePageAdapter(getSupportFragmentManager(), 1));
@@ -70,6 +88,53 @@ public class HomeActivity extends BaseActivity {
         fbwf.setOnClickListener(v -> {
             overlay(SendServeActivity.class);
         });
+        getBannerData();
+    }
+
+    private void getBannerData() {
+        OkGo.<String>post(Api.publicApi).params("api_name", "banner")
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Resp<List<UpFile>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<UpFile>>>() {
+                        }.getType());
+                        if (resp.code == 1) {
+                            new BannerWindow(HomeActivity.this).setData(resp.data).setPopupGravity(Gravity.CENTER).showPopupWindow();
+                        }
+                    }
+                });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getCenterData();
+    }
+
+    private void getCenterData() {
+        OkGo.<String>post(Api.userApi).params("api_name", "center").params("token", mUserInfo.token)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Resp<UserCenter> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<UserCenter>>() {
+                        }.getType());
+                        if (resp.code == 1) {
+                            if (RongIMClient.getInstance().getCurrentConnectionStatus() != RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED) {
+                                ImManager.connect(mUserInfo.ry_token, resp.data);
+                            }
+                            try {
+                                getFragment(0).setCenterData(resp.data);
+                                getFragment(2).setCenterData(resp.data);
+                                getFragment(3).setCenterData(resp.data);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
+                        }
+                    }
+                });
     }
 
     private class HomePageAdapter extends FragmentPagerAdapter {
@@ -90,7 +155,7 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    private Fragment getFragment(int position) {
+    private BaseFragment getFragment(int position) {
         BaseFragment fragment = mList.get(position);
         if (null == fragment) {
             switch (position) {

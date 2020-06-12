@@ -1,2 +1,3 @@
-rootProject.name='JiaZheng'
-include ':app'
+rootProject.name = 'JiaZheng'
+include ':app', ':faceplatform'
+include ':faceplatform-ui'

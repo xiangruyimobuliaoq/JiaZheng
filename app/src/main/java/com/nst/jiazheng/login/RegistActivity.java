@@ -8,8 +8,10 @@ import android.text.style.UnderlineSpan;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.OkGo;
@@ -52,6 +54,8 @@ public class RegistActivity extends BaseActivity {
     CheckBox cb;
     @BindView(R.id.regist)
     Button regist;
+    @BindView(R.id.logo)
+    ImageView logo;
 
     @Override
     protected void init() {
@@ -70,6 +74,24 @@ public class RegistActivity extends BaseActivity {
         });
         regist.setOnClickListener(v -> {
             regist();
+        });
+        setLogo();
+    }
+
+    private void setLogo() {
+        OkGo.<String>post(Api.publicApi).params("api_name", "logo").execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                Resp<Register> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Register>>() {
+                }.getType());
+                if (resp.code == 1) {
+                    try {
+                        Glide.with(RegistActivity.this).load(resp.data.logo).centerCrop().error(R.mipmap.ic_logo).into(logo);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         });
     }
 
@@ -93,20 +115,21 @@ public class RegistActivity extends BaseActivity {
             toast("请阅读并同意<用户协议>");
             return;
         }
-        regist.setEnabled(false);
+        showDialog("正在注册", true);
         OkGo.<String>post(Api.registerApi).params("api_name", "register")
                 .params("mobile", userName)
                 .params("password", passWord)
+                .params("promoter_id", 0)
                 .params("code", smsCode).execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
-                regist.setEnabled(true);
+                dismissDialog();
                 Resp<Register> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Register>>() {
                 }.getType());
                 toast(resp.msg);
                 if (resp.code == 1) {
                     finish();
-                }else if (resp.code == 101) {
+                } else if (resp.code == 101) {
                     SpUtil.putBoolean("isLogin", false);
                     startAndClearAll(LoginActivity.class);
                 }
@@ -115,7 +138,7 @@ public class RegistActivity extends BaseActivity {
             @Override
             public void onError(Response<String> response) {
                 super.onError(response);
-                regist.setEnabled(true);
+                dismissDialog();
                 toast(response.body());
             }
         });
@@ -128,7 +151,7 @@ public class RegistActivity extends BaseActivity {
             return;
         }
         sendcode.setEnabled(false);
-        new CountDownTimer(30000, 1000) {
+        new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long l) {
                 sendcode.setText(l / 1000 + "秒");

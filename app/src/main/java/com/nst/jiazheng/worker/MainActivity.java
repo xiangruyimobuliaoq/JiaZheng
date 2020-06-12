@@ -1,5 +1,6 @@
 package com.nst.jiazheng.worker;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,6 +10,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -24,7 +29,12 @@ import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.LockableViewPager;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.im.ConversationListActivity;
 import com.nst.jiazheng.login.LoginActivity;
+import com.nst.jiazheng.map.MapWindow;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 
@@ -38,7 +48,7 @@ import butterknife.BindView;
  * 更新描述
  */
 @Layout(layoutId = R.layout.activity_main)
-public class MainActivity extends BaseToolBarActivity {
+public class MainActivity extends BaseToolBarActivity implements AMapLocationListener {
     @BindView(R.id.item)
     ImageView mIvChat;
     @BindView(R.id.tab)
@@ -72,6 +82,10 @@ public class MainActivity extends BaseToolBarActivity {
     @BindView(R.id.today_income)
     TextView today_income;
     private Register mUserInfo;
+
+    public AMapLocationClient mlocationClient;
+    //声明mLocationOption对象
+    public AMapLocationClientOption mLocationOption = null;
 
     @Override
     protected void init() {
@@ -108,7 +122,9 @@ public class MainActivity extends BaseToolBarActivity {
         vp.setSwipeLocked(true);
         vp.setAdapter(new OrderPageAdapter(getSupportFragmentManager(), 1));
         vp.setOffscreenPageLimit(mTab.getTabCount() - 1);
-        mIvChat.setOnClickListener(view -> overlay(ChatActivity.class));
+        mIvChat.setOnClickListener(view -> {
+            overlay(ConversationListActivity.class);
+        });
         mTvMy.setOnClickListener(view -> overlay(MyProfileActivity.class));
         mTvComment.setOnClickListener(view -> overlay(MyCommentActivity.class));
         mTvServiceType.setOnClickListener(view -> overlay(ServiceTypeActivity.class));
@@ -129,6 +145,57 @@ public class MainActivity extends BaseToolBarActivity {
 
             }
         });
+        initLocation();
+    }
+
+    private void initLocation() {
+        mlocationClient = new AMapLocationClient(this);
+//初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+//设置定位监听
+        mlocationClient.setLocationListener(this);
+//设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+//设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(60000);
+//设置定位参数
+        mlocationClient.setLocationOption(mLocationOption);
+// 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+// 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+// 在定位结束后，在合适的生命周期调用onDestroy()方法
+// 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+//启动定位
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        if (aMapLocation != null) {
+            if (aMapLocation.getErrorCode() == 0) {
+                double latitude = aMapLocation.getLatitude();//获取纬度
+                double longitude = aMapLocation.getLongitude();//获取经度
+                MapWindow.lat = latitude;
+                MapWindow.lon = longitude;
+                OkGo.<String>post(Api.serverApi).params("api_name", "set_nowtime")
+                        .params("token", mUserInfo.token)
+                        .params("lng", longitude)
+                        .params("lat", latitude).execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        Resp resp = new Gson().fromJson(response.body(), Resp.class);
+                        if (resp.code == 1) {
+                        } else if (resp.code == 101) {
+                            SpUtil.putBoolean("isLogin", false);
+                            startAndClearAll(LoginActivity.class);
+                        }
+                    }
+                });
+            } else {
+                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                Log.e("AmapError", "location Error, ErrCode:"
+                        + aMapLocation.getErrorCode() + ", errInfo:"
+                        + aMapLocation.getErrorInfo());
+            }
+        }
     }
 
 
@@ -136,6 +203,13 @@ public class MainActivity extends BaseToolBarActivity {
     protected void onResume() {
         super.onResume();
         getCenterInfo();
+        mlocationClient.startLocation();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mlocationClient.stopLocation();
     }
 
     private void getCenterInfo() {

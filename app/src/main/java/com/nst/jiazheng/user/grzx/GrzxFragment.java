@@ -3,6 +3,7 @@ package com.nst.jiazheng.user.grzx;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,7 +16,9 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.nst.jiazheng.R;
 import com.nst.jiazheng.api.Api;
+import com.nst.jiazheng.api.resp.AboutUs;
 import com.nst.jiazheng.api.resp.Message;
+import com.nst.jiazheng.api.resp.PayInfo;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.api.resp.UserCenter;
@@ -62,6 +65,8 @@ public class GrzxFragment extends BaseFragment {
     TextView wddd;
     @BindView(R.id.sqcwgj)
     TextView sqcwgj;
+    @BindView(R.id.sqcwgjline)
+    View sqcwgjline;
     @BindView(R.id.yjfk)
     TextView yjfk;
     @BindView(R.id.tjfx)
@@ -102,50 +107,41 @@ public class GrzxFragment extends BaseFragment {
             overlay(ShareActivity.class);
         });
         lxkf.setOnClickListener(v -> {
-            new ConfirmWindow(mContext)
-                    .setContent("0769-22656565", "拨打")
-                    .setListener((ConfirmWindow window) -> {
-                        callServer();
-                        window.dismiss();
-                    })
-                    .setPopupGravity(Gravity.CENTER)
-                    .setBackPressEnable(true)
-                    .setOutSideDismiss(true)
-                    .showPopupWindow();
+            callServer();
         });
     }
 
     private void callServer() {
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        Uri data = Uri.parse("tel:" + "0769-22656565");
-        intent.setData(data);
-        startActivity(intent);
+        OkGo.<String>post(Api.publicApi).params("api_name", "mobile").execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                Resp<AboutUs> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<AboutUs>>() {
+                }.getType());
+                if (resp.code == 1) {
+                    new ConfirmWindow(mContext)
+                            .setContent(resp.data.mobile, "拨打")
+                            .setListener((ConfirmWindow window) -> {
+                                Intent intent = new Intent(Intent.ACTION_DIAL);
+                                Uri data = Uri.parse("tel:" + resp.data.mobile);
+                                intent.setData(data);
+                                startActivity(intent);
+                                window.dismiss();
+                            })
+                            .setPopupGravity(Gravity.CENTER)
+                            .setBackPressEnable(true)
+                            .setOutSideDismiss(true)
+                            .showPopupWindow();
+                }
+            }
+        });
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getCenterData();
-    }
-
-    private void getCenterData() {
-        OkGo.<String>post(Api.userApi).params("api_name", "center").params("token", mUserInfo.token)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        Resp<UserCenter> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<UserCenter>>() {
-                        }.getType());
-                        if (resp.code == 1) {
-                            setData(resp.data);
-                        }else if (resp.code == 101) {
-                            SpUtil.putBoolean("isLogin", false);
-                            startAndClearAll(LoginActivity.class);
-                        }
-                    }
-                });
-    }
-
-    private void setData(UserCenter data) {
+    public void setCenterData(UserCenter data) throws Exception{
+        if (data.type != 1) {
+            sqcwgj.setVisibility(View.GONE);
+            sqcwgjline.setVisibility(View.GONE);
+        }
         nickname.setText(data.nickname);
         msgnum.setText(String.valueOf(data.msg_count));
         descnum.setText(String.valueOf(data.comment_count));

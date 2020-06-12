@@ -1,5 +1,7 @@
 package com.nst.jiazheng.user.grzx;
 
+import android.net.Uri;
+
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
@@ -16,6 +18,7 @@ import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
+import com.nst.jiazheng.base.LockableViewPager;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.login.LoginActivity;
 
@@ -23,9 +26,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
+import io.rong.imkit.fragment.ConversationListFragment;
+import io.rong.imlib.model.Conversation;
 
 /**
  * 创建者     彭龙
@@ -40,24 +49,17 @@ import butterknife.BindView;
 public class MsgCenterActivity extends BaseToolBarActivity {
     @BindView(R.id.tab)
     TabLayout mTab;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    private Register mUserInfo;
-    private MsgCenterAdapter mAdapter;
+    @BindView(R.id.vp)
+    LockableViewPager vp;
 
     @Override
     protected void init() {
         setTitle("消息中心");
-        mUserInfo = (Register) SpUtil.readObj("userInfo");
         mTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 int position = tab.getPosition();
-                if (position == 0) {
-                    getMessage();
-                } else {
-
-                }
+                vp.setCurrentItem(position, false);
             }
 
             @Override
@@ -70,48 +72,38 @@ public class MsgCenterActivity extends BaseToolBarActivity {
 
             }
         });
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        manager.setOrientation(RecyclerView.VERTICAL);
-        recyclerView.setLayoutManager(manager);
-        mAdapter = new MsgCenterAdapter(null);
-        recyclerView.setAdapter(mAdapter);
-        getMessage();
+        vp.setSwipeLocked(true);
+        vp.setAdapter(new MsgCenterAdapter(getSupportFragmentManager(), 1));
+        vp.setOffscreenPageLimit(1);
     }
 
-    private void getMessage() {
-        OkGo.<String>post(Api.userApi).params("api_name", "msg_list").params("token", mUserInfo.token)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        Resp<List<Message>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<Message>>>() {
-                        }.getType());
-                        if (resp.code == 1) {
-                            mAdapter.setList(resp.data);
-                        }else if (resp.code == 101) {
-                            SpUtil.putBoolean("isLogin", false);
-                            startAndClearAll(LoginActivity.class);
-                        }
-                    }
-                });
-    }
+    class MsgCenterAdapter extends FragmentPagerAdapter {
+        public MsgCenterAdapter(@NonNull FragmentManager fm, int behavior) {
+            super(fm, behavior);
+        }
 
-    class MsgCenterAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
-
-        public MsgCenterAdapter(List<MultiItemEntity> data) {
-            super(data);
-            addItemType(0, R.layout.item_message);
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new MsgFragment();
+                case 1:
+                    ConversationListFragment f = new ConversationListFragment();
+                    Uri uri = Uri.parse("rong://" +
+                            getApplicationInfo().packageName).buildUpon()
+                            .appendPath("conversationlist")
+                            .appendQueryParameter(Conversation.ConversationType.PRIVATE.getName(), "false") //设置私聊会话是否聚合显示
+                            .build();
+                    f.setUri(uri);
+                    return f;
+            }
+            return null;
         }
 
         @Override
-        protected void convert(BaseViewHolder baseViewHolder, MultiItemEntity multiItemEntity) {
-            switch (baseViewHolder.getItemViewType()) {
-                case 0:
-                    Message message = (Message) multiItemEntity;
-                    baseViewHolder.setText(R.id.title, message.title)
-                            .setText(R.id.content, message.content)
-                            .setText(R.id.ctime, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(message.ctime * 1000)));
-                    break;
-            }
+        public int getCount() {
+            return 2;
         }
     }
 }

@@ -1,10 +1,18 @@
 package com.nst.jiazheng.user.grzx;
 
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
 
 import com.nst.jiazheng.R;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
+import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.login.LoginActivity;
+import com.nst.jiazheng.user.qb.CouponListActivity;
+import com.nst.jiazheng.worker.widget.ConfirmWindow;
 
 import butterknife.BindView;
 
@@ -21,14 +29,32 @@ import butterknife.BindView;
 public class SettingActivity extends BaseToolBarActivity {
     @BindView(R.id.gywm)
     TextView gywm;
-
+    @BindView(R.id.yhzn)
+    TextView yhzn;
+    @BindView(R.id.logout)
+    TextView logout;
 
     @Override
     protected void init() {
         setTitle("设置");
-        gywm.setOnClickListener(v -> {
-            overlay(AboutUsActivity.class);
-        });
+        gywm.setOnClickListener(v -> overlay(AboutUsActivity.class));
+        yhzn.setOnClickListener(v -> overlay(UserPointActivity.class));
+        SpannableString content = new SpannableString("退出登录");
+        content.setSpan(new UnderlineSpan(), 0, "退出登录".length(), 0);
+        logout.setText(content);
+        logout.setOnClickListener(view -> {
+            new ConfirmWindow(this)
+                    .setContent("确认退出登录？")
+                    .setListener((ConfirmWindow window) -> {
+                        SpUtil.putBoolean("isLogin", false);
+                        startAndClearAll(LoginActivity.class);
+                        window.dismiss();
+                    })
+                    .setPopupGravity(Gravity.CENTER)
+                    .setBackPressEnable(true)
+                    .setOutSideDismiss(true)
+                    .showPopupWindow();
 
+        });
     }
 }

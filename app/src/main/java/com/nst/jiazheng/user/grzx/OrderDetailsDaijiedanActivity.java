@@ -35,6 +35,8 @@ public class OrderDetailsDaijiedanActivity extends BaseToolBarActivity {
     TextView order_no;
     @BindView(R.id.status)
     TextView status;
+    @BindView(R.id.content)
+    TextView content;
     @BindView(R.id.serve_type_name)
     TextView serve_type_name;
     @BindView(R.id.num)
@@ -78,6 +80,7 @@ public class OrderDetailsDaijiedanActivity extends BaseToolBarActivity {
         status.setText(order.StatusText);
         serve_type_name.setText("服务类型: " + order.serve_type_name);
         num.setText("数量: " + order.num);
+        content.setText(order.content);
         address.setText("服务地址: " + order.address);
         time.setText("预约时间: " + order.time);
         pay_price.setText("¥ " + order.pay_price);

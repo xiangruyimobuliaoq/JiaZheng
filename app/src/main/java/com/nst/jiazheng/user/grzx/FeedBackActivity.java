@@ -26,6 +26,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.nst.jiazheng.R;
 import com.nst.jiazheng.api.Api;
+import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.api.resp.ServeType;
 import com.nst.jiazheng.api.resp.UpFile;
@@ -68,10 +69,12 @@ public class FeedBackActivity extends BaseToolBarActivity {
     Button submit;
     private List<UpFile> mUpFiles;
     private PicAdapter mAdapter;
+    private Register mUserInfo;
 
     @Override
     protected void init() {
         setTitle("意见反馈");
+        mUserInfo = (Register) SpUtil.readObj("userInfo");
         mUpFiles = new ArrayList<>();
         mUpFiles.add(new UpFile(null, null));
         GridLayoutManager manager = new GridLayoutManager(this, 4);
@@ -130,7 +133,42 @@ public class FeedBackActivity extends BaseToolBarActivity {
             toast("请输入手机号码");
             return;
         }
+        String id = "";
+        for (UpFile upFile : mUpFiles
+        ) {
+            if (!TextUtils.isEmpty(upFile.id)) {
+                id += upFile.id + ",";
+            }
+        }
+        if (id.endsWith(",")) {
+            id = id.substring(0, id.length() - 1);
+        }
+        showDialog("正在提交", true);
+        OkGo.<String>post(Api.userApi).params("api_name", "feedback")
+                .params("token", mUserInfo.token)
+//                .params("order_id", mId)
+                .params("content", content)
+                .params("mobile", mobile)
+                .params("img", id).execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                dismissDialog();
+                Resp resp = new Gson().fromJson(response.body(), Resp.class);
+                toast(resp.msg);
+                if (resp.code == 1) {
+                    finish();
+                } else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
+                }
+            }
 
+            @Override
+            public void onError(Response<String> response) {
+                super.onError(response);
+                dismissDialog();
+            }
+        });
 
     }
 

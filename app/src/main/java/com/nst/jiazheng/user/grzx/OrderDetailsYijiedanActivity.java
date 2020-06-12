@@ -32,6 +32,8 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.BindViews;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.rong.imkit.RongIM;
+import io.rong.imlib.model.Conversation;
 
 /**
  * 创建者     彭龙
@@ -48,6 +50,8 @@ public class OrderDetailsYijiedanActivity extends BaseToolBarActivity {
     TextView order_no;
     @BindView(R.id.status)
     TextView status;
+    @BindView(R.id.content)
+    TextView content;
     @BindView(R.id.serve_type_name)
     TextView serve_type_name;
     @BindView(R.id.num)
@@ -113,11 +117,12 @@ public class OrderDetailsYijiedanActivity extends BaseToolBarActivity {
         address.setText("服务地址: " + order.address);
         time.setText("预约时间: " + order.time);
         pay_price.setText("¥ " + order.pay_price);
+        content.setText(order.content);
         serve_type_price.setText("服务单价: ¥ " + order.serve_type_price + " /" + order.serve_type_units);
         nickname.setText(order.nickname);
         staff_name.setText("接单管家: " + order.staff_name);
         point.setText(order.staff_score + "分");
-        jie_time.setText("接单时间: " + format.format(new Date(order.jie_time*1000)));
+        jie_time.setText("接单时间: " + format.format(new Date(order.jie_time * 1000)));
         ddh.setOnClickListener(view -> {
             new ConfirmWindow(mContext)
                     .setContent(order.staff_mobile, "拨打")
@@ -139,7 +144,35 @@ public class OrderDetailsYijiedanActivity extends BaseToolBarActivity {
             overlay(WorkerInfoActivity.class, params);
         });
         cancel.setOnClickListener(view -> {
-            cancelOrder(order.id);
+            String tips = null;
+            if (order.charge == 0) {
+                tips = "\n" +
+                        "                                五分钟内可免费取消订单\n" +
+                        "确认取消该订单吗\n" +
+                        "                            ";
+            } else if (order.charge == 1) {
+                tips = "\n" +
+                        "                                超出五分钟后取消订单需支付\n" +
+                        "一定手续费，确认取消吗？\n" +
+                        "                            ";
+            }
+            new ConfirmWindow(mContext)
+                    .setContent(tips, "确认")
+                    .setListener((ConfirmWindow window) -> {
+                        cancelOrder(order.id);
+                        window.dismiss();
+                    })
+                    .setPopupGravity(Gravity.CENTER)
+                    .setBackPressEnable(true)
+                    .setOutSideDismiss(true)
+                    .showPopupWindow();
+
+        });
+        xx.setOnClickListener(view -> {
+            Conversation.ConversationType conversationType = Conversation.ConversationType.PRIVATE;
+            String targetId = order.staff_id;
+            String title = "聊天";
+            RongIM.getInstance().startConversation(this, conversationType, targetId, title, null);
         });
         submit.setOnClickListener(view -> {
             Bundle params = new Bundle();

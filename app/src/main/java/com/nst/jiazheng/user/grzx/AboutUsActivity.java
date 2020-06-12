@@ -1,8 +1,10 @@
 package com.nst.jiazheng.user.grzx;
 
 import android.text.Html;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lzy.okgo.OkGo;
@@ -33,10 +35,26 @@ import butterknife.BindView;
 public class AboutUsActivity extends BaseToolBarActivity {
     @BindView(R.id.content)
     TextView content;
+    @BindView(R.id.logo)
+    ImageView logo;
 
     @Override
     protected void init() {
         setTitle("关于我们");
+        OkGo.<String>post(Api.publicApi).params("api_name", "logo").execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                Resp<Register> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Register>>() {
+                }.getType());
+                if (resp.code == 1) {
+                    try {
+                        Glide.with(AboutUsActivity.this).load(resp.data.logo).centerCrop().error(R.mipmap.ic_logo).into(logo);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
         OkGo.<String>post(Api.publicApi).params("api_name", "about_us").execute(new StringCallback() {
             @Override
@@ -45,7 +63,7 @@ public class AboutUsActivity extends BaseToolBarActivity {
                 }.getType());
                 if (resp.code == 1) {
                     content.setText(Html.fromHtml(resp.data.copyright) + "\r\n" + "        联系电话:" + resp.data.mobile);
-                }else if (resp.code == 101) {
+                } else if (resp.code == 101) {
                     SpUtil.putBoolean("isLogin", false);
                     startAndClearAll(LoginActivity.class);
                 }

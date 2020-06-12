@@ -2,12 +2,9 @@ package com.nst.jiazheng.worker;
 
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.View;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnLoadMoreListener;
 import com.chad.library.adapter.base.module.BaseLoadMoreModule;
 import com.chad.library.adapter.base.module.LoadMoreModule;
@@ -26,14 +23,12 @@ import com.nst.jiazheng.base.BaseFragment;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.login.LoginActivity;
-import com.nst.jiazheng.user.grzx.OrderDetailsDaizhifuActivity;
 import com.nst.jiazheng.worker.widget.ConfirmWindow;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -121,6 +116,14 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                     break;
                 case 4:
                     overlay(JinxingzhongActivity.class, bundle);
+                    break;
+                case 7:
+                    overlay(DaiquerenActivity.class, bundle);
+                    break;
+                case 6:
+                case -1:
+                case -2:
+                    overlay(YiwanchengActivity.class, bundle);
                     break;
             }
         });
@@ -265,18 +268,18 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                     });
                     break;
                 case 4:
-                    baseViewHolder.setText(R.id.start_time, format.format(new Date(order.start_time * 1000)));
+                    baseViewHolder.setText(R.id.start_time, order.start_time == 0 ? "" : format.format(new Date(order.start_time * 1000)));
                     break;
                 case 7:
-                    baseViewHolder.setText(R.id.start_time, format.format(new Date(order.start_time * 1000)))
-                            .setText(R.id.petime, format.format(new Date(order.petime * 1000)));
+                    baseViewHolder.setText(R.id.start_time, order.start_time == 0 ? "" : format.format(new Date(order.start_time * 1000)))
+                            .setText(R.id.etime, order.etime == 0 ? "" : format.format(new Date(order.etime * 1000)));
                     break;
                 case 6:
                 case -1:
                 case -2:
-                    baseViewHolder.setText(R.id.start_time, format.format(new Date(order.start_time * 1000)))
-                            .setText(R.id.etime, format.format(new Date(order.etime * 1000)))
-                            .setText(R.id.petime, format.format(new Date(order.petime * 1000)));
+                    baseViewHolder.setText(R.id.start_time, order.start_time == 0 ? "" : format.format(new Date(order.start_time * 1000)))
+                            .setText(R.id.etime, order.etime == 0 ? "" : format.format(new Date(order.etime * 1000)))
+                            .setText(R.id.petime, order.petime == 0 ? "" : format.format(new Date(order.petime * 1000)));
                     break;
             }
         }

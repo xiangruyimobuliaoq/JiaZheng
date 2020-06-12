@@ -1,12 +1,17 @@
 package com.nst.jiazheng.user.jzfw;
 
+import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +27,10 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.listener.OnResultCallbackListener;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
@@ -33,16 +42,24 @@ import com.nst.jiazheng.api.resp.Order;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.api.resp.ServeType;
+import com.nst.jiazheng.api.resp.UpFile;
 import com.nst.jiazheng.api.resp.Worker;
 import com.nst.jiazheng.base.BaseToolBarActivity;
+import com.nst.jiazheng.base.GlideEngine;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.user.AddrPickActivity;
 import com.nst.jiazheng.user.PayActivity;
+import com.nst.jiazheng.user.PhotoWindow;
+import com.nst.jiazheng.user.SendServeActivity;
+import com.nst.jiazheng.user.grzx.OrderDetailsDaijiedanActivity;
 import com.nst.jiazheng.user.wdgj.CompanyInfoActivity;
 import com.nst.jiazheng.user.wdgj.WorkerInfoActivity;
+import com.nst.jiazheng.worker.widget.ConfirmWindow;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +68,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -67,6 +85,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 @Layout(layoutId = R.layout.activity_requestserve)
 public class RequestServeActivity extends BaseToolBarActivity {
+
     @BindView(R.id.tx)
     CircleImageView tx;
     @BindView(R.id.nickname)
@@ -89,6 +108,9 @@ public class RequestServeActivity extends BaseToolBarActivity {
     EditText content;
     @BindView(R.id.submit)
     Button submit;
+    @BindView(R.id.piclist)
+    RecyclerView piclist;
+    private List<UpFile> mUpFiles;
     private Register mUserInfo;
     private TypeAdapter mAdapter;
     private Addr mAddr;
@@ -96,6 +118,10 @@ public class RequestServeActivity extends BaseToolBarActivity {
     private ServeType mServeType;
     private int currentPosition = -1;
     private Worker mWorker;
+    private String mOrder_id;
+    private static final int ADDR_PICK = 1;
+    private static final int PAY = 2;
+    private PicAdapter mPicAdapter;
 
     @Override
     protected void init() {
@@ -105,25 +131,25 @@ public class RequestServeActivity extends BaseToolBarActivity {
         nickname.setText(mWorker.name);
         counts.setText(mWorker.OrderCount + "单");
         point.setText(mWorker.score + "分");
-
-        submit.setEnabled(false);
         workerinfo.setOnClickListener(v -> {
             Bundle params = new Bundle();
-            params.putString("worker", mWorker.id);
             if (mWorker.type == 1) {
+                params.putString("worker", mWorker.id);
                 overlay(WorkerInfoActivity.class, params);
             } else {
+                params.putSerializable("worker", mWorker);
                 overlay(CompanyInfoActivity.class, params);
             }
         });
         addr.setOnClickListener(v -> {
-            overlayForResult(AddrPickActivity.class, 1);
+            overlayForResult(AddrPickActivity.class, ADDR_PICK);
         });
         time.setOnClickListener(v -> {
             if (null == mServeType) {
                 toast("请先选择服务");
                 return;
             }
+            Log.e("123", mServeType.serve_type_units_id + "");
             switch (mServeType.serve_type_units_id) {
                 case 1:
                     pickHour();
@@ -158,9 +184,50 @@ public class RequestServeActivity extends BaseToolBarActivity {
                     time.setText("");
                     mSelectedTime = null;
                     submit.setText("预约服务");
-                    submit.setEnabled(false);
                 }
             }
+        });
+        mUpFiles = new ArrayList<>();
+        mUpFiles.add(new UpFile(null, null));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4);
+        piclist.setLayoutManager(gridLayoutManager);
+        mPicAdapter = new PicAdapter(R.layout.item_pic, mUpFiles);
+        piclist.setAdapter(mPicAdapter);
+        mPicAdapter.setOnItemClickListener((adapter1, view, position) -> {
+            if (position == 0) {
+                if (mPicAdapter.getData().size() >= 5) {
+                    toast("最多只能上传4张图片");
+                    return;
+                }
+                new PhotoWindow(this).setListener(new PhotoWindow.OnConfirmClickListener() {
+                    @Override
+                    public void onCam(PhotoWindow confirmWindow) {
+                        requestPermissionAndOpenCam();
+                        confirmWindow.dismiss();
+                    }
+
+                    @Override
+                    public void onGallery(PhotoWindow confirmWindow) {
+                        requestPermissionAndOpenGallery();
+                        confirmWindow.dismiss();
+                    }
+                }).setPopupGravity(Gravity.BOTTOM).showPopupWindow();
+            }
+        });
+        mPicAdapter.setOnItemLongClickListener((adapter, view, position) -> {
+            if (position != 0) {
+                new ConfirmWindow(mContext)
+                        .setContent("确认删除该图片吗?", "确认")
+                        .setListener((ConfirmWindow window) -> {
+                            mPicAdapter.removeAt(position);
+                            window.dismiss();
+                        })
+                        .setPopupGravity(Gravity.CENTER)
+                        .setBackPressEnable(true)
+                        .setOutSideDismiss(true)
+                        .showPopupWindow();
+            }
+            return true;
         });
         try {
             Glide.with(this).load(mWorker.logo).error(R.mipmap.ic_tx).into(tx);
@@ -178,6 +245,17 @@ public class RequestServeActivity extends BaseToolBarActivity {
             toast("请选择地址");
             return;
         }
+        String id = "";
+        for (UpFile upFile : mUpFiles
+        ) {
+            if (!TextUtils.isEmpty(upFile.id)) {
+                id += upFile.id + ",";
+            }
+        }
+        if (id.endsWith(",")) {
+            id = id.substring(0, id.length() - 1);
+        }
+        showDialog("正在提交", true);
         OkGo.<String>post(Api.serverApi).params("token", mUserInfo.token)
                 .params("api_name", "server_sublimit")
                 .params("id", mWorker.id)
@@ -188,21 +266,31 @@ public class RequestServeActivity extends BaseToolBarActivity {
                 .params("address", mAddr.addr)
                 .params("content", content.getText().toString().trim())
                 .params("serve_type_id", mServeType.id)
+                .params("serve_img", id)
                 .params("insurance", cb.isChecked() ? 1 : 2).execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
+                dismissDialog();
                 Resp<Order> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Order>>() {
                 }.getType());
                 toast(resp.msg);
                 if (resp.code == 1) {
                     Bundle params = new Bundle();
-                    params.putString("orderNo", resp.data.order_no);
-                    overlay(PayActivity.class, params);
+                    String order_no = resp.data.order_no;
+                    mOrder_id = resp.data.order_id;
+                    params.putString("orderNo", order_no);
+                    overlayForResult(PayActivity.class, PAY, params);
                     finish();
-                }else if (resp.code == 101) {
+                } else if (resp.code == 101) {
                     SpUtil.putBoolean("isLogin", false);
                     startAndClearAll(LoginActivity.class);
                 }
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                super.onError(response);
+                dismissDialog();
             }
         });
     }
@@ -227,7 +315,7 @@ public class RequestServeActivity extends BaseToolBarActivity {
                 String sm = smonth.get(options1);
                 String m = month.get(options2);
                 time.setText(sm + "--" + format.format(new Date(System.currentTimeMillis() + Long.parseLong(m) * 1000 * 3600 * 24 * 30)));
-                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 try {
                     mSelectedTime = f.format(format.parse(sm))
                             + "+-+" + f.format(new Date(format.parse(sm).getTime() + Long.parseLong(m) * 1000 * 3600 * 24 * 30));
@@ -255,9 +343,8 @@ public class RequestServeActivity extends BaseToolBarActivity {
                 }.getType());
                 toast(resp.msg);
                 if (resp.code == 1) {
-                    submit.setEnabled(true);
                     submit.setText("预约服务(总价: ¥ " + resp.data.total_price + ")");
-                }else if (resp.code == 101) {
+                } else if (resp.code == 101) {
                     SpUtil.putBoolean("isLogin", false);
                     startAndClearAll(LoginActivity.class);
                 }
@@ -281,7 +368,7 @@ public class RequestServeActivity extends BaseToolBarActivity {
                 String sday = day.get(options1);
                 String eday = day.get(options2);
                 time.setText(sday + "--" + eday);
-                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 try {
                     mSelectedTime = f.format(format.parse(sday)) + "+-+" + f.format(format.parse(eday));
                     calculatePrice();
@@ -298,6 +385,7 @@ public class RequestServeActivity extends BaseToolBarActivity {
         List<String> day = new ArrayList<>();
         List<String> startHour = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
         SimpleDateFormat formath = new SimpleDateFormat("HH:mm");
         long l1 = System.currentTimeMillis();
         OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
@@ -307,9 +395,10 @@ public class RequestServeActivity extends BaseToolBarActivity {
                 String sh = startHour.get(options2);
                 String eh = startHour.get(options3);
                 time.setText(s + "  " + sh + "--" + eh);
-                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 try {
-                    mSelectedTime = f.format(format.parse(s + " " + sh)) + "+-+" + f.format(format.parse(s + " " + eh));
+                    mSelectedTime = f.format(format1.parse(s + " " + sh)) + "+-+" + f.format(format1.parse(s + " " + eh));
+                    Log.e("123", mSelectedTime);
                     calculatePrice();
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -363,7 +452,7 @@ public class RequestServeActivity extends BaseToolBarActivity {
                 }.getType());
                 if (resp.code == 1) {
                     mAdapter.setList(resp.data);
-                }else if (resp.code == 101) {
+                } else if (resp.code == 101) {
                     SpUtil.putBoolean("isLogin", false);
                     startAndClearAll(LoginActivity.class);
                 }
@@ -371,12 +460,117 @@ public class RequestServeActivity extends BaseToolBarActivity {
         });
     }
 
+    private void requestPermissionAndOpenCam() {
+        new RxPermissions(this)
+                .requestEach(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe((p) -> {
+                    if (p.granted) {
+                        openCam();
+                    } else if (p.shouldShowRequestPermissionRationale) {
+                        requestPermissionAndOpenCam();
+                    } else {
+                        getAppDetailSettingIntent();
+                    }
+                });
+    }
+
+    private void requestPermissionAndOpenGallery() {
+        new RxPermissions(this)
+                .requestEach(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe((p) -> {
+                    if (p.granted) {
+                        openGallery();
+                    } else if (p.shouldShowRequestPermissionRationale) {
+                        requestPermissionAndOpenGallery();
+                    } else {
+                        getAppDetailSettingIntent();
+                    }
+                });
+    }
+
+    private void openGallery() {
+        PictureSelector.create(this)
+                .openGallery(PictureMimeType.ofImage())
+                .loadImageEngine(GlideEngine.createGlideEngine())
+                .maxSelectNum(5 - mAdapter.getData().size())
+                .forResult(new OnResultCallbackListener<LocalMedia>() {
+                    @Override
+                    public void onResult(List<LocalMedia> result) {
+                        for (LocalMedia localMedia : result
+                        ) {
+                            if (Build.VERSION.SDK_INT == 29) {
+                                upLoadFiles(localMedia.getAndroidQToPath());
+                            } else {
+                                upLoadFiles(localMedia.getPath());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // onCancel Callback
+                    }
+                });
+    }
+
+    private void openCam() {
+        PictureSelector.create(this)
+                .openCamera(PictureMimeType.ofImage())
+                .loadImageEngine(GlideEngine.createGlideEngine())
+                .forResult(new OnResultCallbackListener<LocalMedia>() {
+                    @Override
+                    public void onResult(List<LocalMedia> result) {
+                        LocalMedia localMedia = result.get(0);
+                        if (Build.VERSION.SDK_INT == 29) {
+                            upLoadFiles(localMedia.getAndroidQToPath());
+                        } else {
+                            upLoadFiles(localMedia.getPath());
+                        }
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // onCancel Callback
+                    }
+                });
+    }
+
+    private void upLoadFiles(String path) {
+        showDialog("正在上传", true);
+        OkGo.<String>post(Api.baseApi).params("api_name", "uploadPic").params("img", new File(path)).execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                dismissDialog();
+                Resp<UpFile> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<UpFile>>() {
+                }.getType());
+                toast(resp.msg);
+                if (resp.code == 1) {
+                    mPicAdapter.addData(new UpFile(resp.data.id, path));
+                } else if (resp.code == 101) {
+                    SpUtil.putBoolean("isLogin", false);
+                    startAndClearAll(LoginActivity.class);
+                }
+            }
+
+            @Override
+            public void onError(Response<String> response) {
+                super.onError(response);
+                dismissDialog();
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+        if (requestCode == ADDR_PICK && resultCode == RESULT_OK) {
             mAddr = (Addr) data.getSerializableExtra("addr");
             this.addr.setText(mAddr.addr);
+        } else if (requestCode == PAY && resultCode == RESULT_OK) {
+            Bundle bundle = new Bundle();
+            bundle.putString("id", mOrder_id);
+            overlay(OrderDetailsDaijiedanActivity.class,bundle);
+            finish();
         }
     }
 
@@ -397,6 +591,28 @@ public class RequestServeActivity extends BaseToolBarActivity {
                 cb.setChecked(false);
             }
             cb.setEnabled(false);
+        }
+    }
+
+    class PicAdapter extends BaseQuickAdapter<UpFile, BaseViewHolder> {
+
+        public PicAdapter(int layoutResId, List<UpFile> data) {
+            super(layoutResId, data);
+        }
+
+        @Override
+        protected void convert(BaseViewHolder baseViewHolder, UpFile upfile) {
+            ImageView pic = baseViewHolder.getView(R.id.pic);
+            int position = baseViewHolder.getLayoutPosition();
+            if (position == 0) {
+                pic.setImageResource(R.mipmap.ic_upfile);
+            } else {
+                try {
+                    Glide.with(RequestServeActivity.this).load(upfile.path).centerCrop().into(pic);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

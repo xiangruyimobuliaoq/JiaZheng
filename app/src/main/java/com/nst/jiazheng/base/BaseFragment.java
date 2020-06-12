@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import com.nst.jiazheng.api.resp.UserCenter;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiasuhuei321.loadingdialog.view.LoadingDialog;
 
@@ -102,10 +103,14 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void startAndClearAll(Class<?> classObj) {
-        Intent intent = new Intent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.setClass(mContext, classObj);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent();
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setClass(mContext, classObj);
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void toast(String msg) {
@@ -157,5 +162,8 @@ public abstract class BaseFragment extends Fragment {
     public void hideInput() {
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
+    }
+
+    public void setCenterData(UserCenter data) throws Exception {
     }
 }

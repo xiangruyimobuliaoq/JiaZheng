@@ -135,10 +135,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void startAndClearAll(Class<?> classObj) {
-        Intent intent = new Intent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.setClass(this, classObj);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent();
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setClass(this, classObj);
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void requestPermissions() {

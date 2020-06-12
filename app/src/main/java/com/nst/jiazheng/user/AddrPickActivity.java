@@ -106,7 +106,7 @@ public class AddrPickActivity extends BaseToolBarActivity implements AMap.OnCame
             @Override
             public void onClick(View view) {
 //                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
-                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(23.02067, 113.75179), 16));
+                aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
             }
         });
         content.addTextChangedListener(new TextWatcher() {
@@ -154,7 +154,7 @@ public class AddrPickActivity extends BaseToolBarActivity implements AMap.OnCame
                 if (mMarker != null) {
                 }
                 mMarker = aMap.addMarker(new MarkerOptions().position(latLng).title(address));
-                mAddr = new Addr(tip.getDistrict() + tip.getAddress() + address, tip.getPoint().getLatitude(), tip.getPoint().getLatitude());
+                mAddr = new Addr(tip.getDistrict() + tip.getAddress() + address, tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
             }
         });
     }

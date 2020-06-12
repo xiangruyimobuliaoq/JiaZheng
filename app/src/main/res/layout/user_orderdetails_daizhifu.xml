@@ -118,9 +118,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
+            android:id="@+id/content"
             android:layout_marginBottom="15dp"
             android:lines="2"
-            android:text="客厅的灯坏了！"
             android:textColor="@color/text_2"
             android:textSize="13sp" />
 

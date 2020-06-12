@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_btn_white_corner"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="23dp"
+        android:text="选择优惠券"
+        android:textColor="@color/text_1"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/couponlist"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="7.5dp"
+        android:layout_marginRight="10dp" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="37.5dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="37.5dp"
+        android:background="@drawable/shape_btn_yellow_corner"
+        android:text="不使用优惠券"
+        android:textColor="@color/text_1"
+        android:textSize="16sp" />
+
+</LinearLayout>

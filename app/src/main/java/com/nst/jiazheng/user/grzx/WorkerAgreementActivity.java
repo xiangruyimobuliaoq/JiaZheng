@@ -1,6 +1,12 @@
 package com.nst.jiazheng.user.grzx;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.Html;
+import android.text.Spanned;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -16,6 +22,10 @@ import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.login.LoginActivity;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import butterknife.BindView;
 
@@ -37,14 +47,27 @@ public class WorkerAgreementActivity extends BaseToolBarActivity {
     @Override
     protected void init() {
         setTitle("私人管家协议");
-        OkGo.<String>post(Api.registerApi).params("api_name", "private_agreement").execute(new StringCallback() {
+        OkGo.<String>post(Api.publicApi).params("api_name", "private_agreement").execute(new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 Resp<Agreement> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<Agreement>>() {
                 }.getType());
                 if (resp.code == 1) {
-                    content.setText(Html.fromHtml(resp.data.private_agreement));
-                }else if (resp.code == 101) {
+                    new Thread(() -> {
+                        Spanned text = Html.fromHtml(resp.data.private_agreement, s -> {
+                            Log.e("123", s);
+                            Drawable drawable;
+                            drawable = getImageNetwork(s);
+                            if (drawable != null) {
+                                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                            } else if (drawable == null) {
+                                return null;
+                            }
+                            return drawable;
+                        }, null);
+                        runOnUiThread(() -> content.setText(text));
+                    }).start();
+                } else if (resp.code == 101) {
                     SpUtil.putBoolean("isLogin", false);
                     startAndClearAll(LoginActivity.class);
                 }
@@ -56,6 +79,25 @@ public class WorkerAgreementActivity extends BaseToolBarActivity {
                 toast(response.body());
             }
         });
+    }
 
+    public Drawable getImageNetwork(String imageUrl) {
+        URL myFileUrl;
+        Drawable drawable = null;
+        try {
+            myFileUrl = new URL(imageUrl);
+            HttpURLConnection conn = (HttpURLConnection) myFileUrl
+                    .openConnection();
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            // 在这一步最好先将图片进行压缩，避免消耗内存过多
+            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            drawable = new BitmapDrawable(bitmap);
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return drawable;
     }
 }
