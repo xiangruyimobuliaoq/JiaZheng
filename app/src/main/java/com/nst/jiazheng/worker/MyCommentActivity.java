@@ -70,6 +70,7 @@ public class MyCommentActivity extends BaseToolBarActivity {
                 } else {
                     currentTpye = 1;
                 }
+                getCommentList();
             }
 
             @Override
@@ -88,9 +89,12 @@ public class MyCommentActivity extends BaseToolBarActivity {
         mAdapter = new CommentAdapter(R.layout.item_comment_padding, null);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            Bundle params = new Bundle();
-            params.putSerializable("data", mAdapter.getData().get(position));
-            overlay(CommentDetailActivity.class, params);
+//            Bundle params = new Bundle();
+//            params.putSerializable("data", mAdapter.getData().get(position));
+//            overlay(CommentDetailActivity.class, params);
+            Bundle bundle = new Bundle();
+            bundle.putString("id", mAdapter.getData().get(position).order_id);
+            overlay(YiwanchengActivity.class, bundle);
         });
         getCommentList();
     }
@@ -126,8 +130,14 @@ public class MyCommentActivity extends BaseToolBarActivity {
             baseViewHolder
                     .setText(R.id.name, comment.name)
                     .setText(R.id.content, comment.content)
+                    .setText(R.id.order_no, comment.order_no)
                     .setText(R.id.ctime, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(comment.ctime * 1000)));
             CircleImageView tx = baseViewHolder.getView(R.id.tx);
+//            baseViewHolder.getView(R.id.orderpart).setOnClickListener(view -> {
+//                Bundle bundle = new Bundle();
+//                bundle.putString("id", comment.order_id);
+//                overlay(YiwanchengActivity.class, bundle);
+//            });
             AndRatingBar score = baseViewHolder.getView(R.id.score);
             score.setRating(Float.parseFloat(comment.score));
             try {

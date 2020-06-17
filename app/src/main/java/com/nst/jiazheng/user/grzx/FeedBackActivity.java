@@ -96,7 +96,7 @@ public class FeedBackActivity extends BaseToolBarActivity {
 
                     @Override
                     public void onGallery(PhotoWindow confirmWindow) {
-                        openGallery();
+                        requestPermissionAndOpenGallery();
                         confirmWindow.dismiss();
                     }
                 }).setPopupGravity(Gravity.BOTTOM).showPopupWindow();
@@ -204,15 +204,17 @@ public class FeedBackActivity extends BaseToolBarActivity {
         PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofImage())
                 .loadImageEngine(GlideEngine.createGlideEngine())
-                .maxSelectNum(1)
+                .maxSelectNum(5 - mAdapter.getData().size())
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override
                     public void onResult(List<LocalMedia> result) {
-                        LocalMedia localMedia = result.get(0);
-                        if (Build.VERSION.SDK_INT == 29) {
-                            upLoadFiles(localMedia.getAndroidQToPath());
-                        } else {
-                            upLoadFiles(localMedia.getPath());
+                        for (LocalMedia localMedia : result
+                        ) {
+                            if (Build.VERSION.SDK_INT == 29) {
+                                upLoadFiles(localMedia.getAndroidQToPath());
+                            } else {
+                                upLoadFiles(localMedia.getPath());
+                            }
                         }
                     }
 

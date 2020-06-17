@@ -2,6 +2,7 @@ package com.nst.jiazheng.user.grzx;
 
 import android.Manifest;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -30,6 +31,7 @@ import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.GlideEngine;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
+import com.nst.jiazheng.im.ImManager;
 import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.user.PhotoWindow;
 import com.tbruyelle.rxpermissions2.RxPermissions;
@@ -41,6 +43,9 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.UserInfo;
 
 /**
  * 创建者     彭龙
@@ -86,6 +91,12 @@ public class UserInfoActivity extends BaseToolBarActivity {
                                 new TypeToken<Resp<UserCenter>>() {
                                 }.getType());
                         if (resp.code == 1) {
+                            if (RongIMClient.getInstance().getCurrentConnectionStatus() != RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED) {
+                                ImManager.connect(mUserInfo.ry_token, resp.data);
+                            } else {
+                                UserInfo userInfo = new UserInfo(resp.data.user_id, resp.data.nickname, Uri.parse(resp.data.headimgurl));
+                                RongIM.getInstance().refreshUserInfoCache(userInfo);
+                            }
                             setData(resp.data);
                         } else if (resp.code == 101) {
                             SpUtil.putBoolean("isLogin", false);

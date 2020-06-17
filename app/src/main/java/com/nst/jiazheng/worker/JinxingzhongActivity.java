@@ -38,7 +38,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
+import io.rong.imkit.userInfoCache.RongUserInfoManager;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.UserInfo;
 
 /**
  * 创建者     彭龙
@@ -55,6 +57,8 @@ public class JinxingzhongActivity extends BaseToolBarActivity {
     CircleImageView tx;
     @BindView(R.id.nickname)
     TextView nickname;
+    @BindView(R.id.address)
+    TextView address;
     @BindView(R.id.StatusText)
     TextView StatusText;
     @BindView(R.id.score)
@@ -112,8 +116,9 @@ public class JinxingzhongActivity extends BaseToolBarActivity {
     }
 
     private void setData(Order data) {
-        nickname.setText(data.nickname);
+        nickname.setText(data.staff_name);
         StatusText.setText(data.StatusText);
+        address.setText(data.address);
         score.setText(data.staff_score);
         ddh.setOnClickListener(view -> {
             new ConfirmWindow(mContext)
@@ -143,6 +148,8 @@ public class JinxingzhongActivity extends BaseToolBarActivity {
             Conversation.ConversationType conversationType = Conversation.ConversationType.PRIVATE;
             String targetId = data.staff_id;
             String title = "聊天";
+            UserInfo userInfo = RongUserInfoManager.getInstance().getUserInfo(targetId);
+            RongIM.getInstance().refreshUserInfoCache(userInfo);
             RongIM.getInstance().startConversation(this, conversationType, targetId, title, null);
         });
         dh.setOnClickListener(view -> {

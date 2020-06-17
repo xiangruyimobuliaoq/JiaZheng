@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
+import com.nst.jiazheng.api.Api;
 import com.nst.jiazheng.api.resp.UserCenter;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.xiasuhuei321.loadingdialog.view.LoadingDialog;
@@ -103,6 +104,11 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void startAndClearAll(Class<?> classObj) {
+        if (!Api.goingToLogin) {
+            Api.goingToLogin = true;
+        } else {
+            return;
+        }
         try {
             Intent intent = new Intent();
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

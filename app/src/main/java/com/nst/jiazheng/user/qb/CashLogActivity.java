@@ -53,10 +53,12 @@ public class CashLogActivity extends BaseToolBarActivity {
     }
 
     private void getCashLog() {
+        showDialog("加载中",true);
         OkGo.<String>post(Api.userApi).params("api_name", "cash_log").params("token", mUserInfo.token)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        dismissDialog();
                         Resp<List<IntegralLog>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<IntegralLog>>>() {
                         }.getType());
                         if (resp.code == 1) {
@@ -65,6 +67,12 @@ public class CashLogActivity extends BaseToolBarActivity {
                             SpUtil.putBoolean("isLogin", false);
                             startAndClearAll(LoginActivity.class);
                         }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        dismissDialog();
                     }
                 });
     }

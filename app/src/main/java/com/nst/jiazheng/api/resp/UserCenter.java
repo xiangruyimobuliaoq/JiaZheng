@@ -72,7 +72,12 @@ public class UserCenter {
     public String id_card_img;
     public String name;
     public String age;
-    public String job_age;
+    public double job_age;
     public String address;
     public int type;
+    public String user_id;
+    public String province;
+    public String city;
+    public String area;
+    public String id;
 }

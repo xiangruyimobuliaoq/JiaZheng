@@ -27,5 +27,7 @@ public class Comment implements Serializable {
     public long ctime;
     public int user_id;
     public String name;
+    public String order_no;
+    public String order_id;
     public String headimgurl;
 }

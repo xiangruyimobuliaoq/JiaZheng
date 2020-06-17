@@ -261,7 +261,7 @@
                     android:background="@null"
                     android:gravity="top"
                     android:hint="请输入"
-                    android:lines="6"
+                    android:minLines="6"
                     android:padding="18.5dp"
                     android:textColor="@color/text_1"
                     android:textSize="12sp" />

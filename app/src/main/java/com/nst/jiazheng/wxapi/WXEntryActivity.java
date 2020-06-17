@@ -38,10 +38,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         api = WXAPIFactory.createWXAPI(this, APP_ID);
-        try {
-            api.handleIntent(getIntent(), this);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!api.handleIntent(getIntent(), this)) {
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
                 int errCode = bundle.getInt("_wxapi_baseresp_errcode");
@@ -62,11 +59,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        try {
-            api.handleIntent(intent, this);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Bundle bundle = intent.getExtras();
+        if (!api.handleIntent(getIntent(), this)) {
+            Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
                 int errCode = bundle.getInt("_wxapi_baseresp_errcode");
                 if (errCode == 0) {
@@ -75,7 +69,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                     if (code != null) {
                         Log.e("123", code + "" + state);
                         EventBus.getDefault().post(new WechatEvent(state, code));
-                        finish();
                     }
                 }
             }

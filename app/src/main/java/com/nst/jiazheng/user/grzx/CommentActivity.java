@@ -24,6 +24,7 @@ import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.user.wdgj.WorkerInfoActivity;
+import com.nst.jiazheng.worker.YiwanchengActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -68,6 +69,7 @@ public class CommentActivity extends BaseToolBarActivity {
                 } else {
                     currentTpye = 1;
                 }
+                getCommentList();
             }
 
             @Override
@@ -86,20 +88,25 @@ public class CommentActivity extends BaseToolBarActivity {
         mAdapter = new CommentAdapter(R.layout.item_comment_padding, null);
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener((adapter, view, position) -> {
-            Bundle params = new Bundle();
-            params.putSerializable("data", mAdapter.getData().get(position));
-            overlay(CommentDetailActivity.class, params);
+//            Bundle params = new Bundle();
+//            params.putSerializable("data", mAdapter.getData().get(position));
+//            overlay(CommentDetailActivity.class, params);
+            Bundle bundle = new Bundle();
+            bundle.putString("id", mAdapter.getData().get(position).order_id);
+            overlay(YiwanchengActivity.class, bundle);
         });
         getCommentList();
     }
 
     private void getCommentList() {
+        showDialog("加载中", true);
         OkGo.<String>post(Api.userApi).params("api_name", "comment_list")
                 .params("token", mUserInfo.token)
                 .params("type", currentTpye)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        dismissDialog();
                         Resp<List<Comment>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<Comment>>>() {
                         }.getType());
                         if (resp.code == 1) {
@@ -108,6 +115,12 @@ public class CommentActivity extends BaseToolBarActivity {
                             SpUtil.putBoolean("isLogin", false);
                             startAndClearAll(LoginActivity.class);
                         }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        showDialog("加载中", true);
                     }
                 });
     }
@@ -124,7 +137,13 @@ public class CommentActivity extends BaseToolBarActivity {
             baseViewHolder
                     .setText(R.id.name, comment.name)
                     .setText(R.id.content, comment.content)
+                    .setText(R.id.order_no, comment.order_no)
                     .setText(R.id.ctime, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(comment.ctime * 1000)));
+//            baseViewHolder.getView(R.id.orderpart).setOnClickListener(view -> {
+//                Bundle bundle = new Bundle();
+//                bundle.putString("id", comment.order_id);
+//                overlay(OrderDetailsYiwanchengActivity.class, bundle);
+//            });
             CircleImageView tx = baseViewHolder.getView(R.id.tx);
             AndRatingBar score = baseViewHolder.getView(R.id.score);
             score.setRating(Float.parseFloat(comment.score));

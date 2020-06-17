@@ -38,7 +38,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
+import io.rong.imkit.userInfoCache.RongUserInfoManager;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.UserInfo;
 
 /**
  * 创建者     彭龙
@@ -55,6 +57,8 @@ public class DaiquerenActivity extends BaseToolBarActivity {
     CircleImageView tx;
     @BindView(R.id.nickname)
     TextView nickname;
+    @BindView(R.id.address)
+    TextView address;
     @BindView(R.id.StatusText)
     TextView StatusText;
     @BindView(R.id.score)
@@ -112,7 +116,8 @@ public class DaiquerenActivity extends BaseToolBarActivity {
     }
 
     private void setData(Order data) {
-        nickname.setText(data.nickname);
+        nickname.setText(data.staff_name);
+        address.setText(data.address);
         score.setText(data.staff_score);
         StatusText.setText(data.StatusText);
         ddh.setOnClickListener(view -> {
@@ -131,6 +136,8 @@ public class DaiquerenActivity extends BaseToolBarActivity {
             Conversation.ConversationType conversationType = Conversation.ConversationType.PRIVATE;
             String targetId = data.staff_id;
             String title = "聊天";
+            UserInfo userInfo = RongUserInfoManager.getInstance().getUserInfo(targetId);
+            RongIM.getInstance().refreshUserInfoCache(userInfo);
             RongIM.getInstance().startConversation(this, conversationType, targetId, title, null);
         });
         dh.setOnClickListener(view -> {
@@ -141,7 +148,7 @@ public class DaiquerenActivity extends BaseToolBarActivity {
         content.setText(data.content);
         jie_time.setText(data.jie_time == 0 ? "" : format.format(new Date(data.jie_time * 1000)));
         stime.setText(data.start_time == 0 ? "" : format.format(new Date(data.start_time * 1000)));
-        etime.setText(data.etime == 0 ? "" : format.format(new Date(data.etime * 1000)));
+        etime.setText(data.petime == 0 ? "" : format.format(new Date(data.petime * 1000)));
         time.setText(data.time);
         serve_type_units.setText(data.serve_type_units);
         num.setText(data.num);

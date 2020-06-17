@@ -65,10 +65,10 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.wxLogin)
     ImageView wxLogin;
     private IWXAPI api;
-    private BroadcastReceiver mReceiver;
 
     @Override
     protected void init() {
+        Api.goingToLogin = false;
         if (SpUtil.getBoolean("isLogin", false)) {
             overlay(HomeActivity.class);
             finish();

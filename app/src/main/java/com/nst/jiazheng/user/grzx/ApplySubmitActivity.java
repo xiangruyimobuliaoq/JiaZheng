@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -122,16 +123,22 @@ public class ApplySubmitActivity extends BaseToolBarActivity {
             toast("请上传手持身份证照");
             return;
         }
+        String trim1 = address.getText().toString().trim();
+        if (TextUtils.isEmpty(trim1)) {
+            toast("请填写地址");
+            return;
+        }
         showDialog("正在提交认证", true);
         String trim = job_age.getText().toString().trim();
         if (trim.equals("半年")) {
             trim = "0.5年";
         }
+
         OkGo.<String>post(Api.userApi).params("api_name", "private_sublimit")
                 .params("token", mUserInfo.token)
                 .params("mobile", mobile.getText().toString().trim())
                 .params("name", name.getText().toString().trim())
-                .params("address", address.getText().toString().trim())
+                .params("address", trim1)
                 .params("sex", currentSex)
                 .params("id_card_img", currentPicId)
                 .params("age", age.getText().toString().trim().replaceAll("岁", ""))
@@ -144,18 +151,7 @@ public class ApplySubmitActivity extends BaseToolBarActivity {
                         }.getType());
                         toast(resp.msg);
                         if (resp.code == 1) {
-                            SpUtil.putBoolean("isLogin", false);
-                            new ConfirmWindow(mContext)
-                                    .setContent("确认删除该图片吗?", "确认")
-                                    .setListener((ConfirmWindow window) -> {
-                                        window.dismiss();
-                                    })
-                                    .setPopupGravity(Gravity.CENTER)
-                                    .setBackPressEnable(true)
-                                    .setOutSideDismiss(true)
-                                    .showPopupWindow();
-
-
+                            setResult(RESULT_OK);
                             finish();
                         } else if (resp.code == 101) {
                             SpUtil.putBoolean("isLogin", false);
@@ -217,6 +213,7 @@ public class ApplySubmitActivity extends BaseToolBarActivity {
         } else if (data.sex == 2) {
             sex.setText("女");
         }
+        currentSex = data.sex;
         age.setText(data.age);
         job_age.setText(data.job_age + "年");
         address.setText(data.address);

@@ -219,7 +219,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="开始时间"
+            android:text="开始服务时间"
             android:textColor="#ff333333"
             android:textSize="12sp" />
 

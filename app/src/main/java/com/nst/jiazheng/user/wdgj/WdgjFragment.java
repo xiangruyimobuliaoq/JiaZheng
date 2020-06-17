@@ -62,32 +62,38 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
     private NearbyAdapter mAdapter;
+    private double mLatitude;
+    private double mLongitude;
 
     @Override
     protected void init() {
         mUserInfo = (Register) SpUtil.readObj("userInfo");
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (i) {
-                    case R.id.srgj:
-                        currentType = 1;
-                        getData();
-                        break;
-                    case R.id.jzgs:
-                        currentType = 2;
-                        getData();
-                        break;
-                }
+        rg.setOnCheckedChangeListener((radioGroup, i) -> {
+            switch (i) {
+                case R.id.srgj:
+                    currentType = 1;
+                    break;
+                case R.id.jzgs:
+                    currentType = 2;
+                    break;
             }
+            getData(mLatitude, mLongitude);
         });
-        requestPermission();
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         manager.setOrientation(RecyclerView.VERTICAL);
         nearbylist.setLayoutManager(manager);
         mAdapter = new NearbyAdapter(R.layout.item_worker, null);
         nearbylist.setAdapter(mAdapter);
-        getData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mlocationClient != null) {
+            mlocationClient.startLocation();
+        } else {
+            requestPermission();
+        }
     }
 
     private void requestPermission() {
@@ -126,16 +132,20 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
 
     @Override
     public void onDestroy() {
-        mlocationClient.onDestroy();
+        if (null != mlocationClient)
+            mlocationClient.onDestroy();
         super.onDestroy();
     }
 
-    private void getData() {
+    private void getData(double latitude, double longitude) {
+        if (0 == latitude || 0 == longitude) {
+            return;
+        }
         mAdapter.setList(null);
         showDialog("加载中", false);
         OkGo.<String>post(Api.serverApi).params("api_name", "my_collect").params("token", mUserInfo.token).params("type", currentType)
-                .params("lng", 113.75179).params("lat", 23.02067)
-//                .params("lng", cameraPosition.target.longitude).params("lat", cameraPosition.target.latitude)
+//                .params("lng", 113.75179).params("lat", 23.02067)
+                .params("lng", longitude).params("lat", latitude)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -163,10 +173,15 @@ public class WdgjFragment extends BaseFragment implements AMapLocationListener {
         if (aMapLocation != null) {
             if (aMapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
-                aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-                aMapLocation.getLatitude();//获取纬度
-                aMapLocation.getLongitude();//获取经度
-                aMapLocation.getAccuracy();//获取精度信息
+                double latitude = aMapLocation.getLatitude();
+                double longitude = aMapLocation.getLongitude();
+                if (latitude == mLatitude || longitude == mLongitude) {
+                    return;
+                }
+                mLatitude = latitude;
+                mLongitude = longitude;
+                getData(mLatitude, mLongitude);
+                mlocationClient.stopLocation();
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 Log.e("AmapError", "location Error, ErrCode:"

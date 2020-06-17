@@ -1,6 +1,7 @@
 package com.nst.jiazheng.user.grzx;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -54,7 +55,7 @@ public class WorkerApplyActivity extends BaseToolBarActivity {
             overlay(WorkerAgreementActivity.class);
         });
         submit.setOnClickListener(view -> {
-            overlay(ApplySubmitActivity.class);
+            overlayForResult(ApplySubmitActivity.class, 2);
         });
         submit.setEnabled(false);
         getCenterData();
@@ -86,8 +87,10 @@ public class WorkerApplyActivity extends BaseToolBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 1 && resultCode == RESULT_OK) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
             getCenterData();
+        } else if (requestCode == 2 && resultCode == RESULT_OK) {
+            finish();
         }
     }
 

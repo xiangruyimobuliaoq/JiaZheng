@@ -117,10 +117,12 @@ public class MsgFragment extends BaseFragment {
     }
 
     private void getMessage() {
+        showDialog("加载中",true);
         OkGo.<String>post(Api.userApi).params("api_name", "msg_list").params("token", mUserInfo.token)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        dismissDialog();
                         Resp<List<Message>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<Message>>>() {
                         }.getType());
                         if (resp.code == 1) {
@@ -129,6 +131,12 @@ public class MsgFragment extends BaseFragment {
                             SpUtil.putBoolean("isLogin", false);
                             startAndClearAll(LoginActivity.class);
                         }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        showDialog("加载中",true);
                     }
                 });
     }

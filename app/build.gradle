@@ -14,7 +14,7 @@ android {
 
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
-            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86"
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
         }
     }
 
@@ -101,13 +101,14 @@ dependencies {
     implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.5.3'
 
     implementation 'com.github.ForgetAll:LoadingDialog:v1.1.2'
+
     api 'cn.rongcloud.sdk:im_kit:2.10.5'
 //im_kit必须依赖im_lib，所以需要加入对应依赖
     api 'cn.rongcloud.sdk:im_lib:2.10.5'
 
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.50'
 
-    implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
+    implementation(name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
 
     api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
 

@@ -62,17 +62,8 @@ public class PointDetailActivity extends BaseToolBarActivity {
                 }.getType());
                 if (resp.code == 1) {
                     new Thread(() -> {
-                        Spanned text = Html.fromHtml(resp.data.content, s -> {
-                            Log.e("123", s);
-                            Drawable drawable;
-                            drawable = getImageNetwork(s);
-                            if (drawable != null) {
-                                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                            } else if (drawable == null) {
-                                return null;
-                            }
-                            return drawable;
-                        }, null);
+
+                        Spanned text = Html.fromHtml(resp.data.content, s -> getImageNetwork(s), null);
                         runOnUiThread(() -> content.setText(text));
                     }).start();
                 } else if (resp.code == 101) {
@@ -101,7 +92,10 @@ public class PointDetailActivity extends BaseToolBarActivity {
             InputStream is = conn.getInputStream();
             // 在这一步最好先将图片进行压缩，避免消耗内存过多
             Bitmap bitmap = BitmapFactory.decodeStream(is);
-            drawable = new BitmapDrawable(bitmap);
+            drawable = new BitmapDrawable(getResources(), bitmap);
+            if (drawable != null) {
+                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            }
             is.close();
         } catch (Exception e) {
             e.printStackTrace();

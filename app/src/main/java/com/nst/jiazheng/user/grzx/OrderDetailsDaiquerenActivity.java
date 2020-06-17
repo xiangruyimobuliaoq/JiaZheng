@@ -32,7 +32,9 @@ import java.util.Date;
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
+import io.rong.imkit.userInfoCache.RongUserInfoManager;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.UserInfo;
 
 /**
  * 创建者     彭龙
@@ -59,6 +61,10 @@ public class OrderDetailsDaiquerenActivity extends BaseToolBarActivity {
     TextView time;
     @BindView(R.id.pay_price)
     TextView pay_price;
+    @BindView(R.id.total_price)
+    TextView total_price;
+    @BindView(R.id.coupon_money)
+    TextView coupon_money;
     @BindView(R.id.content)
     TextView content;
     @BindView(R.id.serve_type_price)
@@ -122,12 +128,14 @@ public class OrderDetailsDaiquerenActivity extends BaseToolBarActivity {
         content.setText(order.content);
         pay_price.setText("¥ " + order.pay_price);
         serve_type_price.setText("服务单价: ¥ " + order.serve_type_price + " /" + order.serve_type_units);
-        nickname.setText(order.nickname);
+        nickname.setText(order.staff_name);
+        total_price.setText("应付金额: ¥ " + order.total_price);
+        coupon_money.setText("优惠券抵扣: ¥ " + order.coupon_money);
         staff_name.setText("接单管家: " + order.staff_name);
         point.setText(order.staff_score + "分");
-        jie_time.setText("接单时间: " + format.format(new Date(order.jie_time*1000)));
-        start_time.setText("开始时间: " + format.format(new Date(order.start_time*1000)));
-        etime.setText("结束时间: " + format.format(new Date(order.etime*1000)));
+        jie_time.setText("接单时间: " + format.format(new Date(order.jie_time * 1000)));
+        start_time.setText("开始服务时间: " + format.format(new Date(order.start_time * 1000)));
+        etime.setText(order.petime == 0 ? "结束服务时间: " : "结束服务时间: " + format.format(new Date(order.petime * 1000)));
         ddh.setOnClickListener(view -> {
             new ConfirmWindow(mContext)
                     .setContent(order.staff_mobile, "拨打")
@@ -152,6 +160,8 @@ public class OrderDetailsDaiquerenActivity extends BaseToolBarActivity {
             Conversation.ConversationType conversationType = Conversation.ConversationType.PRIVATE;
             String targetId = order.staff_id;
             String title = "聊天";
+            UserInfo userInfo = RongUserInfoManager.getInstance().getUserInfo(targetId);
+            RongIM.getInstance().refreshUserInfoCache(userInfo);
             RongIM.getInstance().startConversation(this, conversationType, targetId, title, null);
         });
         cancel.setOnClickListener(view -> {

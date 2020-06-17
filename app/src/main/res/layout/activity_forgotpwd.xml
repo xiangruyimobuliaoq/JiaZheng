@@ -33,8 +33,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
                 android:id="@+id/logo"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="18.5dp"
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:hint="请输入密码"
+                    android:hint="请输入验证码"
                     android:imeOptions="actionNext"
                     android:nextFocusDown="@id/password"
                     android:padding="10dp"
@@ -83,10 +83,10 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/sendcode"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:id="@+id/sendcode"
                     android:text="获取验证码"
                     android:textColor="@color/statusbar_blue"
                     android:textSize="14sp" />
@@ -110,6 +110,7 @@
                 android:background="@null"
                 android:hint="请输入新密码"
                 android:imeOptions="actionDone"
+                android:inputType="textPassword"
                 android:nextFocusDown="@id/submit"
                 android:padding="10dp"
                 android:singleLine="true"

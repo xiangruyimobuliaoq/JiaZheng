@@ -48,6 +48,10 @@ public class OrderDetailsDaizhifuActivity extends BaseToolBarActivity {
     TextView address;
     @BindView(R.id.time)
     TextView time;
+    @BindView(R.id.total_price)
+    TextView total_price;
+    @BindView(R.id.coupon_money)
+    TextView coupon_money;
     @BindView(R.id.pay_price)
     TextView pay_price;
     @BindView(R.id.serve_type_price)
@@ -86,6 +90,8 @@ public class OrderDetailsDaizhifuActivity extends BaseToolBarActivity {
         order_no.setText("订单编号: " + order.order_no);
         status.setText(order.StatusText);
         content.setText(order.content);
+        total_price.setText("应付金额: ¥ " + order.total_price);
+        coupon_money.setText("优惠券抵扣: ¥ " + order.coupon_money);
         serve_type_name.setText("服务类型: " + order.serve_type_name);
         num.setText("数量: " + order.num);
         address.setText("服务地址: " + order.address);

@@ -1,12 +1,9 @@
 package com.nst.jiazheng.user.grzx;
 
 import android.os.Bundle;
-import android.view.View;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnLoadMoreListener;
 import com.chad.library.adapter.base.module.BaseLoadMoreModule;
 import com.chad.library.adapter.base.module.LoadMoreModule;
@@ -30,7 +27,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -127,6 +123,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
     }
 
     private void getOrderList(boolean loadMore) {
+        showDialog("加载中", true);
         if (loadMore) {
             OkGo.<String>post(Api.orderApi).params("api_name", "order_list")
                     .params("token", mUserInfo.token)
@@ -135,6 +132,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                     .execute(new StringCallback() {
                         @Override
                         public void onSuccess(Response<String> response) {
+                            dismissDialog();
                             Resp<List<Order>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<Order>>>() {
                             }.getType());
                             if (resp.code == 1) {
@@ -154,6 +152,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                         public void onError(Response<String> response) {
                             super.onError(response);
                             mLoadMoreModule.loadMoreFail();
+                            dismissDialog();
                         }
                     });
         } else {
@@ -164,6 +163,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                     .execute(new StringCallback() {
                         @Override
                         public void onSuccess(Response<String> response) {
+                            dismissDialog();
                             Resp<List<Order>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<Order>>>() {
                             }.getType());
                             if (resp.code == 1) {
@@ -175,6 +175,12 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                                 SpUtil.putBoolean("isLogin", false);
                                 startAndClearAll(LoginActivity.class);
                             }
+                        }
+
+                        @Override
+                        public void onError(Response<String> response) {
+                            super.onError(response);
+                            showDialog("加载中", true);
                         }
                     });
         }
@@ -229,14 +235,14 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                 case 6:
                     baseViewHolder.setText(R.id.staff_name, "接单管家: " + order.staff_name)
                             .setText(R.id.jie_time, "接单时间: " + format.format(new Date(order.jie_time * 1000)))
-                            .setText(R.id.etime, "完成时间: " + format.format(new Date(order.etime * 1000)))
-                            .setText(R.id.petime, "确认时间: " + format.format(new Date(order.petime * 1000)))
+                            .setText(R.id.etime, "结束服务时间: " + format.format(new Date(order.petime * 1000)))
+                            .setText(R.id.petime, "订单完成时间: " + format.format(new Date(order.etime * 1000)))
                             .setText(R.id.start_time, "开始服务时间: " + format.format(new Date(order.start_time * 1000)));
                     break;
                 case 7:
                     baseViewHolder.setText(R.id.staff_name, "接单管家: " + order.staff_name)
                             .setText(R.id.jie_time, "接单时间: " + format.format(new Date(order.jie_time * 1000)))
-                            .setText(R.id.etime, "完成时间: " + format.format(new Date(order.etime * 1000)))
+                            .setText(R.id.etime, "结束服务时间: " + format.format(new Date(order.petime * 1000)))
                             .setText(R.id.start_time, "开始服务时间: " + format.format(new Date(order.start_time * 1000)));
                     break;
                 case -1:

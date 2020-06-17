@@ -65,10 +65,12 @@ public class MyIntegralActivity extends BaseToolBarActivity {
     }
 
     private void getIntegralList() {
+        showDialog("加载中", true);
         OkGo.<String>post(Api.userApi).params("api_name", "my_integral").params("token", mUserInfo.token)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        dismissDialog();
                         Resp<IntegralResp> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<IntegralResp>>() {
                         }.getType());
                         if (resp.code == 1) {
@@ -78,6 +80,12 @@ public class MyIntegralActivity extends BaseToolBarActivity {
                             SpUtil.putBoolean("isLogin", false);
                             startAndClearAll(LoginActivity.class);
                         }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        dismissDialog();
                     }
                 });
     }

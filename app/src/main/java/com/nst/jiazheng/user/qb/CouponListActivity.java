@@ -59,10 +59,12 @@ public class CouponListActivity extends BaseToolBarActivity {
     }
 
     private void getCouponList() {
+        showDialog("加载中",true);
         OkGo.<String>post(Api.userApi).params("api_name", "coupon_list").params("token", mUserInfo.token)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        dismissDialog();
                         Resp<List<Coupon>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<Coupon>>>() {
                         }.getType());
                         if (resp.code == 1) {
@@ -71,6 +73,12 @@ public class CouponListActivity extends BaseToolBarActivity {
                             SpUtil.putBoolean("isLogin", false);
                             startAndClearAll(LoginActivity.class);
                         }
+                    }
+
+                    @Override
+                    public void onError(Response<String> response) {
+                        super.onError(response);
+                        dismissDialog();
                     }
                 });
     }

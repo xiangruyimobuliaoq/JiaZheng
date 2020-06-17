@@ -136,6 +136,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
     }
 
     private void getOrderList(boolean loadMore) {
+        showDialog("加载中",true);
         if (loadMore) {
             OkGo.<String>post(Api.orderApi).params("api_name", "order_list_app")
                     .params("token", mUserInfo.token)
@@ -144,6 +145,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                     .execute(new StringCallback() {
                         @Override
                         public void onSuccess(Response<String> response) {
+                            dismissDialog();
                             Resp<List<Order>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<Order>>>() {
                             }.getType());
                             if (resp.code == 1) {
@@ -163,6 +165,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                         public void onError(Response<String> response) {
                             super.onError(response);
                             mLoadMoreModule.loadMoreFail();
+                            dismissDialog();
                         }
                     });
         } else {
@@ -173,6 +176,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                     .execute(new StringCallback() {
                         @Override
                         public void onSuccess(Response<String> response) {
+                            dismissDialog();
                             Resp<List<Order>> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<List<Order>>>() {
                             }.getType());
                             if (resp.code == 1) {
@@ -184,6 +188,12 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                                 SpUtil.putBoolean("isLogin", false);
                                 startAndClearAll(LoginActivity.class);
                             }
+                        }
+
+                        @Override
+                        public void onError(Response<String> response) {
+                            super.onError(response);
+                            dismissDialog();
                         }
                     });
         }
@@ -211,7 +221,7 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                         }.getType());
                         toast(resp.msg);
                         if (resp.code == 1) {
-                            mAdapter.remove(order);
+                            getOrderList(false);
                         } else if (resp.code == 101) {
                             SpUtil.putBoolean("isLogin", false);
                             startAndClearAll(LoginActivity.class);
@@ -272,14 +282,14 @@ public class OrderFragment extends BaseFragment implements OnLoadMoreListener {
                     break;
                 case 7:
                     baseViewHolder.setText(R.id.start_time, order.start_time == 0 ? "" : format.format(new Date(order.start_time * 1000)))
-                            .setText(R.id.etime, order.etime == 0 ? "" : format.format(new Date(order.etime * 1000)));
+                            .setText(R.id.etime, order.petime == 0 ? "" : format.format(new Date(order.petime * 1000)));
                     break;
                 case 6:
                 case -1:
                 case -2:
                     baseViewHolder.setText(R.id.start_time, order.start_time == 0 ? "" : format.format(new Date(order.start_time * 1000)))
-                            .setText(R.id.etime, order.etime == 0 ? "" : format.format(new Date(order.etime * 1000)))
-                            .setText(R.id.petime, order.petime == 0 ? "" : format.format(new Date(order.petime * 1000)));
+                            .setText(R.id.etime, order.petime == 0 ? "" : format.format(new Date(order.petime * 1000)))
+                            .setText(R.id.petime, order.etime == 0 ? "" : format.format(new Date(order.etime * 1000)));
                     break;
             }
         }

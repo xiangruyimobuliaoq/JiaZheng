@@ -492,7 +492,7 @@ public class RequestServeActivity extends BaseToolBarActivity {
         PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofImage())
                 .loadImageEngine(GlideEngine.createGlideEngine())
-                .maxSelectNum(5 - mAdapter.getData().size())
+                .maxSelectNum(5 - mPicAdapter.getData().size())
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override
                     public void onResult(List<LocalMedia> result) {

@@ -12,6 +12,7 @@ import com.nst.jiazheng.BuildConfig;
  * 更新描述
  */
 public class Api {
+    public static boolean goingToLogin;
     public static String registerApi = BuildConfig.API_SERVER + "/outside/register/api";
     public static String baseApi = BuildConfig.API_SERVER + "/outside/base/api";
     public static String publicApi = BuildConfig.API_SERVER + "/outside/public/api";

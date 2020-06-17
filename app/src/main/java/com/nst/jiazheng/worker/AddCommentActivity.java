@@ -67,6 +67,7 @@ public class AddCommentActivity extends BaseToolBarActivity {
                 Resp resp = new Gson().fromJson(response.body(), Resp.class);
                 toast(resp.msg);
                 if (resp.code == 1) {
+                    setResult(RESULT_OK);
                     finish();
                 } else if (resp.code == 101) {
                     SpUtil.putBoolean("isLogin", false);

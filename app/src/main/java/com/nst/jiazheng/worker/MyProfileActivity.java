@@ -3,6 +3,7 @@ package com.nst.jiazheng.worker;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -32,19 +33,18 @@ import com.nst.jiazheng.api.resp.Order;
 import com.nst.jiazheng.api.resp.Register;
 import com.nst.jiazheng.api.resp.Resp;
 import com.nst.jiazheng.api.resp.UpFile;
+import com.nst.jiazheng.api.resp.UserCenter;
 import com.nst.jiazheng.base.BaseToolBarActivity;
 import com.nst.jiazheng.base.GlideEngine;
 import com.nst.jiazheng.base.Layout;
 import com.nst.jiazheng.base.LogUtil;
 import com.nst.jiazheng.base.SpUtil;
 import com.nst.jiazheng.base.ToastHelper;
+import com.nst.jiazheng.im.ImManager;
 import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.user.PhotoWindow;
-import com.nst.jiazheng.worker.bean.JsonBean;
 import com.nst.jiazheng.worker.utils.GetJsonDataUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-
-import org.json.JSONArray;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,11 +53,18 @@ import java.util.List;
 
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.UserInfo;
 
 /**
- * 创建者     ZhangAnran
- * 创建时间   2020/4/18 4:52 PM
- * 描述	      个人资料
+ * 创建者     彭龙
+ * 创建时间   2020/4/2 11:48 AM
+ * 描述
+ * <p>
+ * 更新者     $
+ * 更新时间   $
+ * 更新描述
  */
 @Layout(layoutId = R.layout.activity_my_profile)
 public class MyProfileActivity extends BaseToolBarActivity {
@@ -113,10 +120,16 @@ public class MyProfileActivity extends BaseToolBarActivity {
                     @Override
                     public void onSuccess(Response<String> response) {
                         LogUtil.getInstance().d("user_info : " + response.body());
-                        Resp<Order> resp = new Gson().fromJson(response.body(),
-                                new TypeToken<Resp<Order>>() {
+                        Resp<UserCenter> resp = new Gson().fromJson(response.body(),
+                                new TypeToken<Resp<UserCenter>>() {
                                 }.getType());
                         if (resp.code == 1) {
+                            if (RongIMClient.getInstance().getCurrentConnectionStatus() != RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED) {
+                                ImManager.connect(mUserInfo.ry_token, resp.data);
+                            } else {
+                                UserInfo userInfo = new UserInfo(resp.data.id, resp.data.nickname, Uri.parse(resp.data.headimgurl));
+                                RongIM.getInstance().refreshUserInfoCache(userInfo);
+                            }
                             setData(resp.data);
                         } else if (resp.code == 101) {
                             SpUtil.putBoolean("isLogin", false);
@@ -132,7 +145,7 @@ public class MyProfileActivity extends BaseToolBarActivity {
                 });
     }
 
-    private void setData(Order data) {
+    private void setData(UserCenter data) {
         mTvAge.setText(data.age + "岁");
         mTvMobile.setText(data.mobile);
         mTvName.setText(data.nickname);
@@ -441,18 +454,4 @@ public class MyProfileActivity extends BaseToolBarActivity {
         pvOptions.show();
     }
 
-    public ArrayList<JsonBean> parseData(String result) {//Gson 解析
-        ArrayList<JsonBean> detail = new ArrayList<>();
-        try {
-            JSONArray data = new JSONArray(result);
-            Gson gson = new Gson();
-            for (int i = 0; i < data.length(); i++) {
-                JsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), JsonBean.class);
-                detail.add(entity);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return detail;
-    }
 }

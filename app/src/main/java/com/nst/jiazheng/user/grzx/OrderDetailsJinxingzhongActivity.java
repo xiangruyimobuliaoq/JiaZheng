@@ -33,7 +33,9 @@ import java.util.Date;
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
+import io.rong.imkit.userInfoCache.RongUserInfoManager;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.UserInfo;
 
 /**
  * 创建者     彭龙
@@ -58,6 +60,10 @@ public class OrderDetailsJinxingzhongActivity extends BaseToolBarActivity {
     TextView num;
     @BindView(R.id.address)
     TextView address;
+    @BindView(R.id.total_price)
+    TextView total_price;
+    @BindView(R.id.coupon_money)
+    TextView coupon_money;
     @BindView(R.id.time)
     TextView time;
     @BindView(R.id.pay_price)
@@ -116,16 +122,18 @@ public class OrderDetailsJinxingzhongActivity extends BaseToolBarActivity {
         status.setText(order.StatusText);
         serve_type_name.setText("服务类型: " + order.serve_type_name);
         num.setText("数量: " + order.num);
+        total_price.setText("应付金额: ¥ " + order.total_price);
+        coupon_money.setText("优惠券抵扣: ¥ " + order.coupon_money);
         content.setText(order.content);
         address.setText("服务地址: " + order.address);
         time.setText("预约时间: " + order.time);
         pay_price.setText("¥ " + order.pay_price);
         serve_type_price.setText("服务单价: ¥ " + order.serve_type_price + " /" + order.serve_type_units);
-        nickname.setText(order.nickname);
+        nickname.setText(order.staff_name);
         staff_name.setText("接单管家: " + order.staff_name);
         point.setText(order.staff_score + "分");
         jie_time.setText("接单时间: " + format.format(new Date(order.jie_time * 1000)));
-        start_time.setText("开始时间: " + format.format(new Date(order.start_time * 1000)));
+        start_time.setText("开始服务时间: " + format.format(new Date(order.start_time * 1000)));
         ddh.setOnClickListener(view -> {
             new ConfirmWindow(mContext)
                     .setContent(order.staff_mobile, "拨打")
@@ -158,6 +166,8 @@ public class OrderDetailsJinxingzhongActivity extends BaseToolBarActivity {
             Conversation.ConversationType conversationType = Conversation.ConversationType.PRIVATE;
             String targetId = order.staff_id;
             String title = "聊天";
+            UserInfo userInfo = RongUserInfoManager.getInstance().getUserInfo(targetId);
+            RongIM.getInstance().refreshUserInfoCache(userInfo);
             RongIM.getInstance().startConversation(this, conversationType, targetId, title, null);
         });
         try {

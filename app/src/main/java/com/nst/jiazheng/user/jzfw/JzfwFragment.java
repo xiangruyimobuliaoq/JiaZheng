@@ -187,28 +187,30 @@ public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeLis
         addrlist.setLayoutManager(manager);
         mAdapter = new AddrAdapter(R.layout.item_addr, null);
         addrlist.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                hideInput();
-                Tip tip = mAdapter.getData().get(position);
-                String address = tip.getName();
-                Log.e("address", address);
-                pickPotion = position;
-                mAdapter.notifyDataSetChanged();
-                addrlist.setVisibility(View.GONE);
-                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude()), 16));
-//                    geoMarker.setPosition(new LatLng(address.getLatLonPoint().getLatitude(), address.getLatLonPoint().getLongitude());
-                String addressName = "经纬度值:" + tip.getPoint() + "\n位置描述:"
-                        + tip.getDistrict() + tip.getAddress();
-                Log.e("123", addressName);
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+            hideInput();
+            Tip tip = mAdapter.getData().get(position);
+            String address = tip.getName();
+            if (null == tip.getPoint()) {
+                toast("请输入更详细的地址");
+                return;
             }
+            Log.e("address", address);
+            pickPotion = position;
+            mAdapter.notifyDataSetChanged();
+            addrlist.setVisibility(View.GONE);
+            String addressName = "经纬度值:" + tip.getPoint() + "\n位置描述:"
+                    + tip.getDistrict() + tip.getAddress();
+            Log.e("123", addressName);
+
+            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude()), 16));
+//                    geoMarker.setPosition(new LatLng(address.getLatLonPoint().getLatitude(), address.getLatLonPoint().getLongitude());
         });
     }
 
     @Override
-    public void setCenterData(UserCenter data) throws Exception{
+    public void setCenterData(UserCenter data) throws Exception {
         if (data.type == 1) {
             ivTitleLeftIcon.setVisibility(View.GONE);
         } else {
@@ -216,6 +218,7 @@ public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeLis
             ivTitleLeftIcon.setOnClickListener(view -> getManageStatus());
         }
     }
+
 
     private void getManageStatus() {
         showDialog("正在验证", true);
@@ -305,6 +308,7 @@ public class JzfwFragment extends BaseFragment implements AMap.OnCameraChangeLis
     public void onResume() {
         super.onResume();
         map.onResume();
+        setOverlay(currentPosition);
     }
 
     @Override

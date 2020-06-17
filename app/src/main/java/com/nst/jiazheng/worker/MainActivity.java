@@ -33,9 +33,6 @@ import com.nst.jiazheng.im.ConversationListActivity;
 import com.nst.jiazheng.login.LoginActivity;
 import com.nst.jiazheng.map.MapWindow;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import butterknife.BindView;
 
 /**
@@ -219,6 +216,7 @@ public class MainActivity extends BaseToolBarActivity implements AMapLocationLis
                     public void onSuccess(Response<String> response) {
                         Resp<UserCenter> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<UserCenter>>() {
                         }.getType());
+                        Log.e("123", response.body());
                         if (resp.code == 1) {
                             setData(resp.data);
                         } else if (resp.code == 101) {

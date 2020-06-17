@@ -41,7 +41,6 @@
             android:gravity="start"
             android:hint="请输入你的评价"
             android:id="@+id/comment"
-            android:maxLines="6"
             android:minLines="6"
             android:padding="@dimen/dp_10"
             android:textSize="14sp" />

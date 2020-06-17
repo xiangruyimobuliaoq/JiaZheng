@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,10 +31,13 @@ import com.nst.jiazheng.worker.widget.ConfirmWindow;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import androidx.annotation.Nullable;
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
+import io.rong.imkit.userInfoCache.RongUserInfoManager;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.UserInfo;
 
 /**
  * 创建者     彭龙
@@ -54,6 +58,10 @@ public class OrderDetailsYiwanchengActivity extends BaseToolBarActivity {
     TextView serve_type_name;
     @BindView(R.id.num)
     TextView num;
+    @BindView(R.id.total_price)
+    TextView total_price;
+    @BindView(R.id.coupon_money)
+    TextView coupon_money;
     @BindView(R.id.content)
     TextView content;
     @BindView(R.id.address)
@@ -86,6 +94,8 @@ public class OrderDetailsYiwanchengActivity extends BaseToolBarActivity {
     TextView start_time;
     @BindView(R.id.etime)
     TextView etime;
+    @BindView(R.id.petime)
+    TextView petime;
     private Register mUserInfo;
 
     @Override
@@ -116,17 +126,20 @@ public class OrderDetailsYiwanchengActivity extends BaseToolBarActivity {
         status.setText(order.StatusText);
         serve_type_name.setText("服务类型: " + order.serve_type_name);
         num.setText("数量: " + order.num);
+        total_price.setText("应付金额: ¥ " + order.total_price);
+        coupon_money.setText("优惠券抵扣: ¥ " + order.coupon_money);
         address.setText("服务地址: " + order.address);
         time.setText("预约时间: " + order.time);
         pay_price.setText("¥ " + order.pay_price);
         serve_type_price.setText("服务单价: ¥ " + order.serve_type_price + " /" + order.serve_type_units);
-        nickname.setText(order.nickname);
+        nickname.setText(order.staff_name);
         staff_name.setText("接单管家: " + order.staff_name);
         content.setText(order.content);
         point.setText(order.staff_score + "分");
         jie_time.setText("接单时间: " + format.format(new Date(order.jie_time * 1000)));
-        start_time.setText("开始时间: " + format.format(new Date(order.start_time * 1000)));
-        etime.setText("结束时间: " + format.format(new Date(order.etime * 1000)));
+        start_time.setText("开始服务时间: " + format.format(new Date(order.start_time * 1000)));
+        etime.setText(order.petime == 0 ? "订单完成时间: " : "结束服务时间: " + format.format(new Date(order.petime * 1000)));
+        petime.setText(order.etime == 0 ? "订单完成时间: " : "订单完成时间: " + format.format(new Date(order.etime * 1000)));
         ddh.setOnClickListener(view -> {
             new ConfirmWindow(mContext)
                     .setContent(order.staff_mobile, "拨打")
@@ -151,13 +164,19 @@ public class OrderDetailsYiwanchengActivity extends BaseToolBarActivity {
             Conversation.ConversationType conversationType = Conversation.ConversationType.PRIVATE;
             String targetId = order.staff_id;
             String title = "聊天";
+            UserInfo userInfo = RongUserInfoManager.getInstance().getUserInfo(targetId);
+            RongIM.getInstance().refreshUserInfoCache(userInfo);
             RongIM.getInstance().startConversation(this, conversationType, targetId, title, null);
         });
-        cancel.setOnClickListener(view -> {
-            Bundle params = new Bundle();
-            params.putString("id", order.id);
-            overlay(AddCommentActivity.class, params);
-        });
+        if (order.comment_button == 0) {
+            cancel.setVisibility(View.GONE);
+        } else {
+            cancel.setOnClickListener(view -> {
+                Bundle params = new Bundle();
+                params.putString("id", order.id);
+                overlayForResult(AddCommentActivity.class, 1, params);
+            });
+        }
         try {
             Glide.with(this).load(order.staff_logo).error(R.mipmap.ic_tx).into(tx);
         } catch (Exception e) {
@@ -165,33 +184,11 @@ public class OrderDetailsYiwanchengActivity extends BaseToolBarActivity {
         }
     }
 
-    private void cancelOrder(String id) {
-        showDialog("正在取消", true);
-        OkGo.<String>post(Api.orderApi).params("api_name", "order_end")
-                .params("token", mUserInfo.token)
-                .params("type", 1)
-                .params("order_id", id).execute(new StringCallback() {
-            @Override
-            public void onSuccess(Response<String> response) {
-                dismissDialog();
-                Resp resp = new Gson().fromJson(response.body(), new TypeToken<Resp>() {
-                }.getType());
-                toast(resp.msg);
-                if (resp.code == 1) {
-                    finish();
-                } else if (resp.code == 101) {
-                    SpUtil.putBoolean("isLogin", false);
-                    startAndClearAll(LoginActivity.class);
-                }
-            }
-
-            @Override
-            public void onError(Response<String> response) {
-                super.onError(response);
-                dismissDialog();
-            }
-        });
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            cancel.setVisibility(View.GONE);
+        }
     }
 }

@@ -47,6 +47,10 @@ public class OrderDetailsDaijiedanActivity extends BaseToolBarActivity {
     TextView time;
     @BindView(R.id.pay_price)
     TextView pay_price;
+    @BindView(R.id.total_price)
+    TextView total_price;
+    @BindView(R.id.coupon_money)
+    TextView coupon_money;
     @BindView(R.id.serve_type_price)
     TextView serve_type_price;
     @BindView(R.id.submit)
@@ -84,6 +88,8 @@ public class OrderDetailsDaijiedanActivity extends BaseToolBarActivity {
         address.setText("服务地址: " + order.address);
         time.setText("预约时间: " + order.time);
         pay_price.setText("¥ " + order.pay_price);
+        total_price.setText("应付金额: ¥ " + order.total_price);
+        coupon_money.setText("优惠券抵扣: ¥ " + order.coupon_money);
         serve_type_price.setText("服务单价: ¥ " + order.serve_type_price + " /" + order.serve_type_units);
         submit.setOnClickListener(view -> {
             cancelOrder(order.id);

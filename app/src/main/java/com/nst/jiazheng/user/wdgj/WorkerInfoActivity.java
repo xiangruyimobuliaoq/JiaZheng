@@ -1,6 +1,5 @@
 package com.nst.jiazheng.user.wdgj;
 
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -113,12 +112,7 @@ public class WorkerInfoActivity extends BaseToolBarActivity {
         age.setText(data.age + "岁");
         year.setText(data.job_age + "年");
         address.setText(data.address);
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                collect();
-            }
-        });
+        submit.setOnClickListener(view -> collect());
         GridLayoutManager manager = new GridLayoutManager(this, 4);
         typelist.setLayoutManager(manager);
         TypeAdapter adapter = new TypeAdapter(R.layout.item_servetype, data.servetype);

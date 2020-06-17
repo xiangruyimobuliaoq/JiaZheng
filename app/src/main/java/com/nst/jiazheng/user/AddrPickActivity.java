@@ -131,31 +131,33 @@ public class AddrPickActivity extends BaseToolBarActivity implements AMap.OnCame
         addrlist.setLayoutManager(manager);
         mAdapter = new AddrAdapter(R.layout.item_addr, null);
         addrlist.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                if (pickPotion == position) {
-                    return;
-                }
-                hideInput();
-                Tip tip = mAdapter.getData().get(position);
-                String address = tip.getName();
-                Log.e("address", address);
-                pickPotion = position;
-                mAdapter.notifyDataSetChanged();
-                addrlist.setVisibility(View.GONE);
-                LatLng latLng = new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
-                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                        latLng, 16));
-//                    geoMarker.setPosition(new LatLng(address.getLatLonPoint().getLatitude(), address.getLatLonPoint().getLongitude());
-                String addressName = "经纬度值:" + tip.getPoint() + "\n位置描述:"
-                        + tip.getDistrict() + tip.getAddress();
-                Log.e("123", addressName);
-                if (mMarker != null) {
-                }
-                mMarker = aMap.addMarker(new MarkerOptions().position(latLng).title(address));
-                mAddr = new Addr(tip.getDistrict() + tip.getAddress() + address, tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
+        mAdapter.setOnItemClickListener((adapter, view, position) -> {
+            if (pickPotion == position) {
+                return;
             }
+            hideInput();
+            Tip tip = mAdapter.getData().get(position);
+            if (null == tip.getPoint()) {
+                toast("请输入更详细的地址");
+                return;
+            }
+            String address = tip.getName();
+            Log.e("address", address);
+            pickPotion = position;
+            mAdapter.notifyDataSetChanged();
+            addrlist.setVisibility(View.GONE);
+
+            LatLng latLng = new LatLng(tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
+            aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    latLng, 16));
+//                    geoMarker.setPosition(new LatLng(address.getLatLonPoint().getLatitude(), address.getLatLonPoint().getLongitude());
+            String addressName = "经纬度值:" + tip.getPoint() + "\n位置描述:"
+                    + tip.getDistrict() + tip.getAddress();
+            Log.e("123", addressName);
+            if (mMarker != null) {
+            }
+            mMarker = aMap.addMarker(new MarkerOptions().position(latLng).title(address));
+            mAddr = new Addr(tip.getDistrict() + tip.getAddress() + address, tip.getPoint().getLatitude(), tip.getPoint().getLongitude());
         });
     }
 

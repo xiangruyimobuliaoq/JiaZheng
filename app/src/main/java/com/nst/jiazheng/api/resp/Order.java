@@ -80,6 +80,9 @@ public class Order implements MultiItemEntity {
     public String order_id;
     public int charge;
     public String serve_img;
+    public String total_price;
+    public String coupon_money;
+    public int comment_button;
 
 
     @Override

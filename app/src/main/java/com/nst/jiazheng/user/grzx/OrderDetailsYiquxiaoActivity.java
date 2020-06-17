@@ -41,6 +41,10 @@ public class OrderDetailsYiquxiaoActivity extends BaseToolBarActivity {
     TextView num;
     @BindView(R.id.content)
     TextView content;
+    @BindView(R.id.total_price)
+    TextView total_price;
+    @BindView(R.id.coupon_money)
+    TextView coupon_money;
     @BindView(R.id.address)
     TextView address;
     @BindView(R.id.time)
@@ -77,6 +81,8 @@ public class OrderDetailsYiquxiaoActivity extends BaseToolBarActivity {
     private void setData(Order order) {
         order_no.setText("订单编号: " + order.order_no);
         status.setText(order.StatusText);
+        total_price.setText("应付金额: ¥ " + order.total_price);
+        coupon_money.setText("优惠券抵扣: ¥ " + order.coupon_money);
         serve_type_name.setText("服务类型: " + order.serve_type_name);
         num.setText("数量: " + order.num);
         address.setText("服务地址: " + order.address);

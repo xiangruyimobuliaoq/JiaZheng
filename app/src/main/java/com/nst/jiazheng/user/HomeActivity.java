@@ -1,5 +1,7 @@
 package com.nst.jiazheng.user;
 
+import android.net.Uri;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
@@ -38,6 +40,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import butterknife.BindView;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
+import io.rong.imlib.model.UserInfo;
 
 /**
  * 创建者     彭龙
@@ -66,23 +69,20 @@ public class HomeActivity extends BaseActivity {
         vp.setSwipeLocked(true);
         vp.setAdapter(new HomePageAdapter(getSupportFragmentManager(), 1));
         vp.setOffscreenPageLimit(3);
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (i) {
-                    case R.id.jzfw:
-                        vp.setCurrentItem(0, false);
-                        break;
-                    case R.id.wdgj:
-                        vp.setCurrentItem(1, false);
-                        break;
-                    case R.id.wdqb:
-                        vp.setCurrentItem(2, false);
-                        break;
-                    case R.id.grzx:
-                        vp.setCurrentItem(3, false);
-                        break;
-                }
+        rg.setOnCheckedChangeListener((radioGroup, i) -> {
+            switch (i) {
+                case R.id.jzfw:
+                    vp.setCurrentItem(0, false);
+                    break;
+                case R.id.wdgj:
+                    vp.setCurrentItem(1, false);
+                    break;
+                case R.id.wdqb:
+                    vp.setCurrentItem(2, false);
+                    break;
+                case R.id.grzx:
+                    vp.setCurrentItem(3, false);
+                    break;
             }
         });
         fbwf.setOnClickListener(v -> {
@@ -116,11 +116,15 @@ public class HomeActivity extends BaseActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+//                        Log.e("213", response.body());
                         Resp<UserCenter> resp = new Gson().fromJson(response.body(), new TypeToken<Resp<UserCenter>>() {
                         }.getType());
                         if (resp.code == 1) {
                             if (RongIMClient.getInstance().getCurrentConnectionStatus() != RongIMClient.ConnectionStatusListener.ConnectionStatus.CONNECTED) {
                                 ImManager.connect(mUserInfo.ry_token, resp.data);
+                            } else {
+                                UserInfo userInfo = new UserInfo(resp.data.user_id, resp.data.nickname, Uri.parse(resp.data.headimgurl));
+                                RongIM.getInstance().refreshUserInfoCache(userInfo);
                             }
                             try {
                                 getFragment(0).setCenterData(resp.data);

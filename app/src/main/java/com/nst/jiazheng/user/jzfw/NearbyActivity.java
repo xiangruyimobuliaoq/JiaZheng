@@ -61,23 +61,23 @@ public class NearbyActivity extends BaseToolBarActivity implements AMapLocationL
     //声明mLocationOption对象
     public AMapLocationClientOption mLocationOption = null;
     private NearbyAdapter mAdapter;
+    private double mLatitude;
+    private double mLongitude;
 
     @Override
     protected void init() {
         mUserInfo = (Register) SpUtil.readObj("userInfo");
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (i) {
-                    case R.id.srgj:
-                        currentType = 1;
-                        getData();
-                        break;
-                    case R.id.jzgs:
-                        currentType = 2;
-                        getData();
-                        break;
-                }
+        rg.setOnCheckedChangeListener((radioGroup, i) -> {
+            switch (i) {
+                case R.id.srgj:
+                    currentType = 1;
+                    break;
+                case R.id.jzgs:
+                    currentType = 2;
+                    break;
+            }
+            if (mLatitude != 0 && mLongitude != 0) {
+                getData(mLatitude, mLongitude);
             }
         });
         requestPermission();
@@ -86,7 +86,6 @@ public class NearbyActivity extends BaseToolBarActivity implements AMapLocationL
         nearbylist.setLayoutManager(manager);
         mAdapter = new NearbyAdapter(R.layout.item_worker, null);
         nearbylist.setAdapter(mAdapter);
-        getData();
     }
 
     private void requestPermission() {
@@ -121,6 +120,7 @@ public class NearbyActivity extends BaseToolBarActivity implements AMapLocationL
 // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
 //启动定位
         mlocationClient.startLocation();
+        showDialog("获取定位中", true);
     }
 
     @Override
@@ -129,12 +129,15 @@ public class NearbyActivity extends BaseToolBarActivity implements AMapLocationL
         mlocationClient.onDestroy();
     }
 
-    private void getData() {
+    private void getData(double latitude, double longitude) {
+        if (0 == latitude || 0 == longitude) {
+            return;
+        }
         mAdapter.setList(null);
         showDialog("加载中", false);
         OkGo.<String>post(Api.serverApi).params("api_name", "index_map").params("token", mUserInfo.token).params("type", currentType)
-                .params("lng", 113.75179).params("lat", 23.02067)
-//                .params("lng", cameraPosition.target.longitude).params("lat", cameraPosition.target.latitude)
+//                .params("lng", 113.75179).params("lat", 23.02067)
+                .params("lng", longitude).params("lat", latitude)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
@@ -143,7 +146,7 @@ public class NearbyActivity extends BaseToolBarActivity implements AMapLocationL
                         }.getType());
                         if (resp.code == 1) {
                             mAdapter.setList(resp.data.list);
-                        }else if (resp.code == 101) {
+                        } else if (resp.code == 101) {
                             SpUtil.putBoolean("isLogin", false);
                             startAndClearAll(LoginActivity.class);
                         }
@@ -159,13 +162,19 @@ public class NearbyActivity extends BaseToolBarActivity implements AMapLocationL
 
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
+        dismissDialog();
         if (aMapLocation != null) {
             if (aMapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
-                aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-                aMapLocation.getLatitude();//获取纬度
-                aMapLocation.getLongitude();//获取经度
-                aMapLocation.getAccuracy();//获取精度信息
+                double latitude = aMapLocation.getLatitude();
+                double longitude = aMapLocation.getLongitude();
+                if (latitude == mLatitude || longitude == mLongitude) {
+                    return;
+                }
+                mLatitude = latitude;
+                mLongitude = longitude;
+                getData(mLatitude, mLongitude);
+                mlocationClient.stopLocation();
             } else {
                 //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                 Log.e("AmapError", "location Error, ErrCode:"
@@ -191,14 +200,11 @@ public class NearbyActivity extends BaseToolBarActivity implements AMapLocationL
             mTypelist.setLayoutManager(manager);
             TypeAdapter adapter = new TypeAdapter(R.layout.item_servetype, worker.serve_type);
             mTypelist.setAdapter(adapter);
-            baseViewHolder.getView(R.id.btn).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    worker.type = currentType;
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("worker", worker);
-                    overlay(RequestServeActivity.class, bundle);
-                }
+            baseViewHolder.getView(R.id.btn).setOnClickListener(view -> {
+                worker.type = currentType;
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("worker", worker);
+                overlay(RequestServeActivity.class, bundle);
             });
             try {
                 Glide.with(getContext()).load(worker.logo).error(R.mipmap.ic_tx).into((CircleImageView) baseViewHolder.getView(R.id.tx));

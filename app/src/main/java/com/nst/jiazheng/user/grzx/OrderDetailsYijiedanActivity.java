@@ -33,7 +33,10 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
+import io.rong.imkit.userInfoCache.RongUserInfoManager;
+import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.UserInfo;
 
 /**
  * 创建者     彭龙
@@ -56,6 +59,10 @@ public class OrderDetailsYijiedanActivity extends BaseToolBarActivity {
     TextView serve_type_name;
     @BindView(R.id.num)
     TextView num;
+    @BindView(R.id.total_price)
+    TextView total_price;
+    @BindView(R.id.coupon_money)
+    TextView coupon_money;
     @BindView(R.id.address)
     TextView address;
     @BindView(R.id.time)
@@ -115,11 +122,13 @@ public class OrderDetailsYijiedanActivity extends BaseToolBarActivity {
         serve_type_name.setText("服务类型: " + order.serve_type_name);
         num.setText("数量: " + order.num);
         address.setText("服务地址: " + order.address);
+        total_price.setText("应付金额: ¥ " + order.total_price);
+        coupon_money.setText("优惠券抵扣: ¥ " + order.coupon_money);
         time.setText("预约时间: " + order.time);
         pay_price.setText("¥ " + order.pay_price);
         content.setText(order.content);
         serve_type_price.setText("服务单价: ¥ " + order.serve_type_price + " /" + order.serve_type_units);
-        nickname.setText(order.nickname);
+        nickname.setText(order.staff_name);
         staff_name.setText("接单管家: " + order.staff_name);
         point.setText(order.staff_score + "分");
         jie_time.setText("接单时间: " + format.format(new Date(order.jie_time * 1000)));
@@ -146,15 +155,9 @@ public class OrderDetailsYijiedanActivity extends BaseToolBarActivity {
         cancel.setOnClickListener(view -> {
             String tips = null;
             if (order.charge == 0) {
-                tips = "\n" +
-                        "                                五分钟内可免费取消订单\n" +
-                        "确认取消该订单吗\n" +
-                        "                            ";
+                tips = "五分钟内可免费取消订单, 确认取消该订单吗";
             } else if (order.charge == 1) {
-                tips = "\n" +
-                        "                                超出五分钟后取消订单需支付\n" +
-                        "一定手续费，确认取消吗？\n" +
-                        "                            ";
+                tips = "已超出五分钟，取消订单需要支付一定手续费，确认取消吗？";
             }
             new ConfirmWindow(mContext)
                     .setContent(tips, "确认")
@@ -172,6 +175,8 @@ public class OrderDetailsYijiedanActivity extends BaseToolBarActivity {
             Conversation.ConversationType conversationType = Conversation.ConversationType.PRIVATE;
             String targetId = order.staff_id;
             String title = "聊天";
+            UserInfo userInfo = RongUserInfoManager.getInstance().getUserInfo(targetId);
+            RongIM.getInstance().refreshUserInfoCache(userInfo);
             RongIM.getInstance().startConversation(this, conversationType, targetId, title, null);
         });
         submit.setOnClickListener(view -> {
